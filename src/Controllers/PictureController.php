@@ -6,56 +6,51 @@ use sasquatch\Models\Picture;
 
 class PictureController
 {
-    public function index()
+    public function index() : string
     {
         $contents = "
-        <table>
+        <table border='1' align='center'>
 ";
         foreach ( Picture::findAll() as $picture ) {
             $contents .= "
 <tr>
     <td>
-        <img src='uploads/{$picture->getPath()}'/>
+        <img src='show?file={$picture->getFileName()}' height='600' width='800'/>
     </td>
-    <td>
-        By: {$picture->getAuthor()}
-    </td>
-    <td>
-        At: {$picture->getLocation()}
-    </td>
-    <td>
-        On: {$picture->getDate()->format('Y/m/d')}
+</tr>
+<tr>
+    <td align='center'>
+        By <strong>{$picture->getAuthor()}</strong> at: <strong>{$picture->getLocation()}</strong> on <strong>{$picture->getDate()->format('Y/m/d')}</strong>
     </td>
 </tr>";
         }
 
         $contents .= "
         </table>
-    </body>
-</html>
+        <p align='center'><a href='upload'>Add yours!</a></p>
        ";
 
         return $this->render( $contents );
     }
 
-    private function render( string $contents )
+    private function render( string $contents ) : string
     {
         return preg_replace( '/{contents}/', $contents, $this->getLayout() );
     }
 
-    private function getLayout()
+    private function getLayout() : string
     {
         return "
 <html>
     <body>
-        <h1>Sasquatch pictures</h1>
+        <h1 align='center'>Sasquatch pictures</h1>
         {contents}
     </body>
 </html>
         ";
     }
 
-    public function upload()
+    public function upload() : string
     {
         if ( strtolower( $_SERVER['REQUEST_METHOD'] ) == 'post' ) {
             // Process form
@@ -78,7 +73,7 @@ class PictureController
         }
     }
 
-    private function storeUploadedPicture(array $uploadedFile, string $author, string $location )
+    private function storeUploadedPicture(array $uploadedFile, string $author, string $location ) : string
     {
         $destination = __DIR__ . '/../../uploads/' . basename($uploadedFile['name']);
         if ( move_uploaded_file( $uploadedFile['tmp_name'], $destination ) ) {
@@ -99,7 +94,7 @@ class PictureController
         }
     }
 
-    private function showForm()
+    private function showForm() : string
     {
         return "
 <form method=\"post\" enctype='multipart/form-data'>
@@ -111,15 +106,15 @@ class PictureController
         ";
     }
 
-    private function error400()
+    private function error400() : string
     {
         http_send_status( 400 );
 
         return $this->render( "<p>Sorry... I didn't understand :(...</p><p>Wanna <a href='upload'>try again?</a></p>");
     }
 
-    public function show()
+    public function show( string $fileName ) : string
     {
-        return file_get_contents( __DIR__.'/../../uploads/'.$_GET['file'] );
+        return file_get_contents( __DIR__.'/../../uploads/'.$fileName );
     }
 }

@@ -6,18 +6,18 @@ class Picture
 {
     private $author;
     private $date;
-    private $path;
+    private $fileName;
     private $location;
 
-    public function __construct( string $author, \DateTimeImmutable $date, string $location, string $path )
+    public function __construct( string $author, \DateTimeImmutable $date, string $location, string $fileName )
     {
         $this->author = $author;
         $this->date = $date;
-        $this->path = $path;
+        $this->fileName = $fileName;
         $this->location = $location;
     }
 
-    public function getAuthor()
+    public function getAuthor() : string
     {
         return $this->author;
     }
@@ -52,7 +52,7 @@ class Picture
                     $metadata['author'],
                     new \DateTimeImmutable( $metadata['date']),
                     $metadata['location'],
-                    $fileInfo->getPath().DIRECTORY_SEPARATOR.$fileInfo->getFilename()
+                    $fileInfo->getFilename()
                 );
             }
         }
@@ -63,12 +63,8 @@ class Picture
     /**
      * @return string
      */
-    public function getPath(): string
+    public function getFileName(): string
     {
-        return $this->path;
-    }
-
-    public function save()
-    {
+        return $this->fileName;
     }
 }
