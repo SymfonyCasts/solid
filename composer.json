@@ -1,0 +1,17 @@
+{
+  "name": "leewayweb/sasquatch",
+  "description": "An app to share Big foot sighting pictures",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Mauro Chojrin",
+      "email": "mauro.chojrin@leewayweb.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "sasquatch\\": "src/"
+    }
+  }
+}
