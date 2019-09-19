@@ -24,7 +24,7 @@ class BigFootSightingRepository extends ServiceEntityRepository
      */
     public function findLatest(): array
     {
-        return $this->findBy([], ['createdAt' => 'ASC']);
+        return $this->findBy([], ['createdAt' => 'DESC']);
     }
 
     // /**

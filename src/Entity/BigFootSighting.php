@@ -56,6 +56,7 @@ class BigFootSighting
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="bigFootSighting")
+     * @ORM\OrderBy({"createdAt"="DESC"})
      */
     private $comments;
 
@@ -146,6 +147,14 @@ class BigFootSighting
     {
         return $this->createdAt;
     }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
 
     /**
      * @return Collection|Comment[]
