@@ -28,15 +28,15 @@ class AppExtension extends AbstractExtension
     {
         $commentCount = $this->commentHelper->countRecentCommentsForUser($user);
 
-        if ($commentCount > 20) {
+        if ($commentCount > 50) {
             return 'bigfoot fanatic';
         }
 
-        if ($commentCount > 10) {
+        if ($commentCount > 30) {
             return 'believer';
         }
 
-        if ($commentCount > 5) {
+        if ($commentCount > 20) {
             return 'hobbyist';
         }
 
