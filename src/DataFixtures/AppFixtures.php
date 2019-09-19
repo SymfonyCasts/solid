@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
 
     private function createUsers()
     {
-        $this->users = $this->createMany(10, function() {
+        $this->users = $this->createMany(30, function() {
             $user = new User();
             $user->setUsername($this->faker->userName);
             $user->setEmail($user->getUsername().'@example.com');
@@ -57,7 +57,7 @@ class AppFixtures extends Fixture
 
     private function createSightings()
     {
-        $this->sightings = $this->createMany(50, function() {
+        $this->sightings = $this->createMany(200, function() {
             $sighting = new BigFootSighting();
             $sighting->setOwner($this->users[array_rand($this->users)]);
             $sighting->setTitle($this->faker->realText(80));
@@ -73,15 +73,15 @@ class AppFixtures extends Fixture
 
     private function createComments()
     {
-        $this->createMany(200, function(int $i) {
+        $this->createMany(4000, function(int $i) {
             $comment = new Comment();
             if ($i % 3 === 0) {
                 $comment->setOwner($this->users[array_rand($this->users)]);
             } else {
-                // make every 3rd comment done by a single user
-                // this is a super user that comments a ton! They
-                // must love Bigfoot!
-                $comment->setOwner($this->users[0]);
+                // make every 3rd comment done by a small set of users
+                // Wow! They must *love* Bigfoot!
+                $rangeMax = floor(count($this->users) / 10);
+                $comment->setOwner($this->users[rand(0, $rangeMax)]);
             }
             $comment->setBigFootSighting($this->sightings[array_rand($this->sightings)]);
             $comment->setContent($this->faker->paragraph);
