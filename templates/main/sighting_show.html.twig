@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ sighting.title }} | Bigfoot{% endblock %}
+
 {% block body %}
     <h1>{{ sighting.title }}</h1>
     <h4>Posted <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time></h4>
