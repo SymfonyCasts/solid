@@ -48,9 +48,15 @@ class User implements UserInterface
      */
     private $bigFootSightings;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="owner")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->bigFootSightings = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,5 +178,13 @@ class User implements UserInterface
     public function getAvatarUrl(): string
     {
         return sprintf('https://api.adorable.io/avatars/70/%s.png', $this->getEmail());
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
     }
 }

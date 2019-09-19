@@ -17,7 +17,9 @@
         {% for comment in sighting.comments %}
             <div>
                 <img src="{{ comment.owner.avatarUrl }}" alt="Avatar for {{ comment.owner.username }}">
-                <strong>{{ comment.owner.username }}</strong> from
+                <strong>{{ comment.owner.username }}</strong>
+                <span>({{ comment.owner|user_activity_text }})</span>
+                from
                 <time datetime="{{ comment.createdAt|date('Y-m-d H:i') }}">{{ comment.createdAt|time_diff }}</time>
                 <div>
                     {{ comment.content }}
