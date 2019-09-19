@@ -39,6 +39,11 @@ class BigFootSighting
     private $latitude;
 
     /**
+     * @ORM\Column(type="decimal", precision=8, scale=6)
+     */
+    private $longitude;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="bigFootSightings")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -109,6 +114,18 @@ class BigFootSighting
     public function setLatitude(string $latitude): self
     {
         $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(string $longitude): self
+    {
+        $this->longitude = $longitude;
 
         return $this;
     }
