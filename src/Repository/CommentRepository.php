@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use App\Entity\User;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,18 @@ class CommentRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
+    }
+
+    public function countForUser(User $user, \DateTimeImmutable $sinceDate): int
+    {
+        return (int) $this->createQueryBuilder('comment')
+            ->select('COUNT(comment.id)')
+            ->andWhere('comment.owner = :user')
+            ->andWhere('comment.createdAt >= :sinceDate')
+            ->setParameter('user', $user)
+            ->setParameter('sinceDate', $sinceDate)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     // /**
