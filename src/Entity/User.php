@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -40,6 +42,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BigFootSighting", mappedBy="owner")
+     */
+    private $bigFootSightings;
+
+    public function __construct()
+    {
+        $this->bigFootSightings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -122,6 +134,37 @@ class User implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BigFootSighting[]
+     */
+    public function getBigFootSightings(): Collection
+    {
+        return $this->bigFootSightings;
+    }
+
+    public function addBigFootSighting(BigFootSighting $bigFootSighting): self
+    {
+        if (!$this->bigFootSightings->contains($bigFootSighting)) {
+            $this->bigFootSightings[] = $bigFootSighting;
+            $bigFootSighting->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBigFootSighting(BigFootSighting $bigFootSighting): self
+    {
+        if ($this->bigFootSightings->contains($bigFootSighting)) {
+            $this->bigFootSightings->removeElement($bigFootSighting);
+            // set the owning side to null (unless already changed)
+            if ($bigFootSighting->getOwner() === $this) {
+                $bigFootSighting->setOwner(null);
+            }
+        }
 
         return $this;
     }
