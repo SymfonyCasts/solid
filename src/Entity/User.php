@@ -168,4 +168,9 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getAvatarUrl(): string
+    {
+        return sprintf('https://api.adorable.io/avatars/70/%s.png', $this->getEmail());
+    }
 }
