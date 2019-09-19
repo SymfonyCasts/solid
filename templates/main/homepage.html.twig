@@ -12,6 +12,7 @@
                 </a>
                 posted
                 <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time>
+                ({{ sighting.comments|length }} comments)
             </li>
         {% endfor %}
     </ul>
