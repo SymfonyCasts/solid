@@ -10,7 +10,8 @@
                 <a href="{{ path('app_sighting_show', {id: sighting.id}) }}">
                     {{ sighting.title }}
                 </a>
-                posted {{ sighting.createdAt|time_diff }}
+                posted
+                <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time>
             </li>
         {% endfor %}
     </ul>

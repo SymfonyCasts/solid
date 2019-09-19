@@ -27,7 +27,7 @@ class MainController extends AbstractController
     public function showSighting(BigFootSighting $bigFootSighting)
     {
         return $this->render('main/sighting_show.html.twig', [
-            'slighting' => $bigFootSighting
+            'sighting' => $bigFootSighting
         ]);
     }
 }

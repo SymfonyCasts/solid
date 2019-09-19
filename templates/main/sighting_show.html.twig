@@ -2,6 +2,25 @@
 
 {% block body %}
     <h1>{{ sighting.title }}</h1>
-    <h4>Posted {{ sighting.createdAt|time_diff }}</h4>
+    <h4>Posted <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time></h4>
+
+    <div>
+        {{ sighting.description }}
+    </div>
+
+    <hr>
+
+    <h3>Littlefoot (i.e. Human) Reactions</h3>
+    <div>
+        {% for comment in sighting.comments %}
+            <div>
+                <strong>{{ comment.owner.username }}</strong> from
+                <time datetime="{{ comment.createdAt|date('Y-m-d H:i') }}">{{ comment.createdAt|time_diff }}</time>
+                <div>
+                    {{ comment.content }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 
