@@ -73,9 +73,16 @@ class AppFixtures extends Fixture
 
     private function createComments()
     {
-        $this->createMany(200, function() {
+        $this->createMany(200, function(int $i) {
             $comment = new Comment();
-            $comment->setOwner($this->users[array_rand($this->users)]);
+            if ($i % 3 === 0) {
+                $comment->setOwner($this->users[array_rand($this->users)]);
+            } else {
+                // make every 3rd comment done by a single user
+                // this is a super user that comments a ton! They
+                // must love Bigfoot!
+                $comment->setOwner($this->users[0]);
+            }
             $comment->setBigFootSighting($this->sightings[array_rand($this->sightings)]);
             $comment->setContent($this->faker->paragraph);
             $comment->setCreatedAt($this->faker->dateTimeBetween(
