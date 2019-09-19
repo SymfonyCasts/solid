@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bigfoot is out there!</h1>
+
+    <h3>Sightings:</h3>
+    <ul>
+        {% for sighting in sightings %}
+            <li>
+                <a href="{{ path('app_sighting_show', {id: sighting.id}) }}">
+                    {{ sighting.title }}
+                </a>
+                posted {{ sighting.createdAt|time_diff }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

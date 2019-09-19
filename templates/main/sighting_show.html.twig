@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ sighting.title }}</h1>
+    <h4>Posted {{ sighting.createdAt|time_diff }}</h4>
+{% endblock %}
+

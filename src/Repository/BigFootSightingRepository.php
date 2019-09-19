@@ -19,6 +19,14 @@ class BigFootSightingRepository extends ServiceEntityRepository
         parent::__construct($registry, BigFootSighting::class);
     }
 
+    /**
+     * @return BigFootSighting[]
+     */
+    public function findLatest(): array
+    {
+        return $this->findBy([], ['createdAt' => 'ASC']);
+    }
+
     // /**
     //  * @return BigFootSighting[] Returns an array of BigFootSighting objects
     //  */
