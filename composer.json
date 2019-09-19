@@ -21,6 +21,7 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.2",
         "fzaninotto/faker": "^1.8",
+        "symfony/debug-pack": "^1.0",
         "symfony/maker-bundle": "^1.13"
     },
     "config": {
