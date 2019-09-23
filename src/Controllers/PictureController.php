@@ -40,14 +40,18 @@ class PictureController
 
     private function getLayout() : string
     {
-        return "
+        return '
 <html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/bigfoot.css">
+    </head>
     <body>
-        <h1 align='center'>Sasquatch pictures</h1>
+        <h1 class="text-center">Sasquatch pictures</h1>
         {contents}
     </body>
 </html>
-        ";
+        ';
     }
 
     public function upload() : string
