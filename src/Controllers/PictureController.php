@@ -8,27 +8,28 @@ class PictureController
 {
     public function index() : string
     {
-        $contents = "
-        <table border='1' align='center'>
-";
+        $contents = '
+        <table border="1">
+';
         foreach ( Picture::findAll() as $picture ) {
-            $contents .= "
+            $contents .= '
 <tr>
     <td>
-        <img src='show?file={$picture->getFileName()}' height='600' width='800'/>
+        <img src="show?file={$picture->getFileName()}" height="600" width="800"/>
     </td>
 </tr>
 <tr>
-    <td align='center'>
-        By <strong>{$picture->getAuthor()}</strong> at: <strong>{$picture->getLocation()}</strong> on <strong>{$picture->getDate()->format('Y/m/d')}</strong>
+    <td>
+        By <strong>{$picture->getAuthor()}</strong> at: <strong>{$picture->getLocation()}</strong> on <strong>{$picture->getDate()->format("Y/m/d")}</strong>
     </td>
-</tr>";
+</tr>
+        ';
         }
 
-        $contents .= "
+        $contents .= '
         </table>
-        <p align='center'><a href='upload'>Add yours!</a></p>
-       ";
+        <a class="btn btn-light btn-lg" href="upload">Add yours!</a>
+       ';
 
         return $this->render( $contents );
     }
@@ -47,8 +48,18 @@ class PictureController
         <link rel="stylesheet" href="/css/bigfoot.css">
     </head>
     <body>
-        <h1 class="text-center">Sasquatch pictures</h1>
-        {contents}
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="my-5"><img class="mr-3" src="img/bigfoot.png" alt="bigfoot icon" style="width:50px;height:65px;">Sasquatch Sightings</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {contents}
+                </div>
+            </div>
+        </div>
     </body>
 </html>
         ';
