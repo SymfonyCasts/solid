@@ -9,26 +9,26 @@ class PictureController
     public function index() : string
     {
         $contents = '
-        <table border="1">
+        
+        <h1>All Reported Sightings</h1>
+        <p>All reported Sasquatch sightings, we will find the truth, upload your image to help us find Bigfoot!</p>
+        <a class="btn btn-info btn-lg" href="upload">Upload your Bigfoot Image</a>
+        <div class="my-5 row">
+        
 ';
         foreach ( Picture::findAll() as $picture ) {
-            $contents .= '
-<tr>
-    <td>
-        <img src="show?file={$picture->getFileName()}" height="600" width="800"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        By <strong>{$picture->getAuthor()}</strong> at: <strong>{$picture->getLocation()}</strong> on <strong>{$picture->getDate()->format("Y/m/d")}</strong>
-    </td>
-</tr>
-        ';
+            $contents .= "
+            <div class='col-sm-4 mb-5'>
+                <img src='show?file={$picture->getFileName()}' class='big-foot-img'/>
+                <p class='mt-3 mb-0'>Image taken by: <strong>{$picture->getAuthor()}</strong></p> 
+                <p class='mb-0'>Coordinates: <strong>{$picture->getLocation()}</strong></p>
+                <p class='mb-0'><strong>{$picture->getDate()->format('d/m/Y')}</strong></p>
+            </div>
+        ";
         }
 
         $contents .= '
-        </table>
-        <a class="btn btn-light btn-lg" href="upload">Add yours!</a>
+        </div>
        ';
 
         return $this->render( $contents );
@@ -57,6 +57,11 @@ class PictureController
             <div class="row">
                 <div class="col-12">
                     {contents}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 footer-nav">
+                    <p class="pt-4">Made with <span class="text-danger"><3</span> by the guys and gals at <u><a class="text-white" href="https://symfonycasts.com">SymfonyCasts</a></u></p>
                 </div>
             </div>
         </div>
@@ -102,22 +107,41 @@ class PictureController
 
             file_put_contents( $metaDataFileName, json_encode( $metaData ) );
 
-            return "<h2>File uploaded! Yoohoo!</h2><p>Click <a href='/'>here</a> to see it together with the rest!</p>";
+            return '
+            <h2>Sasquatch Spotted! </h2>
+            <p>Click <u><a class="text-white" href="/">here</a></u> to see your image and the rest of the sightings!</p>';
         } else {
 
-            return "<h2>Sorry dude... Your pic was not uploaded :(</h2><p>Wanna <a href='upload'>try again?</a></p>";
+            return '
+            <h2 class="mb-4 text-center">Sneaky like a Sasquatch, that upload didn\'t work!</h2>
+            <p class="text-center"><a class="btn btn-light btn-lg" href="upload">Try Again</a></p>
+            
+            ';
         }
     }
 
     private function showForm() : string
     {
         return '
-<form method=\"post\" enctype="multipart/form-data">
-    <p><label for="file">Show us what you got!</label><input type="file" id="file" name="newPicture"/></p>
-    <p><label for="author">Your Name</label><input type="text" id="author" name="author"/></p>
-    <p><label for="location">Coordinates of Sighting</label><input type="text" id="location" name="location"/></p>
-    <input type="submit" value="Share it with the world!"/>
-</form>
+        <div class="row">
+            <div class="col">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file">Add your Big Foot image</label>
+                        <input class="form-control-file" type="file" id="file" name="newPicture"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="author">Your Name</label>
+                        <input class="form-control" type="text" id="author" name="author"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Coordinates of Sighting in Degrees (Lat Long)</label>
+                        <input class="form-control" type="text" id="location" name="location" placeholder="48.5100000°, -121.2500000°"/>
+                    </div>
+                    <button class="btn btn-light btn-lg" type="submit">Share it with the world!</button>
+                </form>
+            </div>
+        </div>
         ';
     }
 

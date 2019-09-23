@@ -44,7 +44,7 @@ class Picture
 
         $pictures = [];
         foreach ( $dir as $fileInfo ) {
-            if ( $fileInfo->getExtension() == 'jpg' ) {
+            if ( in_array($fileInfo->getExtension(), ['jpg', 'jpeg', 'png', 'gif']) ) {
                 $metaDataFileName = $fileInfo->getPath().DIRECTORY_SEPARATOR.substr( $fileInfo->getFilename(), 0, -3).'json';
                 $metadata = json_decode( file_get_contents( $metaDataFileName ), true );
 
