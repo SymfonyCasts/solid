@@ -2,3 +2,7 @@ body {
     background-color: rgb(21, 32, 43);
     color: #fff;
 }
+
+.top-nav {
+    border-bottom: 1px solid #48535E;
+}

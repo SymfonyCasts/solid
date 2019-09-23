@@ -50,8 +50,8 @@ class PictureController
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-12">
-                    <h1 class="my-5"><img class="mr-3" src="img/bigfoot.png" alt="bigfoot icon" style="width:50px;height:65px;">Sasquatch Sightings</h1>
+                <div class="col-12 mb-5 top-nav">
+                    <h1 class="mt-5"><img class="mr-3" src="img/bigfoot.png" alt="bigfoot icon" style="width:50px;height:65px;">Sasquatch Sightings</h1>
                 </div>
             </div>
             <div class="row">
@@ -111,14 +111,14 @@ class PictureController
 
     private function showForm() : string
     {
-        return "
-<form method=\"post\" enctype='multipart/form-data'>
-    <p><label for='file'>Show us what you got!</label><input type='file' id='file' name='newPicture'/></p>
-    <p><label for='author'>What's your name friend?</label><input type='text' id='author' name='author'/></p>
-    <p><label for='location'>Where did you take this pic?</label><input type='text' id='location' name='location'/></p>
-    <input type='submit' value='Share it with the world!'/>
+        return '
+<form method=\"post\" enctype="multipart/form-data">
+    <p><label for="file">Show us what you got!</label><input type="file" id="file" name="newPicture"/></p>
+    <p><label for="author">Your Name</label><input type="text" id="author" name="author"/></p>
+    <p><label for="location">Coordinates of Sighting</label><input type="text" id="location" name="location"/></p>
+    <input type="submit" value="Share it with the world!"/>
 </form>
-        ";
+        ';
     }
 
     private function error400() : string
