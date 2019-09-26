@@ -1,0 +1,68 @@
+diff --git a/src/Models/Picture.php b/src/Models/Picture.php
+index 2de2a94..6e124c0 100644
+--- a/src/Models/Picture.php
++++ b/src/Models/Picture.php
+@@ -38,28 +38,6 @@ class Picture
+         return $this->location;
+     }
+ 
+-    public static function findAll() : array
+-    {
+-        $dir = new \DirectoryIterator(__DIR__.'/../../uploads');
+-
+-        $pictures = [];
+-        foreach ( $dir as $fileInfo ) {
+-            if ( in_array($fileInfo->getExtension(), ['jpg', 'jpeg', 'png', 'gif']) ) {
+-                $metaDataFileName = $fileInfo->getPath().DIRECTORY_SEPARATOR.substr( $fileInfo->getFilename(), 0, -3).'json';
+-                $metadata = json_decode( file_get_contents( $metaDataFileName ), true );
+-
+-                $pictures[] = new Picture(
+-                    $metadata['author'],
+-                    new \DateTimeImmutable( $metadata['date']),
+-                    $metadata['location'],
+-                    $fileInfo->getFilename()
+-                );
+-            }
+-        }
+-
+-        return $pictures;
+-    }
+-
+     /**
+      * @return string
+      */
+diff --git a/src/Repositories/PictureRepository.php b/src/Repositories/PictureRepository.php
+index cdf7e13..670fc06 100644
+--- a/src/Repositories/PictureRepository.php
++++ b/src/Repositories/PictureRepository.php
+@@ -2,7 +2,29 @@
+ 
+ namespace sasquatch\Repositories;
+ 
++use sasquatch\Models\Picture;
++
+ class PictureRepository
+ {
++    public static function findAll() : array
++    {
++        $dir = new \DirectoryIterator(__DIR__.'/../../uploads');
++
++        $pictures = [];
++        foreach ( $dir as $fileInfo ) {
++            if ( in_array($fileInfo->getExtension(), ['jpg', 'jpeg', 'png', 'gif']) ) {
++                $metaDataFileName = $fileInfo->getPath().DIRECTORY_SEPARATOR.substr( $fileInfo->getFilename(), 0, -3).'json';
++                $metadata = json_decode( file_get_contents( $metaDataFileName ), true );
++
++                $pictures[] = new Picture(
++                    $metadata['author'],
++                    new \DateTimeImmutable( $metadata['date']),
++                    $metadata['location'],
++                    $fileInfo->getFilename()
++                );
++            }
++        }
+ 
++        return $pictures;
++    }
+ }
+\ No newline at end of file

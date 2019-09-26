@@ -1,0 +1,80 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "srp-create-a-new-method-for-rendering-a-single-picture",
+            "name": "SRP: Create a new method for rendering a single picture",
+            "description": null
+        },
+        {
+            "id": "srp-put-all-of-the-html-code-together-in-index-method",
+            "name": "SRP: Put all of the HTML code together in index method",
+            "description": null
+        },
+        {
+            "id": "srp-new-method-for-index-header-html",
+            "name": "SRP: New method for index header HTML",
+            "description": null
+        },
+        {
+            "id": "srp-extract-html-from-storeuploadedpicture",
+            "name": "SRP: Extract HTML from storeUploadedPicture",
+            "description": null
+        },
+        {
+            "id": "srp-remove-html-from-upload",
+            "name": "SRP: Remove HTML from upload",
+            "description": null
+        },
+        {
+            "id": "srp-group-every-html-generating-method",
+            "name": "SRP: Group every HTML generating method",
+            "description": null
+        },
+        {
+            "id": "srp-new-class-responsegenerator",
+            "name": "SRP: New class ResponseGenerator",
+            "description": null
+        },
+        {
+            "id": "srp-create-picturerepository-class",
+            "name": "SRP: Create PictureRepository Class",
+            "description": null
+        },
+        {
+            "id": "srp-move-method-findall",
+            "name": "SRP: Move method findAll",
+            "description": null
+        },
+        {
+            "id": "srp-fix-picturecontroller",
+            "name": "SRP: Fix PictureController",
+            "description": null
+        },
+        {
+            "id": "srp-add-method-save",
+            "name": "SRP: Add method save",
+            "description": null
+        },
+        {
+            "id": "srp-create-independent-picturestorage-class",
+            "name": "SRP: Create independent PictureStorage Class",
+            "description": null
+        },
+        {
+            "id": "srp-create-store-method",
+            "name": "SRP: Create store method",
+            "description": null
+        },
+        {
+            "id": "srp-create-constructor",
+            "name": "SRP: Create constructor",
+            "description": null
+        }
+    ],
+    "sha": "7007a57412903f2dcd9a0f910a6db8fbe12274bf"
+}

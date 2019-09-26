@@ -1,0 +1,39 @@
+diff --git a/src/Repositories/PictureRepository.php b/src/Repositories/PictureRepository.php
+index 670fc06..c68d17f 100644
+--- a/src/Repositories/PictureRepository.php
++++ b/src/Repositories/PictureRepository.php
+@@ -27,4 +27,15 @@ class PictureRepository
+ 
+         return $pictures;
+     }
++
++    public static function save( Picture $picture )
++    {
++        $metadataFile = __DIR__.'/../../metadata/'.substr( $picture->getFileName(), 0, -4 ).'.json';
++
++        file_put_contents( $metadataFile, json_encode([
++            'date' => $picture->getDate()->format('Y-m-d'),
++            'author' => $picture->getAuthor(),
++            'location' => $picture->getLocation(),
++        ]));
++    }
+ }
+\ No newline at end of file
+diff --git a/src/Storage/PictureStorage.php b/src/Storage/PictureStorage.php
+index 425be19..71e6e81 100644
+--- a/src/Storage/PictureStorage.php
++++ b/src/Storage/PictureStorage.php
+@@ -3,8 +3,10 @@
+ 
+ namespace sasquatch\Storage;
+ 
+-
+ class PictureStorage
+ {
+-
++    public function store( array $file )
++    {
++        return move_uploaded_file( $file['tmp_name'],  __DIR__ . '/../../uploads/' . basename($file['name']) );
++    }
+ }
+\ No newline at end of file

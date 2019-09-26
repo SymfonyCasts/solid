@@ -1,0 +1,50 @@
+diff --git a/src/Controllers/PictureController.php b/src/Controllers/PictureController.php
+index 742efcf..2c699c4 100644
+--- a/src/Controllers/PictureController.php
++++ b/src/Controllers/PictureController.php
+@@ -20,21 +20,12 @@ class PictureController
+ 
+     public function index() : string
+     {
+-        $contents = '
+-        
+-        <h1>All Reported Sightings</h1>
+-        <p>All reported Sasquatch sightings, we will find the truth, upload your image to help us find Bigfoot!</p>
+-        <a class="btn btn-info btn-lg" href="upload">Upload your Bigfoot Image</a>
+-        <div class="my-5 row">
+-        {pictures}
+-        </div>
+-';
+         $picturesHTML = '';
+         foreach ( Picture::findAll() as $picture ) {
+             $picturesHTML .= $this->renderPicture( $picture );
+         }
+ 
+-        return $this->render( preg_replace( '/{pictures}/', $picturesHTML, $contents ) );
++        return $this->render( preg_replace( '/{pictures}/', $picturesHTML, $this->getIndexHeader() ) );
+     }
+ 
+     private function render( string $contents ) : string
+@@ -159,4 +150,21 @@ class PictureController
+     {
+         return file_get_contents( __DIR__.'/../../uploads/'.$fileName );
+     }
++
++    /**
++     * @return string
++     */
++    private function getIndexHeader(): string
++    {
++        $contents = '
++        
++        <h1>All Reported Sightings</h1>
++        <p>All reported Sasquatch sightings, we will find the truth, upload your image to help us find Bigfoot!</p>
++        <a class="btn btn-info btn-lg" href="upload">Upload your Bigfoot Image</a>
++        <div class="my-5 row">
++        {pictures}
++        </div>
++';
++        return $contents;
++    }
+ }
+\ No newline at end of file
