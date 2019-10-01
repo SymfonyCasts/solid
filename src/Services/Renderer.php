@@ -1,21 +1,20 @@
 <?php
 
-
 namespace sasquatch\Services;
 
 class Renderer
 {
-    public function renderPage( string $title, string $contents )
+    public function renderPage(string $title, string $contents)
     {
-        return $this->render('<h1>'.$title.'</h1>'.$contents );
+        return $this->render('<h1>'.$title.'</h1>'.$contents);
     }
 
-    private function render( string $contents ) : string
+    private function render(string $contents): string
     {
-        return preg_replace( '/{contents}/', $contents, $this->getLayout() );
+        return preg_replace('/{contents}/', $contents, $this->getLayout());
     }
 
-    private function getLayout() : string
+    private function getLayout(): string
     {
         return '
 <html>
@@ -46,7 +45,7 @@ class Renderer
         ';
     }
 
-    public function renderUploadForm() : string
+    public function renderUploadForm(): string
     {
         return $this->render('
         <div class="row">
