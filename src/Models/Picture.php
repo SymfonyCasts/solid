@@ -91,18 +91,4 @@ class Picture
             throw new \Exception( 'Couldn\'t store the upload :(' );
         }
     }
-
-    public function save()
-    {
-        $destination = __DIR__ . '/../../picture_info/' . basename($this->getFileName());
-        $infoFileName = substr( $destination, 0, strrpos($destination, '.') ).'.json';
-
-        file_put_contents( $infoFileName, json_encode( [
-            'date' => $this->getDate()->format('Y/m/d'),
-            'author' => $this->getAuthor(),
-            'location' => $this->getLocation(),
-            'fileName' => basename($this->getFileName()),
-        ] ) );
-
-    }
 }
