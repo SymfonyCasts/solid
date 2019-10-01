@@ -22,22 +22,19 @@ class Picture
         return $this->author;
     }
 
-    /**
-     * @return \DateTimeImmutable
-     */
     public function getDate(): \DateTimeImmutable
     {
         return $this->date;
     }
 
-    /**
-     * @return string
-     */
     public function getLocation(): string
     {
         return $this->location;
     }
 
+    /**
+     * @return Picture[]
+     */
     public static function findAll(): array
     {
         $dir = new \DirectoryIterator(__DIR__.'/../../picture_info');
@@ -59,9 +56,6 @@ class Picture
         return $pictures;
     }
 
-    /**
-     * @return string
-     */
     public function getFileName(): string
     {
         return $this->fileName;
@@ -79,16 +73,6 @@ class Picture
         ";
     }
 
-    /**
-     * @param array              $uploadedFile
-     * @param \DateTimeImmutable $date
-     * @param string             $author
-     * @param string             $location
-     *
-     * @return Picture
-     *
-     * @throws \Exception
-     */
     public static function createFromUpload(array $uploadedFile, \DateTimeImmutable $date, string $author, string $location): Picture
     {
         $destination = __DIR__.'/../../uploads/'.basename($uploadedFile['name']);
