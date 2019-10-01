@@ -40,19 +40,18 @@ class Picture
 
     public static function findAll() : array
     {
-        $dir = new \DirectoryIterator(__DIR__.'/../../uploads');
+        $dir = new \DirectoryIterator(__DIR__.'/../../picture_info');
 
         $pictures = [];
         foreach ( $dir as $fileInfo ) {
-            if ( in_array($fileInfo->getExtension(), ['jpg', 'jpeg', 'png', 'gif']) ) {
-                $metaDataFileName = $fileInfo->getPath().DIRECTORY_SEPARATOR.substr( $fileInfo->getFilename(), 0, -3).'json';
-                $metadata = json_decode( file_get_contents( $metaDataFileName ), true );
+            if ( $fileInfo->getExtension() == 'json' ) {
+                $metadata = json_decode( file_get_contents( $fileInfo->getPathname() ), true );
 
                 $pictures[] = new Picture(
                     $metadata['author'],
-                    new \DateTimeImmutable( $metadata['date']),
+                    new \DateTimeImmutable( $metadata['date'] ),
                     $metadata['location'],
-                    $fileInfo->getFilename()
+                    $metadata['fileName']
                 );
             }
         }
@@ -66,5 +65,56 @@ class Picture
     public function getFileName(): string
     {
         return $this->fileName;
+    }
+
+    public function render() : string
+    {
+        return "
+            <div class='col-sm-4 mb-5'>
+                <img src='show?file={$this->getFileName()}' class='big-foot-img'/>
+                <p class='mt-3 mb-0'>Image taken by: <strong>{$this->getAuthor()}</strong></p> 
+                <p class='mb-0'>Coordinates: <strong>{$this->getLocation()}</strong></p>
+                <p class='mb-0'>Date: <strong>{$this->getDate()->format('d/m/Y')}</strong></p>
+            </div>
+        ";
+    }
+
+    /**
+     * @param array $uploadedFile
+     * @param \DateTimeImmutable $date
+     * @param string $author
+     * @param string $location
+     * @return Picture
+     * @throws \Exception
+     */
+    public static function createFromUpload( array $uploadedFile, \DateTimeImmutable $date, string $author, string $location ) : Picture
+    {
+        $destination = __DIR__ . '/../../uploads/' . basename($uploadedFile['name']);
+        if ( move_uploaded_file( $uploadedFile['tmp_name'], $destination ) ) {
+
+            return new Picture(
+                $author,
+                $date,
+                $location,
+                basename($uploadedFile['name'])
+            );
+        } else {
+
+            throw new \Exception( 'Couldn\'t store the upload :(' );
+        }
+    }
+
+    public function save()
+    {
+        $destination = __DIR__ . '/../../picture_info/' . basename($this->getFileName());
+        $infoFileName = substr( $destination, 0, strrpos($destination, '.') ).'.json';
+
+        file_put_contents( $infoFileName, json_encode( [
+            'date' => $this->getDate()->format('Y/m/d'),
+            'author' => $this->getAuthor(),
+            'location' => $this->getLocation(),
+            'fileName' => basename($this->getFileName()),
+        ] ) );
+
     }
 }
