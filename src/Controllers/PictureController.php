@@ -3,15 +3,17 @@
 namespace sasquatch\Controllers;
 
 use sasquatch\Models\Picture;
+use sasquatch\Repositories\PictureRepository;
+use sasquatch\Services\PictureRenderer;
 use sasquatch\Services\Renderer;
 
 class PictureController
 {
     private $renderer;
 
-    public function __construct()
+    public function __construct( Renderer $renderer )
     {
-        $this->renderer = new Renderer();
+        $this->renderer = $renderer;
     }
 
     public function index() : string
@@ -21,8 +23,9 @@ class PictureController
         <a class="btn btn-info btn-lg" href="upload">Upload your Bigfoot Image</a>
         <div class="my-5 row">';
 
+        $pictureRenderer = new PictureRenderer();
         foreach ( Picture::findAll() as $picture ) {
-            $contents .= $picture->render();
+            $contents .= $pictureRenderer->render($picture);
         }
 
         $contents .= '</div>';
@@ -47,7 +50,8 @@ class PictureController
                         $_POST['author'],
                         $_POST['location'],
                     );
-                    $newPicture->save();
+                    $repo = new PictureRepository();
+                    $repo->save( $newPicture );
 
                     return $this->renderer->renderPage('New sighting', '
                 <h2>Sasquatch Spotted! </h2>
