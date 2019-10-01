@@ -67,18 +67,6 @@ class Picture
         return $this->fileName;
     }
 
-    public function render() : string
-    {
-        return "
-            <div class='col-sm-4 mb-5'>
-                <img src='show?file={$this->getFileName()}' class='big-foot-img'/>
-                <p class='mt-3 mb-0'>Image taken by: <strong>{$this->getAuthor()}</strong></p> 
-                <p class='mb-0'>Coordinates: <strong>{$this->getLocation()}</strong></p>
-                <p class='mb-0'>Date: <strong>{$this->getDate()->format('d/m/Y')}</strong></p>
-            </div>
-        ";
-    }
-
     /**
      * @param array $uploadedFile
      * @param \DateTimeImmutable $date
