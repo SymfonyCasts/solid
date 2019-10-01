@@ -32,38 +32,38 @@ class PictureController
 
     public function upload(): string
     {
-        if ('post' == strtolower($_SERVER['REQUEST_METHOD'])) {
-            // Process form
-            if (!array_key_exists('newPicture', $_FILES) || !array_key_exists('author', $_POST)) {
-                http_send_status(400);
-
-                return $this->renderer->renderPage('New sighting', "<p>Sorry... I didn't understand :(...</p><p>Wanna <a href='upload'>try again?</a></p>");
-            } else {
-                try {
-                    $newPicture = Picture::createFromUpload(
-                        $_FILES['newPicture'],
-                        new \DateTimeImmutable(),
-                        $_POST['author'],
-                        $_POST['location'],
-                    );
-                    $newPicture->save();
-
-                    return $this->renderer->renderPage('New sighting', '
-                <h2>Sasquatch Spotted! </h2>
-                <p>Click <u><a class="text-white" href="/">here</a></u> to see your image and the rest of the sightings!</p>'
-                    );
-                } catch (\Exception $e) {
-                    error_log(__FILE__.': '.$e->getMessage());
-
-                    return $this->renderer->renderPage('New sighting!', '
-            <h2 class="mb-4 text-center">Sneaky like a Sasquatch, that upload didn\'t work!</h2>
-            <p class="text-center"><a class="btn btn-light btn-lg" href="upload">Try Again</a></p>
-            '
-                    );
-                }
-            }
-        } else {
+        if ('post' !== strtolower($_SERVER['REQUEST_METHOD'])) {
             return $this->renderer->renderUploadForm();
+        }
+
+        // Process form
+        if (!array_key_exists('newPicture', $_FILES) || !array_key_exists('author', $_POST)) {
+            http_send_status(400);
+
+            return $this->renderer->renderPage('New sighting', "<p>Sorry... I didn't understand :(...</p><p>Wanna <a href='upload'>try again?</a></p>");
+        } else {
+            try {
+                $newPicture = Picture::createFromUpload(
+                    $_FILES['newPicture'],
+                    new \DateTimeImmutable(),
+                    $_POST['author'],
+                    $_POST['location'],
+                );
+                $newPicture->save();
+
+                return $this->renderer->renderPage('New sighting', '
+            <h2>Sasquatch Spotted! </h2>
+            <p>Click <u><a class="text-white" href="/">here</a></u> to see your image and the rest of the sightings!</p>'
+                );
+            } catch (\Exception $e) {
+                error_log(__FILE__.': '.$e->getMessage());
+
+                return $this->renderer->renderPage('New sighting!', '
+        <h2 class="mb-4 text-center">Sneaky like a Sasquatch, that upload didn\'t work!</h2>
+        <p class="text-center"><a class="btn btn-light btn-lg" href="upload">Try Again</a></p>
+        '
+                );
+            }
         }
     }
 
