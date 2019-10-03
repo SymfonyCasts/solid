@@ -3,7 +3,7 @@
 namespace Sasquatch\Controllers;
 
 use Sasquatch\Models\Picture;
-use Sasquatch\Services\Renderer;
+use Sasquatch\Services\WebSiteRenderer;
 
 class PictureController
 {
@@ -11,7 +11,7 @@ class PictureController
 
     public function __construct()
     {
-        $this->renderer = new Renderer();
+        $this->renderer = new WebSiteRenderer();
     }
 
     public function index(): string

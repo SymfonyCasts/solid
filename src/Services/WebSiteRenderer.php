@@ -2,18 +2,38 @@
 
 namespace Sasquatch\Services;
 
-class Renderer
+/**
+ * Class WebSiteRenderer
+ * @package Sasquatch\Services
+ * Service to render HTML pages for the application
+ */
+class WebSiteRenderer
 {
+    /**
+     * @param string $title
+     * @param string $contents
+     * @return string
+     * Renders a full HTML page using current layout
+     */
     public function renderPage(string $title, string $contents)
     {
         return $this->render('<h1>'.$title.'</h1>'.$contents);
     }
 
+    /**
+     * @param string $contents
+     * @return string
+     * Renders contents inside layout
+     */
     private function render(string $contents): string
     {
         return preg_replace('/{contents}/', $contents, $this->getLayout());
     }
 
+    /**
+     * @return string
+     * Renders layout with placeholder
+     */
     private function getLayout(): string
     {
         return '
@@ -45,6 +65,10 @@ class Renderer
         ';
     }
 
+    /**
+     * @return string
+     * Renders an HTML upload form
+     */
     public function renderUploadForm(): string
     {
         return $this->render('
