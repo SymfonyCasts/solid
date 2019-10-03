@@ -1,12 +1,12 @@
 <?php
 
-namespace sasquatch\Controllers;
+namespace Sasquatch\Controllers;
 
-use sasquatch\Repositories\PictureRepository;
-use sasquatch\Services\PictureRenderer;
-use sasquatch\Services\UploadManager;
-use sasquatch\Services\WebSiteRenderer;
-use sasquatch\Models\Picture;
+use Sasquatch\Repositories\PictureRepository;
+use Sasquatch\Services\PictureRenderer;
+use Sasquatch\Services\UploadManager;
+use Sasquatch\Services\WebSiteRenderer;
+use Sasquatch\Models\Picture;
 
 class PictureController
 {

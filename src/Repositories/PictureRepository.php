@@ -1,9 +1,9 @@
 <?php
 
-namespace sasquatch\Repositories;
+namespace Sasquatch\Repositories;
 
-use sasquatch\Models\Picture;
-use sasquatch\Services\PictureSerializer;
+use Sasquatch\Models\Picture;
+use Sasquatch\Services\PictureSerializer;
 
 class PictureRepository
 {

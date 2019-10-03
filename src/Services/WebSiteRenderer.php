@@ -1,6 +1,6 @@
 <?php
 
-namespace sasquatch\Services;
+namespace Sasquatch\Services;
 
 class WebSiteRenderer
 {

@@ -2,8 +2,8 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use sasquatch\Controllers\PictureController;
-use sasquatch\Services\WebSiteRenderer;
+use Sasquatch\Controllers\PictureController;
+use Sasquatch\Services\WebSiteRenderer;
 
 $controller = new PictureController( new WebSiteRenderer() );
 

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace sasquatch\Services;
+namespace Sasquatch\Services;
 
 
-use sasquatch\Models\Picture;
+use Sasquatch\Models\Picture;
 
 class PictureSerializer
 {
