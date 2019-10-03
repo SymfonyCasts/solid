@@ -6,17 +6,32 @@ use sasquatch\Models\Picture;
 
 class PictureRepository
 {
-    public function save( Picture $picture )
-    {
-        $destination = __DIR__ . '/../../picture_info/' . basename($picture->getFileName());
-        $infoFileName = substr( $destination, 0, strrpos($destination, '.') ).'.json';
+    const PICTURE_FILE_EXTENSION = '.json';
+    
+    private $baseDir;
 
-        file_put_contents( $infoFileName, json_encode( [
-            'date' => $picture->getDate()->format('Y/m/d'),
-            'author' => $picture->getAuthor(),
-            'location' => $picture->getLocation(),
-            'fileName' => basename($picture->getFileName()),
-        ] ) );
+    /**
+     * PictureRepository constructor.
+     * @param string $baseDir
+     */
+    public function __construct( string $baseDir )
+    {
+        $this->baseDir = $baseDir;
+    }
+
+    /**
+     * @param Picture $picture
+     * @throws \Exception
+     */
+    public function save(Picture $picture)
+    {
+        $destination = $this->baseDir . basename($picture->getFileName());
+        $infoFileName = substr($destination, 0, strrpos($destination, '.')) . self::PICTURE_FILE_EXTENSION;
+
+        if (!file_put_contents($infoFileName, $this->serializePicture($picture))) {
+
+            throw new \Exception('Couldn\'t save picture information :(');
+        }
     }
 
     /**
@@ -24,12 +39,12 @@ class PictureRepository
      */
     public function findAll(): array
     {
-        $dir = new \DirectoryIterator(__DIR__.'/../../picture_info');
+        $dir = new \DirectoryIterator($this->baseDir);
 
         $pictures = [];
         foreach ($dir as $fileInfo) {
-            if ('json' == $fileInfo->getExtension()) {
-                $metadata = json_decode(file_get_contents($fileInfo->getPathname()), true);
+            if ($this->isPictureFile($fileInfo)) {
+                $metadata = $this->unserializePicture($fileInfo);
 
                 $pictures[] = new Picture(
                     $metadata['author'],
@@ -50,7 +65,7 @@ class PictureRepository
      * @param string $location
      * @return Picture
      */
-    public function createFromFile(string $fileName, \DateTimeImmutable $date, string $author, string $location ) : Picture
+    public function createFromFile(string $fileName, \DateTimeImmutable $date, string $author, string $location): Picture
     {
         return new Picture(
             $author,
@@ -58,5 +73,37 @@ class PictureRepository
             $location,
             basename($fileName)
         );
+    }
+
+    /**
+     * @param Picture $picture
+     * @return false|string
+     */
+    private function serializePicture(Picture $picture)
+    {
+        return json_encode([
+            'date' => $picture->getDate()->format('Y/m/d'),
+            'author' => $picture->getAuthor(),
+            'location' => $picture->getLocation(),
+            'fileName' => basename($picture->getFileName()),
+        ]);
+    }
+
+    /**
+     * @param \DirectoryIterator $fileInfo
+     * @return bool
+     */
+    private function isPictureFile(\DirectoryIterator $fileInfo): bool
+    {
+        return self::PICTURE_FILE_EXTENSION == $fileInfo->getExtension();
+    }
+
+    /**
+     * @param \DirectoryIterator $fileInfo
+     * @return mixed
+     */
+    private function unserializePicture(\DirectoryIterator $fileInfo): mixed
+    {
+        return json_decode(file_get_contents($fileInfo->getPathname()), true);
     }
 }
