@@ -24,7 +24,8 @@ class PictureController
         <div class="my-5 row">';
 
         $pictureRenderer = new PictureRenderer();
-        foreach ( Picture::findAll() as $picture ) {
+        $pictureRepository = new PictureRepository();
+        foreach ( $pictureRepository->findAll() as $picture ) {
             $contents .= $pictureRenderer->render($picture);
         }
 
