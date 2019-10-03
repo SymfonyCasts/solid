@@ -1,5 +1,5 @@
 {
-  "name": "leewayweb/sasquatch",
+  "name": "leewayweb/Sasquatch",
   "description": "An app to share Big foot sighting pictures",
   "minimum-stability": "stable",
   "license": "proprietary",
@@ -11,7 +11,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "sasquatch\\": "src/"
+      "Sasquatch\\": "src/"
     }
   },
   "config": {

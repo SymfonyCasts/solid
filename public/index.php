@@ -2,7 +2,7 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use sasquatch\Controllers\PictureController;
+use Sasquatch\Controllers\PictureController;
 
 $controller = new PictureController();
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace sasquatch\Controllers;
+namespace Sasquatch\Controllers;
 
-use sasquatch\Models\Picture;
-use sasquatch\Services\Renderer;
+use Sasquatch\Models\Picture;
+use Sasquatch\Services\Renderer;
 
 class PictureController
 {

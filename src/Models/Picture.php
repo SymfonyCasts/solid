@@ -1,6 +1,6 @@
 <?php
 
-namespace sasquatch\Models;
+namespace Sasquatch\Models;
 
 class Picture
 {
