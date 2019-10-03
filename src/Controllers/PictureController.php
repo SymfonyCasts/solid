@@ -48,15 +48,15 @@ class PictureController
                 return $this->webSiteRenderer->renderPage( 'New sighting',"<p>Sorry... I didn't understand :(...</p><p>Wanna <a href='upload'>try again?</a></p>");
             } else {
                 $uploadManager = new UploadManager();
+                $pictureRepository = new PictureRepository();
                 try {
-                    $newPicture = Picture::createFromFile(
+                    $newPicture = $pictureRepository->createFromFile(
                         $uploadManager->storeUploadedFile( $_FILES['newPicture'] ),
                         new \DateTimeImmutable(),
                         $_POST['author'],
                         $_POST['location'],
                     );
-                    $repo = new PictureRepository();
-                    $repo->save( $newPicture );
+                    $pictureRepository->save( $newPicture );
 
                 return $this->webSiteRenderer->renderPage('New sighting', '
             <h2>Sasquatch Spotted! </h2>
