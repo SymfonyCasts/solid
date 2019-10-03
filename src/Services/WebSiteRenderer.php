@@ -2,7 +2,7 @@
 
 namespace sasquatch\Services;
 
-class Renderer
+class WebSiteRenderer
 {
     public function renderPage(string $title, string $contents)
     {

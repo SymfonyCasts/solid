@@ -3,9 +3,9 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use sasquatch\Controllers\PictureController;
-use sasquatch\Services\Renderer;
+use sasquatch\Services\WebSiteRenderer;
 
-$controller = new PictureController( new Renderer() );
+$controller = new PictureController( new WebSiteRenderer() );
 
 $uri = $_SERVER['REQUEST_URI'];
 
