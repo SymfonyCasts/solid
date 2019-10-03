@@ -74,4 +74,21 @@ class PictureController
     {
         return file_get_contents(__DIR__ . '/../../uploads/' . $fileName);
     }
+
+    public function api()
+    {
+        $repo = new PictureRepository();
+
+        $ret = [];
+        foreach ( $repo->findAll() as $picture ) {
+            $ret[] = [
+                'author' => $picture->getAuthor(),
+                'date' => $picture->getDate()->format('Y/m/d'),
+                'location' => $picture->getLocation(),
+                'data' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/show?file={$picture->getFileName()}",
+            ];
+        }
+
+        return json_encode( $ret );
+    }
 }
