@@ -25,10 +25,7 @@ class PictureRepository
      */
     public function save(Picture $picture)
     {
-        $destination = $this->baseDir . DIRECTORY_SEPARATOR . basename($picture->getFileName());
-        $infoFileName = substr($destination, 0, strrpos($destination, '.')) . '.' . self::PICTURE_FILE_EXTENSION;
-
-        if (!file_put_contents($infoFileName, $this->serializePicture($picture))) {
+        if (!file_put_contents($this->getInfoFileName($picture), $this->serializePicture($picture))) {
 
             throw new \Exception('Couldn\'t save picture information :(');
         }
@@ -105,5 +102,16 @@ class PictureRepository
     private function unserializePicture(\DirectoryIterator $fileInfo): array
     {
         return json_decode(file_get_contents($fileInfo->getPathname()), true);
+    }
+
+    /**
+     * @param Picture $picture
+     * @return string
+     */
+    private function getInfoFileName(Picture $picture): string
+    {
+        $destination = $this->baseDir . DIRECTORY_SEPARATOR . basename($picture->getFileName());
+
+        return substr($destination, 0, strrpos($destination, '.')) . '.' . self::PICTURE_FILE_EXTENSION;
     }
 }
