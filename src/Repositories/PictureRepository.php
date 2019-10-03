@@ -6,15 +6,15 @@ use sasquatch\Models\Picture;
 
 class PictureRepository
 {
-    const PICTURE_FILE_EXTENSION = '.json';
-    
+    const PICTURE_FILE_EXTENSION = 'json';
+
     private $baseDir;
 
     /**
      * PictureRepository constructor.
      * @param string $baseDir
      */
-    public function __construct( string $baseDir )
+    public function __construct(string $baseDir)
     {
         $this->baseDir = $baseDir;
     }
@@ -25,8 +25,8 @@ class PictureRepository
      */
     public function save(Picture $picture)
     {
-        $destination = $this->baseDir . basename($picture->getFileName());
-        $infoFileName = substr($destination, 0, strrpos($destination, '.')) . self::PICTURE_FILE_EXTENSION;
+        $destination = $this->baseDir . DIRECTORY_SEPARATOR . basename($picture->getFileName());
+        $infoFileName = substr($destination, 0, strrpos($destination, '.')) . '.' . self::PICTURE_FILE_EXTENSION;
 
         if (!file_put_contents($infoFileName, $this->serializePicture($picture))) {
 
@@ -79,7 +79,7 @@ class PictureRepository
      * @param Picture $picture
      * @return false|string
      */
-    private function serializePicture(Picture $picture)
+    private function serializePicture(Picture $picture): string
     {
         return json_encode([
             'date' => $picture->getDate()->format('Y/m/d'),
@@ -102,7 +102,7 @@ class PictureRepository
      * @param \DirectoryIterator $fileInfo
      * @return mixed
      */
-    private function unserializePicture(\DirectoryIterator $fileInfo): mixed
+    private function unserializePicture(\DirectoryIterator $fileInfo): array
     {
         return json_decode(file_get_contents($fileInfo->getPathname()), true);
     }
