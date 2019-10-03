@@ -17,7 +17,7 @@ class PictureController
         <div class="my-5 row">';
 
         $pictureRenderer = new PictureRenderer();
-        $pictureRepository = new PictureRepository();
+        $pictureRepository = new PictureRepository(__DIR__.'/../../picture_info');
         foreach ( $pictureRepository->findAll() as $picture ) {
             $contents .= $pictureRenderer->render($picture);
         }
@@ -42,7 +42,7 @@ class PictureController
                 return $webSiteRenderer->renderPage( 'New sighting',"<p>Sorry... I didn't understand :(...</p><p>Wanna <a href='upload'>try again?</a></p>");
             } else {
                 $uploadManager = new UploadManager();
-                $pictureRepository = new PictureRepository();
+                $pictureRepository = new PictureRepository(__DIR__.'/../../picture_info');
                 try {
                     $newPicture = $pictureRepository->createFromFile(
                         $uploadManager->storeUploadedFile( $_FILES['newPicture'] ),
