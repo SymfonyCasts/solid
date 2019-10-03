@@ -2,6 +2,10 @@
 
 namespace Sasquatch\Models;
 
+/**
+ * Picture Model
+ * @package Sasquatch\Models
+ */
 class Picture
 {
     private $author;
@@ -9,6 +13,17 @@ class Picture
     private $fileName;
     private $location;
 
+    const PICTURE_FILE_EXTENSION = 'json';
+    const INFO_DIR = __DIR__ . '/../../picture_info';
+    const UPLOADS_DIR = __DIR__ . '/../../uploads';
+
+    /**
+     * Picture constructor.
+     * @param string $author
+     * @param \DateTimeImmutable $date
+     * @param string $location
+     * @param string $fileName
+     */
     public function __construct(string $author, \DateTimeImmutable $date, string $location, string $fileName)
     {
         $this->author = $author;
@@ -17,16 +32,25 @@ class Picture
         $this->location = $location;
     }
 
+    /**
+     * @return string
+     */
     public function getAuthor(): string
     {
         return $this->author;
     }
 
+    /**
+     * @return \DateTimeImmutable
+     */
     public function getDate(): \DateTimeImmutable
     {
         return $this->date;
     }
 
+    /**
+     * @return string
+     */
     public function getLocation(): string
     {
         return $this->location;
@@ -37,11 +61,11 @@ class Picture
      */
     public static function findAll(): array
     {
-        $dir = new \DirectoryIterator(__DIR__.'/../../picture_info');
+        $dir = new \DirectoryIterator(self::INFO_DIR);
 
         $pictures = [];
         foreach ($dir as $fileInfo) {
-            if ('json' == $fileInfo->getExtension()) {
+            if (self::PICTURE_FILE_EXTENSION == $fileInfo->getExtension()) {
                 $metadata = json_decode(file_get_contents($fileInfo->getPathname()), true);
 
                 $pictures[] = new Picture(
@@ -56,11 +80,18 @@ class Picture
         return $pictures;
     }
 
+    /**
+     * @return string
+     */
     public function getFileName(): string
     {
         return $this->fileName;
     }
 
+    /**
+     * Returns an HTML representation of the picture object
+     * @return string
+     */
     public function render(): string
     {
         return "
@@ -73,9 +104,17 @@ class Picture
         ";
     }
 
+    /**
+     * @param array $uploadedFile
+     * @param \DateTimeImmutable $date
+     * @param string $author
+     * @param string $location
+     * @return Picture
+     * @throws \Exception
+     */
     public static function createFromUpload(array $uploadedFile, \DateTimeImmutable $date, string $author, string $location): Picture
     {
-        $destination = __DIR__.'/../../uploads/'.basename($uploadedFile['name']);
+        $destination = self::UPLOADS_DIR . DIRECTORY_SEPARATOR . basename($uploadedFile['name']);
         if (move_uploaded_file($uploadedFile['tmp_name'], $destination)) {
             return new Picture(
                 $author,
@@ -88,16 +127,22 @@ class Picture
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function save()
     {
-        $destination = __DIR__.'/../../picture_info/'.basename($this->getFileName());
-        $infoFileName = substr($destination, 0, strrpos($destination, '.')).'.json';
+        $destination = self::INFO_DIR . DIRECTORY_SEPARATOR . basename($this->getFileName());
+        $infoFileName = substr($destination, 0, strrpos($destination, '.')) .'.'. self::PICTURE_FILE_EXTENSION;
 
-        file_put_contents($infoFileName, json_encode([
+        if (!file_put_contents($infoFileName, json_encode([
             'date' => $this->getDate()->format('Y/m/d'),
             'author' => $this->getAuthor(),
             'location' => $this->getLocation(),
             'fileName' => basename($this->getFileName()),
-        ]));
+        ]))) {
+
+            throw new \Exception('Couldn\'t save the picture information :(');
+        }
     }
 }
