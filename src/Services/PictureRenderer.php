@@ -7,7 +7,7 @@ use sasquatch\Models\Picture;
 
 class PictureRenderer
 {
-    public static function render( Picture $picture )
+    public function render( Picture $picture )
     {
         return "                                                                                      
     <div class='col-sm-4 mb-5'>                                                               
