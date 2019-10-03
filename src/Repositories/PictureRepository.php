@@ -18,4 +18,28 @@ class PictureRepository
             'fileName' => basename($picture->getFileName()),
         ] ) );
     }
+
+    /**
+     * @return Picture[]
+     */
+    public function findAll(): array
+    {
+        $dir = new \DirectoryIterator(__DIR__.'/../../picture_info');
+
+        $pictures = [];
+        foreach ($dir as $fileInfo) {
+            if ('json' == $fileInfo->getExtension()) {
+                $metadata = json_decode(file_get_contents($fileInfo->getPathname()), true);
+
+                $pictures[] = new Picture(
+                    $metadata['author'],
+                    new \DateTimeImmutable($metadata['date']),
+                    $metadata['location'],
+                    $metadata['fileName']
+                );
+            }
+        }
+
+        return $pictures;
+    }
 }
