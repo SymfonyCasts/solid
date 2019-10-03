@@ -5,6 +5,7 @@ namespace sasquatch\Controllers;
 use sasquatch\Models\Picture;
 use sasquatch\Repositories\PictureRepository;
 use sasquatch\Services\PictureRenderer;
+use sasquatch\Services\UploadManager;
 use sasquatch\Services\WebSiteRenderer;
 
 class PictureController
@@ -46,9 +47,10 @@ class PictureController
 
                 return $this->webSiteRenderer->renderPage( 'New sighting',"<p>Sorry... I didn't understand :(...</p><p>Wanna <a href='upload'>try again?</a></p>");
             } else {
+                $uploadManager = new UploadManager();
                 try {
-                    $newPicture = Picture::createFromUpload(
-                        $_FILES['newPicture'],
+                    $newPicture = Picture::createFromFile(
+                        $uploadManager->storeUploadedFile( $_FILES['newPicture'] ),
                         new \DateTimeImmutable(),
                         $_POST['author'],
                         $_POST['location'],

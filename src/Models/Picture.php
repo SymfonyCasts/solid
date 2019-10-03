@@ -38,25 +38,19 @@ class Picture
     }
 
     /**
-     * @param array $uploadedFile
+     * @param string $fileName
      * @param \DateTimeImmutable $date
      * @param string $author
      * @param string $location
      * @return Picture
-     * @throws \Exception
      */
-    public static function createFromUpload( array $uploadedFile, \DateTimeImmutable $date, string $author, string $location ) : Picture
+    public static function createFromFile(string $fileName, \DateTimeImmutable $date, string $author, string $location ) : Picture
     {
-        $destination = __DIR__.'/../../uploads/'.basename($uploadedFile['name']);
-        if (move_uploaded_file($uploadedFile['tmp_name'], $destination)) {
-            return new Picture(
-                $author,
-                $date,
-                $location,
-                basename($uploadedFile['name'])
-            );
-        } else {
-            throw new \Exception('Couldn\'t store the upload :(');
-        }
+        return new Picture(
+            $author,
+            $date,
+            $location,
+            basename($fileName)
+        );
     }
 }
