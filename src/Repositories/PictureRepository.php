@@ -3,6 +3,7 @@
 namespace sasquatch\Repositories;
 
 use sasquatch\Models\Picture;
+use sasquatch\Services\PictureSerializer;
 
 class PictureRepository
 {
@@ -25,7 +26,7 @@ class PictureRepository
      */
     public function save(Picture $picture)
     {
-        if (!file_put_contents($this->getInfoFileName($picture), $this->serializePicture($picture))) {
+        if (!file_put_contents($this->getInfoFileName($picture),  (new PictureSerializer())->serializePicture($picture))) {
 
             throw new \Exception('Couldn\'t save picture information :(');
         }
@@ -37,11 +38,12 @@ class PictureRepository
     public function findAll(): array
     {
         $dir = new \DirectoryIterator($this->baseDir);
+        $serializer = new PictureSerializer();
 
         $pictures = [];
         foreach ($dir as $fileInfo) {
             if ($this->isPictureFile($fileInfo)) {
-                $metadata = $this->unserializePicture($fileInfo);
+                $metadata = $serializer->unserializePicture($fileInfo);
 
                 $pictures[] = new Picture(
                     $metadata['author'],
@@ -56,35 +58,12 @@ class PictureRepository
     }
 
     /**
-     * @param Picture $picture
-     * @return false|string
-     */
-    private function serializePicture(Picture $picture): string
-    {
-        return json_encode([
-            'date' => $picture->getDate()->format('Y/m/d'),
-            'author' => $picture->getAuthor(),
-            'location' => $picture->getLocation(),
-            'fileName' => basename($picture->getFileName()),
-        ]);
-    }
-
-    /**
      * @param \DirectoryIterator $fileInfo
      * @return bool
      */
     private function isPictureFile(\DirectoryIterator $fileInfo): bool
     {
         return self::PICTURE_FILE_EXTENSION == $fileInfo->getExtension();
-    }
-
-    /**
-     * @param \DirectoryIterator $fileInfo
-     * @return mixed
-     */
-    private function unserializePicture(\DirectoryIterator $fileInfo): array
-    {
-        return json_decode(file_get_contents($fileInfo->getPathname()), true);
     }
 
     /**
