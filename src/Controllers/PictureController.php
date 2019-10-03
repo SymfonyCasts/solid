@@ -6,6 +6,7 @@ use sasquatch\Repositories\PictureRepository;
 use sasquatch\Services\PictureRenderer;
 use sasquatch\Services\UploadManager;
 use sasquatch\Services\WebSiteRenderer;
+use sasquatch\Models\Picture;
 
 class PictureController
 {
@@ -17,8 +18,8 @@ class PictureController
         <div class="my-5 row">';
 
         $pictureRenderer = new PictureRenderer();
-        $pictureRepository = new PictureRepository(__DIR__.'/../../picture_info');
-        foreach ( $pictureRepository->findAll() as $picture ) {
+        $pictureRepository = new PictureRepository(__DIR__ . '/../../picture_info');
+        foreach ($pictureRepository->findAll() as $picture) {
             $contents .= $pictureRenderer->render($picture);
         }
 
@@ -39,25 +40,26 @@ class PictureController
         if (!array_key_exists('newPicture', $_FILES) || !array_key_exists('author', $_POST)) {
             http_send_status(400);
 
-                return $webSiteRenderer->renderPage( 'New sighting',"<p>Sorry... I didn't understand :(...</p><p>Wanna <a href='upload'>try again?</a></p>");
-            } else {
-                $uploadManager = new UploadManager();
-                $pictureRepository = new PictureRepository(__DIR__.'/../../picture_info');
-                try {
-                    $newPicture = $pictureRepository->createFromFile(
-                        $uploadManager->storeUploadedFile( $_FILES['newPicture'] ),
-                        new \DateTimeImmutable(),
-                        $_POST['author'],
-                        $_POST['location'],
-                    );
-                    $pictureRepository->save( $newPicture );
+            return $webSiteRenderer->renderPage('New sighting', "<p>Sorry... I didn't understand :(...</p><p>Wanna <a href='upload'>try again?</a></p>");
+        } else {
+            $uploadManager = new UploadManager();
+            $pictureRepository = new PictureRepository(__DIR__ . '/../../picture_info');
+            try {
+                $newPicture = new Picture(
+                    $_POST['author'],
+                    new \DateTimeImmutable(),
+                    $_POST['location'],
+                    $uploadManager->storeUploadedFile($_FILES['newPicture'])
+                );
+
+                $pictureRepository->save($newPicture);
 
                 return $webSiteRenderer->renderPage('New sighting', '
             <h2>Sasquatch Spotted! </h2>
             <p>Click <u><a class="text-white" href="/">here</a></u> to see your image and the rest of the sightings!</p>'
                 );
             } catch (\Exception $e) {
-                error_log(__FILE__.': '.$e->getMessage());
+                error_log(__FILE__ . ': ' . $e->getMessage());
 
                 return $webSiteRenderer->renderPage('New sighting!', '
         <h2 class="mb-4 text-center">Sneaky like a Sasquatch, that upload didn\'t work!</h2>
@@ -70,6 +72,6 @@ class PictureController
 
     public function show(string $fileName): string
     {
-        return file_get_contents(__DIR__.'/../../uploads/'.$fileName);
+        return file_get_contents(__DIR__ . '/../../uploads/' . $fileName);
     }
 }

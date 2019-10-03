@@ -56,23 +56,6 @@ class PictureRepository
     }
 
     /**
-     * @param string $fileName
-     * @param \DateTimeImmutable $date
-     * @param string $author
-     * @param string $location
-     * @return Picture
-     */
-    public function createFromFile(string $fileName, \DateTimeImmutable $date, string $author, string $location): Picture
-    {
-        return new Picture(
-            $author,
-            $date,
-            $location,
-            basename($fileName)
-        );
-    }
-
-    /**
      * @param Picture $picture
      * @return false|string
      */
