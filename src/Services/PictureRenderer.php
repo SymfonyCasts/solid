@@ -1,12 +1,15 @@
 <?php
 
-
 namespace sasquatch\Services;
 
 use sasquatch\Models\Picture;
 
 class PictureRenderer
 {
+    /**
+     * @param Picture $picture
+     * @return string
+     */
     public function render( Picture $picture )
     {
         return "                                                                                      
