@@ -41,14 +41,7 @@ class PictureRepository
         $pictures = [];
         foreach ($dir as $fileInfo) {
             if ($this->isPictureFile($fileInfo)) {
-                $metadata = $serializer->unserializePicture($fileInfo);
-
-                $pictures[] = new Picture(
-                    $metadata['author'],
-                    new \DateTimeImmutable($metadata['date']),
-                    $metadata['location'],
-                    $metadata['fileName']
-                );
+                $pictures[] = $serializer->unserializePicture(file_get_contents($fileInfo->getPathname()));
             }
         }
 
