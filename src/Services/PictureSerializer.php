@@ -10,11 +10,18 @@ class PictureSerializer
 {
     /**
      * @param \DirectoryIterator $fileInfo
-     * @return mixed
+     * @return Picture
      */
-    public function unserializePicture(\DirectoryIterator $fileInfo): array
+    public function unserializePicture(string $contents): Picture
     {
-        return json_decode(file_get_contents($fileInfo->getPathname()), true);
+        $data = json_decode($contents, true);
+
+        return new Picture(
+            $data['author'],
+            new \DateTimeImmutable($data['date']),
+            $data['location'],
+            $data['fileName']
+        );
     }
 
     /**
