@@ -13,7 +13,7 @@ class Picture
     private $fileName;
     private $location;
 
-    const PICTURE_FILE_EXTENSION = 'json';
+    const PICTURE_FILE_EXTENSION = 'nfo';
     const INFO_DIR = __DIR__ . '/../../picture_info';
     const UPLOADS_DIR = __DIR__ . '/../../uploads';
 
@@ -65,16 +65,14 @@ class Picture
 
         $pictures = [];
         foreach ($dir as $fileInfo) {
-            if (self::PICTURE_FILE_EXTENSION == $fileInfo->getExtension()) {
-                $metadata = json_decode(file_get_contents($fileInfo->getPathname()), true);
+            $metadata = json_decode(file_get_contents($fileInfo->getPathname()), true);
 
-                $pictures[] = new Picture(
-                    $metadata['author'],
-                    new \DateTimeImmutable($metadata['date']),
-                    $metadata['location'],
-                    $metadata['fileName']
-                );
-            }
+            $pictures[] = new Picture(
+                $metadata['author'],
+                new \DateTimeImmutable($metadata['date']),
+                $metadata['location'],
+                $metadata['fileName']
+            );
         }
 
         return $pictures;
