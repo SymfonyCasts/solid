@@ -12,7 +12,7 @@ class PictureSerializer
      * @param \DirectoryIterator $fileInfo
      * @return Picture
      */
-    public function unserializePicture(string $contents): Picture
+    public function unserialize(string $contents): Picture
     {
         $data = json_decode($contents, true);
 
@@ -28,7 +28,7 @@ class PictureSerializer
      * @param Picture $picture
      * @return false|string
      */
-    public function serializePicture(Picture $picture): string
+    public function serialize(Picture $picture): string
     {
         return json_encode([
             'date' => $picture->getDate()->format('Y/m/d'),

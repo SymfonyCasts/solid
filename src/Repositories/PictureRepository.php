@@ -26,7 +26,7 @@ class PictureRepository
      */
     public function save(Picture $picture)
     {
-        if (!file_put_contents($this->getInfoFileName($picture),  (new PictureSerializer())->serializePicture($picture))) {
+        if (!file_put_contents($this->getInfoFileName($picture),  (new PictureSerializer())->serialize($picture))) {
 
             throw new \Exception('Couldn\'t save picture information :(');
         }
@@ -43,7 +43,7 @@ class PictureRepository
         $pictures = [];
         foreach ($dir as $fileInfo) {
             if ($this->isPictureFile($fileInfo)) {
-                $pictures[] = $serializer->unserializePicture(file_get_contents($fileInfo->getPathname()));
+                $pictures[] = $serializer->unserialize(file_get_contents($fileInfo->getPathname()));
             }
         }
 
