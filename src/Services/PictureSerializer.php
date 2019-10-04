@@ -20,7 +20,7 @@ class PictureSerializer
      */
     public function __construct(string $format)
     {
-        if ( $format != self::FORMAT_XML && $format != self::FORMAT_JSON ) {
+        if ($format != self::FORMAT_XML && $format != self::FORMAT_JSON) {
 
             throw new \Exception('Format ' . $format . ' is unknown for serialization');
         }
@@ -29,17 +29,17 @@ class PictureSerializer
 
     /**
      * @param \DirectoryIterator $fileInfo
-     * @return mixed
+     * @return Picture
      */
-    public function unserializePicture(\DirectoryIterator $fileInfo): array
+    public function unserializePicture(string $contents): Picture
     {
         switch (strtolower($this->format)) {
             case self::FORMAT_JSON:
 
-                return json_decode(file_get_contents($fileInfo->getPathname()), true);
+                return $this->json2picture($contents);
             case self::FORMAT_XML:
 
-                return $this->xml2array(new \SimpleXMLElement($fileInfo->getPathname(), true));
+                return $this->xml2picture($contents);
         }
     }
 
@@ -52,38 +52,72 @@ class PictureSerializer
         switch ($this->format) {
             case self::FORMAT_JSON:
 
-                return json_encode([
-                    'date' => $picture->getDate()->format('Y/m/d'),
-                    'author' => $picture->getAuthor(),
-                    'location' => $picture->getLocation(),
-                    'fileName' => basename($picture->getFileName()),
-                ]);
+                return $this->picture2json($picture);
             case self::FORMAT_XML:
 
-                return $this->picture2xml($picture)->asXML();
+                return $this->picture2xml($picture);
         }
     }
 
     /**
      * @param Picture $picture
-     * @return \SimpleXMLElement
+     * @return string
      */
-    private function picture2xml(Picture $picture): \SimpleXMLElement
+    private function picture2xml(Picture $picture): string
     {
         $xml = new \SimpleXMLElement('<picture/>');
-        $xml->author = $picture->getAuthor();
 
-        return $xml;
+        $xml->author = $picture->getAuthor();
+        $xml->date = $picture->getDate()->format('Y-m-d');
+        $xml->location = $picture->getLocation();
+        $xml->fileName = $picture->getFileName();
+
+        return $xml->asXML();
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param string $xml
      * @return array
      */
-    private function xml2array(\SimpleXMLElement $xml): array
+    private function xml2picture(string $xmlString): Picture
     {
-        return [
-            'author' => $xml->xpath('/picture/author')[0],
-        ];
+        $xml = new \SimpleXMLElement($xmlString);
+
+        return new Picture(
+            $xml->xpath('/picture/author')[0],
+            new \DateTimeImmutable($xml->xpath('/picture/date')[0]),
+            $xml->xpath('/picture/location')[0],
+            $xml->xpath('/picture/fileName')[0],
+        );
+    }
+
+    /**
+     * @param Picture $picture
+     * @return string
+     */
+    private function picture2json(Picture $picture): string
+    {
+        return json_encode([
+            'date' => $picture->getDate()->format('Y/m/d'),
+            'author' => $picture->getAuthor(),
+            'location' => $picture->getLocation(),
+            'fileName' => basename($picture->getFileName()),
+        ]);
+    }
+
+    /**
+     * @param string $json
+     * @return Picture
+     */
+    private function json2picture(string $json): Picture
+    {
+        $data = json_decode($json, true);
+
+        return new Picture(
+            $data['author'],
+            $data['date'],
+            $data['location'],
+            $data['fileName'],
+        );
     }
 }
