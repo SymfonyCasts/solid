@@ -31,7 +31,7 @@ class PictureSerializer
      * @param \DirectoryIterator $fileInfo
      * @return Picture
      */
-    public function unserializePicture(string $contents): Picture
+    public function unserialize(string $contents): Picture
     {
         switch (strtolower($this->format)) {
             case self::FORMAT_JSON:
@@ -47,7 +47,7 @@ class PictureSerializer
      * @param Picture $picture
      * @return false|string
      */
-    public function serializePicture(Picture $picture): string
+    public function serialize(Picture $picture): string
     {
         switch ($this->format) {
             case self::FORMAT_JSON:
