@@ -3,11 +3,12 @@
 namespace Sasquatch\Repositories;
 
 use Sasquatch\Models\Picture;
-use Sasquatch\Services\PictureSerializer;
+use Sasquatch\Services\PictureXMLSerializer;
 
 class PictureRepository
 {
     private $baseDir;
+    private $serializer;
 
     /**
      * PictureRepository constructor.
@@ -16,6 +17,7 @@ class PictureRepository
     public function __construct(string $baseDir)
     {
         $this->baseDir = $baseDir;
+        $this->serializer = new PictureXMLSerializer();
     }
 
     /**
@@ -24,7 +26,7 @@ class PictureRepository
      */
     public function save(Picture $picture)
     {
-        if (!file_put_contents($this->getInfoFileName($picture),  (new PictureSerializer())->serialize($picture))) {
+        if (!file_put_contents($this->getInfoFileName($picture),  $this->serializer->serialize($picture))) {
 
             throw new \Exception('Couldn\'t save picture information :(');
         }
@@ -36,25 +38,17 @@ class PictureRepository
     public function findAll(): array
     {
         $dir = new \DirectoryIterator($this->baseDir);
-        $serializer = new PictureSerializer(PictureSerializer::FORMAT_XML);
 
         $pictures = [];
         foreach ($dir as $fileInfo) {
-            if ($this->isPictureFile($fileInfo)) {
-                $pictures[] = $serializer->unserialize(file_get_contents($fileInfo->getPathname()));
+            try {
+                $pictures[] = $this->serializer->unserialize(file_get_contents($fileInfo->getPathname()));
+            } catch ( \Exception $e ) {
+                error_log('Couldn\'t unserialize file '.$fileInfo->getPathname());
             }
         }
 
         return $pictures;
-    }
-
-    /**
-     * @param \DirectoryIterator $fileInfo
-     * @return bool
-     */
-    private function isPictureFile(\DirectoryIterator $fileInfo): bool
-    {
-        return PictureSerializer::FORMAT_XML == $fileInfo->getExtension();
     }
 
     /**
@@ -65,6 +59,6 @@ class PictureRepository
     {
         $destination = $this->baseDir . DIRECTORY_SEPARATOR . basename($picture->getFileName());
 
-        return substr($destination, 0, strrpos($destination, '.')) . '.' . PictureSerializer::FORMAT_XML;
+        return substr($destination, 0, strrpos($destination, '.')) . '.info';
     }
 }
