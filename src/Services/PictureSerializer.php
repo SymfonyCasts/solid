@@ -70,7 +70,7 @@ class PictureSerializer
         $xml->author = $picture->getAuthor();
         $xml->date = $picture->getDate()->format('Y-m-d');
         $xml->location = $picture->getLocation();
-        $xml->fileName = $picture->getFileName();
+        $xml->fileName = basename($picture->getFileName());
 
         return $xml->asXML();
     }
