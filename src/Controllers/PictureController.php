@@ -70,9 +70,20 @@ class PictureController
         }
     }
 
+    /**
+     * @param string $fileName
+     * @return string
+     */
     public function show(string $fileName): string
     {
-        return file_get_contents(__DIR__ . '/../../uploads/' . $fileName);
+        $fullFileName = __DIR__ . '/../../uploads/' . $fileName;
+        if (is_readable($fullFileName)) {
+
+            return file_get_contents($fullFileName);
+        } else {
+
+            http_send_status(404);
+        }
     }
 
     public function api()
@@ -80,7 +91,7 @@ class PictureController
         $repo = new PictureRepository();
 
         $ret = [];
-        foreach ( $repo->findAll() as $picture ) {
+        foreach ($repo->findAll() as $picture) {
             $ret[] = [
                 'author' => $picture->getAuthor(),
                 'date' => $picture->getDate()->format('Y/m/d'),
@@ -89,6 +100,6 @@ class PictureController
             ];
         }
 
-        return json_encode( $ret );
+        return json_encode($ret);
     }
 }
