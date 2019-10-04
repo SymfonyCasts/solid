@@ -115,7 +115,7 @@ class PictureSerializer
 
         return new Picture(
             $data['author'],
-            $data['date'],
+            new \DateTimeImmutable($data['date']),
             $data['location'],
             $data['fileName'],
         );
