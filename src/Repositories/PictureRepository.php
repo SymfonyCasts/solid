@@ -7,8 +7,6 @@ use Sasquatch\Services\PictureSerializer;
 
 class PictureRepository
 {
-    const PICTURE_FILE_EXTENSION = 'json';
-
     private $baseDir;
 
     /**
@@ -26,7 +24,7 @@ class PictureRepository
      */
     public function save(Picture $picture)
     {
-        if (!file_put_contents($this->getInfoFileName($picture),  (new PictureSerializer())->serializePicture($picture))) {
+        if (!file_put_contents($this->getInfoFileName($picture), (new PictureSerializer(PictureSerializer::FORMAT_XML))->serializePicture($picture))) {
 
             throw new \Exception('Couldn\'t save picture information :(');
         }
@@ -38,7 +36,7 @@ class PictureRepository
     public function findAll(): array
     {
         $dir = new \DirectoryIterator($this->baseDir);
-        $serializer = new PictureSerializer();
+        $serializer = new PictureSerializer(PictureSerializer::FORMAT_XML);
 
         $pictures = [];
         foreach ($dir as $fileInfo) {
@@ -63,7 +61,7 @@ class PictureRepository
      */
     private function isPictureFile(\DirectoryIterator $fileInfo): bool
     {
-        return self::PICTURE_FILE_EXTENSION == $fileInfo->getExtension();
+        return PictureSerializer::FORMAT_XML == $fileInfo->getExtension();
     }
 
     /**
@@ -74,6 +72,6 @@ class PictureRepository
     {
         $destination = $this->baseDir . DIRECTORY_SEPARATOR . basename($picture->getFileName());
 
-        return substr($destination, 0, strrpos($destination, '.')) . '.' . self::PICTURE_FILE_EXTENSION;
+        return substr($destination, 0, strrpos($destination, '.')) . '.' . PictureSerializer::FORMAT_XML;
     }
 }
