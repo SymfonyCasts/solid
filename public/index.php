@@ -21,6 +21,8 @@ if (count($matches)) {
         case 'show':
             echo $controller->show($_GET['file']);
             break;
+        case 'api':
+            echo $controller->api();
     }
 } else {
     echo $controller->index();

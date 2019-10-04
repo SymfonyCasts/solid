@@ -70,8 +70,36 @@ class PictureController
         }
     }
 
+    /**
+     * @param string $fileName
+     * @return string
+     */
     public function show(string $fileName): string
     {
-        return file_get_contents(__DIR__ . '/../../uploads/' . $fileName);
+        $fullFileName = __DIR__ . '/../../uploads/' . $fileName;
+        if (is_readable($fullFileName)) {
+
+            return file_get_contents($fullFileName);
+        } else {
+
+            http_send_status(404);
+        }
+    }
+
+    public function api()
+    {
+        $repo = new PictureRepository();
+
+        $ret = [];
+        foreach ($repo->findAll() as $picture) {
+            $ret[] = [
+                'author' => $picture->getAuthor(),
+                'date' => $picture->getDate()->format('Y/m/d'),
+                'location' => $picture->getLocation(),
+                'data' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/show?file={$picture->getFileName()}",
+            ];
+        }
+
+        return json_encode($ret);
     }
 }
