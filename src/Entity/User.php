@@ -53,6 +53,11 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $agreedToTermsAt;
+
     public function __construct()
     {
         $this->bigFootSightings = new ArrayCollection();
@@ -186,5 +191,17 @@ class User implements UserInterface
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    public function getAgreedToTermsAt(): ?\DateTimeInterface
+    {
+        return $this->agreedToTermsAt;
+    }
+
+    public function setAgreedToTermsAt(\DateTimeInterface $agreedToTermsAt): self
+    {
+        $this->agreedToTermsAt = $agreedToTermsAt;
+
+        return $this;
     }
 }

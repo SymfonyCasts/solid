@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\BigFootSighting;
+use App\Entity\User;
+use App\Form\AgreeToUpdatedTermsFormType;
 use App\GitHub\GitHubApiHelper;
 use App\Repository\BigFootSightingRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,6 +73,31 @@ class MainController extends AbstractController
     {
         return $this->render('main/sighting_show.html.twig', [
             'sighting' => $bigFootSighting
+        ]);
+    }
+
+    /**
+     * @Route("/terms/updated", name="agree_terms_update")
+     * @IsGranted("ROLE_USER")
+     */
+    public function agreeUpdatedTerms(Request $request, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(AgreeToUpdatedTermsFormType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var User $user */
+            $user = $this->getUser();
+            $user->setAgreedToTermsAt(new \DateTimeImmutable());
+            $entityManager->flush();
+
+            return $this->redirect(
+                $request->headers->get('Referer') ?: $this->generateUrl('app_homepage')
+            );
+        }
+
+        return $this->render('main/agreeUpdatedTerms.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

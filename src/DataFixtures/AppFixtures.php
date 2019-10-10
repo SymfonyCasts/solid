@@ -50,6 +50,7 @@ class AppFixtures extends Fixture
             $user->setPassword(
                 $this->passwordEncoder->encodePassword($user, 'believe')
             );
+            $user->setAgreedToTermsAt($this->faker->dateTimeBetween('-6 months', 'now'));
 
             return $user;
         });
