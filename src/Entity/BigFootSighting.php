@@ -60,6 +60,11 @@ class BigFootSighting
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $score = 0;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -183,6 +188,18 @@ class BigFootSighting
                 $comment->setBigFootSighting(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getScore(): ?int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): self
+    {
+        $this->score = $score;
 
         return $this;
     }

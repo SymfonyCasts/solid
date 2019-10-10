@@ -4,7 +4,12 @@
 
 {% block body %}
     <h1>{{ sighting.title }}</h1>
-    <h4>Posted <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time></h4>
+    <h4>
+        Posted <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time>
+        <br>
+        "Big Foot Believability Score": {{ sighting.score }}
+    </h4>
+
 
     <div>
         {{ sighting.description }}
