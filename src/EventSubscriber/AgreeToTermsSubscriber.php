@@ -40,12 +40,13 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
         //$latestTermsDate = new \DateTimeImmutable('2019-10-15');
         $latestTermsDate = new \DateTimeImmutable('-1 year');
 
+        $form = $this->formFactory->create(AgreeToUpdatedTermsFormType::class);
+
         // user is up-to-date!
         if ($user->getAgreedToTermsAt() >= $latestTermsDate) {
             return;
         }
 
-        $form = $this->formFactory->create(AgreeToUpdatedTermsFormType::class);
         $html = $this->twig->render('main/agreeUpdatedTerms.html.twig', [
             'form' => $form->createView()
         ]);

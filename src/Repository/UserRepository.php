@@ -19,6 +19,17 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function getSingleUser(): User
+    {
+        $user = $this->findOneBy([]);
+
+        if (null === $user) {
+            throw new \Exception('Could not find any users!');
+        }
+
+        return $user;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
