@@ -4,16 +4,7 @@
     <h1>Bigfoot is out there!</h1>
 
     <h3>Sightings:</h3>
-    <ul>
-        {% for sighting in sightings %}
-            <li>
-                <a href="{{ path('app_sighting_show', {id: sighting.id}) }}">
-                    {{ sighting.title }}
-                </a>
-                posted
-                <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time>
-                ({{ sighting.comments|length }} comments)
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="js-sightings-list" data-url="{{ path('app_sightings_partial_list') }}">
+        {{ include('main/_sightings.html.twig') }}
+    </div>
 {% endblock %}

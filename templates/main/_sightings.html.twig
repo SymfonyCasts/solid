@@ -1,0 +1,10 @@
+{% for sighting in sightings %}
+    <div>
+        <a href="{{ path('app_sighting_show', {id: sighting.id}) }}">
+            {{ sighting.title }}
+        </a>
+        posted
+        <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time>
+        ({{ sighting.comments|length }} comments)
+    </div>
+{% endfor %}

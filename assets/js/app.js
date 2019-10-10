@@ -1,14 +1,29 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
+import '../css/app.css';
+import forever_scroll from './components/forever_scroll';
+import axios from 'axios';
 
-// any CSS you require will output into a single css file (app.css in this case)
-require('../css/app.css');
+const sightingsListEl = document.querySelector('.js-sightings-list');
+if (sightingsListEl) {
+    let nextPage = 2;
+    let isLoading = false;
+    const url = sightingsListEl.dataset.url;
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// const $ = require('jquery');
+    forever_scroll(sightingsListEl, () => {
+        // avoid repeated requests while loading
+        if (isLoading) {
+            return;
+        }
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+        // check to make sure there *is* a next page
+        if (null === nextPage) {
+            return;
+        }
+
+        isLoading = true;
+        axios.get(url+'?page='+nextPage).then((response) => {
+            sightingsListEl.insertAdjacentHTML('beforeend', response.data.html);
+            isLoading = false;
+            nextPage = response.data.next;
+        })
+    });
+}

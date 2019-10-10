@@ -22,9 +22,9 @@ class BigFootSightingRepository extends ServiceEntityRepository
     /**
      * @return BigFootSighting[]
      */
-    public function findLatest(): array
+    public function findLatest($limit = 25, $offset = 0): array
     {
-        return $this->findBy([], ['createdAt' => 'DESC']);
+        return $this->findBy([], ['createdAt' => 'DESC'], $limit, $offset);
     }
 
     // /**
