@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\BigFootSighting;
+use App\GitHub\GitHubApiHelper;
 use App\Repository\BigFootSightingRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -25,7 +27,7 @@ class MainController extends AbstractController
     /**
      * @Route("/_sightings", name="app_sightings_partial_list")
      */
-    public function loadSightings(BigFootSightingRepository $bigFootSightingRepository, Request $request)
+    public function loadSightingsPartial(BigFootSightingRepository $bigFootSightingRepository, Request $request)
     {
         // simple pagination!
         $page = $request->query->get('page', 1);
@@ -43,6 +45,21 @@ class MainController extends AbstractController
         ];
 
         return $this->json($data);
+    }
+
+    /**
+     * @Route("/api/github-organization", name="app_github_organization_info")
+     */
+    public function gitHubOrganizationInfo(GitHubApiHelper $apiHelper)
+    {
+        $organizationName = 'SymfonyCasts';
+        $organization = $apiHelper->getOrganizationInfo($organizationName);
+        $repositories = $apiHelper->getOrganizationRepositories($organizationName);
+
+        return $this->json([
+            'organization' => $organization,
+            'repositories' => $repositories,
+        ]);
     }
 
     /**

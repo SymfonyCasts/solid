@@ -1,29 +1,13 @@
 import '../css/app.css';
-import forever_scroll from './components/forever_scroll';
-import axios from 'axios';
+import sightings_list from "./components/sightings_list";
+import github_org_info from "./components/github_org_info";
 
 const sightingsListEl = document.querySelector('.js-sightings-list');
 if (sightingsListEl) {
-    let nextPage = 2;
-    let isLoading = false;
-    const url = sightingsListEl.dataset.url;
+    sightings_list(sightingsListEl);
+}
 
-    forever_scroll(sightingsListEl, () => {
-        // avoid repeated requests while loading
-        if (isLoading) {
-            return;
-        }
-
-        // check to make sure there *is* a next page
-        if (null === nextPage) {
-            return;
-        }
-
-        isLoading = true;
-        axios.get(url+'?page='+nextPage).then((response) => {
-            sightingsListEl.insertAdjacentHTML('beforeend', response.data.html);
-            isLoading = false;
-            nextPage = response.data.next;
-        })
-    });
+const organizationInfoEl = document.querySelector('.js-github-organization');
+if (organizationInfoEl) {
+    github_org_info(organizationInfoEl);
 }
