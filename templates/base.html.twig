@@ -13,6 +13,7 @@
         {% else %}
             <a href="{{ path('app_login') }}">Log In</a>
         {% endif %}
+            <a href="{{ path('app_about') }}">About Us</a>
         {% block body %}{% endblock %}
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}

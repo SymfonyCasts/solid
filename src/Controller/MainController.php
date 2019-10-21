@@ -100,4 +100,12 @@ class MainController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/about", name="app_about")
+     */
+    public function about()
+    {
+        return $this->render('main/about.html.twig');
+    }
 }
