@@ -8,6 +8,7 @@ use App\Form\AgreeToUpdatedTermsFormType;
 use App\GitHub\GitHubApiHelper;
 use App\Repository\BigFootSightingRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,7 +22,7 @@ class MainController extends AbstractController
      */
     public function homepage(BigFootSightingRepository $bigFootSightingRepository, Request $request)
     {
-        $sightings = $bigFootSightingRepository->findLatest(25);
+        $sightings = $this->createSightingsPaginator(1, $bigFootSightingRepository);
 
         return $this->render('main/homepage.html.twig', [
             'sightings' => $sightings
@@ -35,9 +36,7 @@ class MainController extends AbstractController
     {
         // simple pagination!
         $page = $request->query->get('page', 1);
-        $limit = 25;
-        $offset = max(0, ($page - 1) * $limit);
-        $sightings = $bigFootSightingRepository->findLatest($limit, $offset);
+        $sightings = $this->createSightingsPaginator($page, $bigFootSightingRepository);
 
         $html = $this->renderView('main/_sightings.html.twig', [
             'sightings' => $sightings
@@ -107,5 +106,17 @@ class MainController extends AbstractController
     public function about()
     {
         return $this->render('main/about.html.twig');
+    }
+
+    /**
+     * @return Paginator|BigFootSighting[]
+     */
+    private function createSightingsPaginator(int $page, BigFootSightingRepository $bigFootSightingRepository): Paginator
+    {
+        $maxResults = 25;
+        $qb = $bigFootSightingRepository->findLatestQueryBuilder($maxResults);
+        $qb->setFirstResult($maxResults * ($page - 1));
+
+        return new Paginator($qb);
     }
 }

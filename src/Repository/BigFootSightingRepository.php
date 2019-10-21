@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\BigFootSighting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method BigFootSighting|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,12 +20,11 @@ class BigFootSightingRepository extends ServiceEntityRepository
         parent::__construct($registry, BigFootSighting::class);
     }
 
-    /**
-     * @return BigFootSighting[]
-     */
-    public function findLatest($limit = 25, $offset = 0): array
+    public function findLatestQueryBuilder(int $maxResults): QueryBuilder
     {
-        return $this->findBy([], ['createdAt' => 'DESC'], $limit, $offset);
+        return $this->createQueryBuilder('big_foot_sighting')
+            ->setMaxResults($maxResults)
+            ->orderBy('big_foot_sighting.createdAt', 'DESC');
     }
 
     // /**
