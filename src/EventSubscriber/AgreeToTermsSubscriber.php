@@ -42,14 +42,14 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
 
         $form = $this->formFactory->create(AgreeToUpdatedTermsFormType::class);
 
+        $html = $this->twig->render('main/agreeUpdatedTerms.html.twig', [
+            'form' => $form->createView()
+        ]);
+
         // user is up-to-date!
         if ($user->getAgreedToTermsAt() >= $latestTermsDate) {
             return;
         }
-
-        $html = $this->twig->render('main/agreeUpdatedTerms.html.twig', [
-            'form' => $form->createView()
-        ]);
 
         $response = new Response($html);
         $event->setResponse($response);
