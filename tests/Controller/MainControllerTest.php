@@ -2,13 +2,10 @@
 
 namespace App\Tests\Controller;
 
-use Blackfire\Bridge\PhpUnit\TestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MainControllerTest extends WebTestCase
 {
-    use TestCaseTrait;
-
     public function testGetGitHubOrganization()
     {
         $client = static::createClient();
