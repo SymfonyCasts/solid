@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Security;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
 
 class AgreeToTermsSubscriber implements EventSubscriberInterface
@@ -16,12 +17,14 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
     private $security;
     private $formFactory;
     private $twig;
+    private $entrypointLookup;
 
-    public function __construct(Security $security, FormFactoryInterface $formFactory, Environment $twig)
+    public function __construct(Security $security, FormFactoryInterface $formFactory, Environment $twig, EntrypointLookupInterface $entrypointLookup)
     {
         $this->security = $security;
         $this->formFactory = $formFactory;
         $this->twig = $twig;
+        $this->entrypointLookup = $entrypointLookup;
     }
 
     public function onRequestEvent(RequestEvent $event)
@@ -45,6 +48,11 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
         $html = $this->twig->render('main/agreeUpdatedTerms.html.twig', [
             'form' => $form->createView()
         ]);
+        // resets Encore assets so they render correctly later
+        // only technically needed here because we should really
+        // "exit" this function before rendering the template if
+        // we know the user doesn't need to see the form!
+        $this->entrypointLookup->reset();
 
         // user is up-to-date!
         if ($user->getAgreedToTermsAt() >= $latestTermsDate) {

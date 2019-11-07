@@ -1,3 +1,22 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
 body {
-    background-color: lightgray;
+    background-color: rgb(21, 32, 43);
+    color: #fff;
+}
+
+.top-nav {
+    border-bottom: 1px solid #48535E;
+}
+
+.footer-nav {
+    border-top: 1px solid #48535E;
+}
+
+.big-foot-img {
+    width:300px;
+    height:300px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 5px;
 }
