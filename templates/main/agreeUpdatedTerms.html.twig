@@ -1,22 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="col">
-    <h1>Our terms updated!</h1>
+<div class="col mb-5">
+    <h2 style="font-size: 1.5rem;">We have updated our terms</h2>
 
     <div>
         Updated terms: by using this site, you agree that
         BigFoot *might* exist.
     </div>
-
+    
     {{ form_start(form, {
-        attr: {
-            action: path('agree_terms_update')
-        }
-    }) }}
+            attr: {
+                action: path('agree_terms_update')
+            }
+        }) }}
         {{ form_row(form) }}
-
-        <button type="submit">Submit</button>
+        <button class="btn btn-info" type="submit">Submit</button>
     {{ form_end(form) }}
 </div>
 {% endblock %}

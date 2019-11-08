@@ -56,7 +56,7 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
 
         // user is up-to-date!
         if ($user->getAgreedToTermsAt() >= $latestTermsDate) {
-            return;
+            //return;
         }
 
         $response = new Response($html);

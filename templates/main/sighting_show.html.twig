@@ -26,7 +26,8 @@
                 <div class="col">
                     <strong>{{ comment.owner.username }}</strong>
                     <span>({{ comment.owner|user_activity_text }})</span>
-                    <small><time datetime="{{ comment.createdAt|date('Y-m-d H:i') }}">{{ comment.createdAt|time_diff }}</time></small>
+                    <span class="px-2">|</span>
+                    <small><i class="fa fa-clock pr-2"></i><time datetime="{{ comment.createdAt|date('Y-m-d H:i') }}">{{ comment.createdAt|time_diff }}</time></small>
                     <div>
                         {{ comment.content }}
                     </div>
