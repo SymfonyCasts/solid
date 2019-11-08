@@ -1,0 +1,72 @@
+diff --git a/src/EventSubscriber/AgreeToTermsSubscriber.php b/src/EventSubscriber/AgreeToTermsSubscriber.php
+index 227a6a8..9a86fa0 100644
+--- a/src/EventSubscriber/AgreeToTermsSubscriber.php
++++ b/src/EventSubscriber/AgreeToTermsSubscriber.php
+@@ -4,27 +4,25 @@ namespace App\EventSubscriber;
+ 
+ use App\Entity\User;
+ use App\Form\AgreeToUpdatedTermsFormType;
++use Psr\Container\ContainerInterface;
+ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+ use Symfony\Component\Form\FormFactoryInterface;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\HttpKernel\Event\RequestEvent;
+ use Symfony\Component\Security\Core\Security;
++use Symfony\Contracts\Service\ServiceSubscriberInterface;
+ use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
+ use Twig\Environment;
+ 
+-class AgreeToTermsSubscriber implements EventSubscriberInterface
++class AgreeToTermsSubscriber implements EventSubscriberInterface, ServiceSubscriberInterface
+ {
+     private $security;
+-    private $formFactory;
+-    private $twig;
+-    private $entrypointLookup;
++    private $container;
+ 
+-    public function __construct(Security $security, FormFactoryInterface $formFactory, Environment $twig, EntrypointLookupInterface $entrypointLookup)
++    public function __construct(Security $security, ContainerInterface $container)
+     {
+         $this->security = $security;
+-        $this->formFactory = $formFactory;
+-        $this->twig = $twig;
+-        $this->entrypointLookup = $entrypointLookup;
++        $this->container = $container;
+     }
+ 
+     public function onRequestEvent(RequestEvent $event)
+@@ -48,16 +46,16 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
+             return;
+         }
+ 
+-        $form = $this->formFactory->create(AgreeToUpdatedTermsFormType::class);
++        $form = $this->container->get(FormFactoryInterface::class)->create(AgreeToUpdatedTermsFormType::class);
+ 
+-        $html = $this->twig->render('main/agreeUpdatedTerms.html.twig', [
++        $html = $this->container->get(Environment::class)->render('main/agreeUpdatedTerms.html.twig', [
+             'form' => $form->createView()
+         ]);
+         // resets Encore assets so they render correctly later
+         // only technically needed here because we should really
+         // "exit" this function before rendering the template if
+         // we know the user doesn't need to see the form!
+-        $this->entrypointLookup->reset();
++        $this->container->get(EntrypointLookupInterface::class)->reset();
+ 
+         $response = new Response($html);
+         $event->setResponse($response);
+@@ -69,4 +67,13 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
+             RequestEvent::class => 'onRequestEvent',
+         ];
+     }
++
++    public static function getSubscribedServices()
++    {
++        return [
++            FormFactoryInterface::class,
++            Environment::class,
++            EntrypointLookupInterface::class,
++        ];
++    }
+ }
