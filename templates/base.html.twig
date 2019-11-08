@@ -8,14 +8,18 @@
         {% endblock %}
     </head>
     <body>
-
+<nav class="navbar navbar-dark bg-dark justify-content-end">
+    <ul class="navbar-nav mr-4">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_about') }}">About Us</a>
+        </li>
+    </ul>
         {% if is_granted('ROLE_USER') %}
-            <a href="{{ path('app_logout') }}">Log Out</a>
+            <a class="nav-link" href="{{ path('app_logout') }}">Log Out</a>
         {% else %}
-            <a href="{{ path('app_login') }}">Log In</a>
+            <a class="btn btn-outline-info my-2 my-sm-0" href="{{ path('app_login') }}">Log In</a>
         {% endif %}
-        <a href="{{ path('app_about') }}">About Us</a>
-
+</nav>
         <div class="container">
             <div class="row">
                 <div class="col-12 mb-5 top-nav">
