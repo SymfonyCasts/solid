@@ -1,0 +1,14 @@
+diff --git a/src/Command/UpdateSightingScoresCommand.php b/src/Command/UpdateSightingScoresCommand.php
+index 163c167..d279548 100644
+--- a/src/Command/UpdateSightingScoresCommand.php
++++ b/src/Command/UpdateSightingScoresCommand.php
+@@ -46,8 +46,8 @@ class UpdateSightingScoresCommand extends Command
+ 
+             $score = ceil(min($characterCount / 500, 10));
+             $sighting->setScore($score);
+-            $this->entityManager->flush();
+         }
++        $this->entityManager->flush();
+         $io->progressFinish();
+     }
+ }

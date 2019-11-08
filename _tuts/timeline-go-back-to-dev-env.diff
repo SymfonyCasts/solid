@@ -1,0 +1,13 @@
+diff --git a/.env b/.env
+index ac88cd0..1f68332 100644
+--- a/.env
++++ b/.env
+@@ -14,7 +14,7 @@
+ # https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+ 
+ ###> symfony/framework-bundle ###
+-APP_ENV=prod
++APP_ENV=dev
+ APP_SECRET=77edcf2d21c9bb9eb67233d29c618543
+ #TRUSTED_PROXIES=127.0.0.1,127.0.0.2
+ #TRUSTED_HOSTS='^localhost|example\.com$'
