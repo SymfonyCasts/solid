@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Bigfoot is out there!</h1>
-
-    <h3>Sightings:</h3>
+<div class="col-7">
+    <h3>Recently Reported Sightings</h3>
+    <small>Submit yours to help us narrow down this search</small>
     <div class="js-sightings-list" data-url="{{ path('app_sightings_partial_list') }}">
         {{ include('main/_sightings.html.twig') }}
     </div>
-
+</div>
+<div class="col-5">
     <div class="js-github-organization" data-url="{{ path('app_github_organization_info') }}"></div>
+</div>
+
 {% endblock %}

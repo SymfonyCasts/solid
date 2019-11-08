@@ -3,34 +3,38 @@
 {% block title %}{{ sighting.title }} | Bigfoot{% endblock %}
 
 {% block body %}
-    <h1>{{ sighting.title }}</h1>
-    <h4>
-        Posted <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time>
-        <br>
-        "Big Foot Believability Score": {{ sighting.score }}
-    </h4>
-
-
-    <div>
-        {{ sighting.description }}
+<div class="col">
+    <div class="sighting-log-container mb-5 pb-5">
+        <h2 style="font-size: 1.5rem;">{{ sighting.title }}</h2>
+        <p><span class="pr-2"><i class="fa fa-clock"></i> <time datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time></span>
+            |
+            <span class="pl-2">Big Foot Believability Score: {{ sighting.score }}</span>
+        </p>
+        <div>
+            {{ sighting.description }}
+        </div>
     </div>
-
-    <hr>
 
     <h3>Littlefoot (i.e. Human) Reactions</h3>
-    <div>
-        {% for comment in sighting.comments %}
-            <div>
-                <img src="{{ comment.owner.avatarUrl }}" alt="Avatar for {{ comment.owner.username }}">
-                <strong>{{ comment.owner.username }}</strong>
-                <span>({{ comment.owner|user_activity_text }})</span>
-                from
-                <time datetime="{{ comment.createdAt|date('Y-m-d H:i') }}">{{ comment.createdAt|time_diff }}</time>
-                <div>
-                    {{ comment.content }}
+    
+    {% for comment in sighting.comments %}
+        <div class="comment-container mb-3">
+            <div class="row">
+                <div class="col-1">        
+                    <img src="{{ comment.owner.avatarUrl }}" alt="Avatar for {{ comment.owner.username }}">
+                </div>
+                <div class="col">
+                    <strong>{{ comment.owner.username }}</strong>
+                    <span>({{ comment.owner|user_activity_text }})</span>
+                    <small><time datetime="{{ comment.createdAt|date('Y-m-d H:i') }}">{{ comment.createdAt|time_diff }}</time></small>
+                    <div>
+                        {{ comment.content }}
+                    </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+        </div>
+    {% endfor %}
+    
+</div>
 {% endblock %}
 
