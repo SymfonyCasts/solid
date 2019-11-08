@@ -19,9 +19,9 @@ class UpdateSightingScoresCommand extends Command
     public function __construct(BigFootSightingRepository $bigFootSightingRepository, EntityManagerInterface $entityManager)
     {
         $this->bigFootSightingRepository = $bigFootSightingRepository;
+        $this->entityManager = $entityManager;
 
         parent::__construct();
-        $this->entityManager = $entityManager;
     }
 
     protected function configure()
