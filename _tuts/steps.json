@@ -1,0 +1,50 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "first-profile-make-direct-count-query",
+            "name": "First Profile: Make direct count query",
+            "description": null
+        },
+        {
+            "id": "first-profile-switch-to-prod",
+            "name": "First Profile: switch to prod",
+            "description": null
+        },
+        {
+            "id": "first-profile-property-caching",
+            "name": "First Profile: Property caching",
+            "description": null
+        },
+        {
+            "id": "first-profile-revert-prop-caching",
+            "name": "First Profile: revert prop caching",
+            "description": null
+        },
+        {
+            "id": "first-profile-use-proper-caching",
+            "name": "First Profile: use proper caching",
+            "description": null
+        },
+        {
+            "id": "n-1-extra-lazy",
+            "name": "N+1: EXTRA_LAZY",
+            "description": null
+        },
+        {
+            "id": "n-1-use-join",
+            "name": "N+1: use join",
+            "description": null
+        },
+        {
+            "id": "n-1-revert-join",
+            "name": "N+1: revert join",
+            "description": null
+        }
+    ],
+    "sha": "a8524f8a93debc4e34d25e50e1c8e729abb3bc50"
+}

@@ -1,0 +1,42 @@
+diff --git a/src/Twig/AppExtension.php b/src/Twig/AppExtension.php
+index 4a18185..eb73e33 100644
+--- a/src/Twig/AppExtension.php
++++ b/src/Twig/AppExtension.php
+@@ -4,6 +4,8 @@ namespace App\Twig;
+ 
+ use App\Entity\User;
+ use App\Service\CommentHelper;
++use Psr\Cache\CacheItemInterface;
++use Symfony\Contracts\Cache\CacheInterface;
+ use Twig\Extension\AbstractExtension;
+ use Twig\TwigFilter;
+ use Twig\TwigFunction;
+@@ -11,10 +13,12 @@ use Twig\TwigFunction;
+ class AppExtension extends AbstractExtension
+ {
+     private $commentHelper;
++    private $cache;
+ 
+-    public function __construct(CommentHelper $commentHelper)
++    public function __construct(CommentHelper $commentHelper, CacheInterface $cache)
+     {
+         $this->commentHelper = $commentHelper;
++        $this->cache = $cache;
+     }
+ 
+     public function getFilters(): array
+@@ -26,7 +30,13 @@ class AppExtension extends AbstractExtension
+ 
+     public function getUserActivityText(User $user): string
+     {
+-        return $this->calculateUserActivityText($user);
++        $key = sprintf('user_activity_text_'.$user->getId());
++
++        return $this->cache->get($key, function(CacheItemInterface $item) use ($user) {
++            $item->expiresAfter(3600);
++
++            return $this->calculateUserActivityText($user);
++        });
+     }
+ 
+     private function calculateUserActivityText(User $user): string

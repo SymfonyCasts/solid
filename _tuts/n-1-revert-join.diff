@@ -1,0 +1,13 @@
+diff --git a/src/Repository/BigFootSightingRepository.php b/src/Repository/BigFootSightingRepository.php
+index 7aa4416..d0a075a 100644
+--- a/src/Repository/BigFootSightingRepository.php
++++ b/src/Repository/BigFootSightingRepository.php
+@@ -23,8 +23,6 @@ class BigFootSightingRepository extends ServiceEntityRepository
+     public function findLatestQueryBuilder(int $maxResults): QueryBuilder
+     {
+         return $this->createQueryBuilder('big_foot_sighting')
+-            ->leftJoin('big_foot_sighting.comments', 'comments')
+-            ->addSelect('comments')
+             ->setMaxResults($maxResults)
+             ->orderBy('big_foot_sighting.createdAt', 'DESC');
+     }

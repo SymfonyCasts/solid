@@ -1,0 +1,13 @@
+diff --git a/src/Entity/BigFootSighting.php b/src/Entity/BigFootSighting.php
+index 1e1f5eb..daf6cbf 100644
+--- a/src/Entity/BigFootSighting.php
++++ b/src/Entity/BigFootSighting.php
+@@ -55,7 +55,7 @@ class BigFootSighting
+     private $createdAt;
+ 
+     /**
+-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="bigFootSighting")
++     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="bigFootSighting", fetch="EXTRA_LAZY")
+      * @ORM\OrderBy({"createdAt"="DESC"})
+      */
+     private $comments;

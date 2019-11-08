@@ -1,0 +1,35 @@
+diff --git a/src/Service/CommentHelper.php b/src/Service/CommentHelper.php
+index 7a96a4f..f2bff11 100644
+--- a/src/Service/CommentHelper.php
++++ b/src/Service/CommentHelper.php
+@@ -3,20 +3,20 @@
+ namespace App\Service;
+ 
+ use App\Entity\User;
++use App\Repository\CommentRepository;
+ 
+ class CommentHelper
+ {
+-    public function countRecentCommentsForUser(User $user): int
++    private $commentRepository;
++
++    public function __construct(CommentRepository $commentRepository)
+     {
+-        $comments = $user->getComments();
+-        $commentCount = 0;
+-        $recentDate = new \DateTimeImmutable('-3 months');
+-        foreach ($comments as $comment) {
+-            if ($comment->getCreatedAt() > $recentDate) {
+-                $commentCount++;
+-            }
+-        }
++        $this->commentRepository = $commentRepository;
++    }
+ 
+-        return $commentCount;
++    public function countRecentCommentsForUser(User $user): int
++    {
++        return $this->commentRepository
++            ->countForUser($user, new \DateTimeImmutable('-3 months'));
+     }
+ }
