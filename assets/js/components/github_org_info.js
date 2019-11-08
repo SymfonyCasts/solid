@@ -30,7 +30,7 @@ export default function(wrapperEl) {
             <thead>
                 <tr class="bg-info">
                     <th>Repo Name</th>
-                    <th>Last Updated</th>
+                    <th>Updated</th>
                 </tr>
             </thead>
             <tbody>
