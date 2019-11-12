@@ -1,1 +1,10 @@
-chapters: []
+chapters:
+    - intro                 # raw
+    - install               # raw
+    - function-list         # raw
+    - call-graph-comparison # raw
+    - recommendations       # raw
+    - cache-compare         # raw
+    - n-plus-one            # raw
+    - profile-all           # raw
+    - blackfire-cli         # raw
