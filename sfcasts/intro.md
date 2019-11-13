@@ -19,11 +19,9 @@ about performance, there are three aspects of it. There is the amount of time th
 takes your server to build the page or the JSON. Then there is the transit time or
 the network to the user. And finally there is the frontend time.
 
-[inaudible]
-
 Blackfire is all about the servers side of that, which is maybe, which along with a
-front end is really the two most important things. Now when you talk about optimizing
-performance of the front end, you actually have two main tools for this. The probably
+frontend is really the two most important things. Now when you talk about optimizing
+performance of the frontend, you actually have two main tools for this. The probably
 the most well known one is called an APM, an application performance monitoring tool.
 This is something that runs on your production servers at all time and it monitors
 performance, um, uh, queries, slow page loads and it kind of alert you when something
@@ -47,20 +45,22 @@ locally. It only activate you activate the profiler when you want.
 
 Alright? So to have the most fun with this stuff, as always, you should absolutely
 download the code, a code along with me. Download the course code from this page.
-When you in sip it, you'll find a start directory with the same code that you see
+When you in sip it, you'll find a `start/` directory with the same code that you see
 here. You can follow the, read me that MD file down here with all the details and how
 to get set up. This is a Symfony project. However, for the most part we're going to
 be talking about is Blackfire and how to optimize Blackfire. So there will be a few
 Symfony specific things, but for the most part, this is going to be a good for
 anybody that wants to learn a Blackfire. The last step will be to open a terminal,
 move into the project, and I'm gonna use the Symfony binary to start a local web
-server by typing Symfony serve.
+server by typing:
 
-Okay.
+```terminal
+symfony serve
+```
 
-That's going to start a web server on local host 8,000 I'll spin back over,
+That's going to start a web server on `localhost:8000` I'll spin back over,
 
-go to localize that thousand to see our website that we need to optimize Sasquatch
+go to `http://localhost:8000` to see our website that we need to optimize Sasquatch
 sightings. Oh website, all about finding and locating where big foot is a, this site
 is getting really, really popular. So it's time for us to look in and see how we can
 make it faster. Now, I've written all the code for this, uh, application. Do I know

@@ -1,6 +1,6 @@
 chapters:
-    - intro                 # raw
-    - install               # raw
+    - intro
+    - install
     - function-list         # raw
     - call-graph-comparison # raw
     - recommendations       # raw
