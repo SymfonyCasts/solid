@@ -1,5 +1,6 @@
 chapters:
     - intro
+    - the-pieces
     - install
     - function-list         # raw
     - call-graph-comparison # raw
