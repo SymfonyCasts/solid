@@ -2,7 +2,7 @@
 
 Coming soon...
 
-Let's go back to blood black fire and. Look at our latest.
+Let's go back to blood blackfire and. Look at our latest.
 
 Profile that we just did after making the top query.
 
@@ -12,13 +12,13 @@ just mean that there's no more no really big performance winds on this page anym
 Might be that we're good enough. By the way it's 270 milliseconds if you're not
 satisfied with that we have to remember two things right now we're in the development
 environment Symfony. So switching to production would be faster. And also it's
-absolute time will never be quite as fast as it really is because the P2P extension
+absolute time will never be quite as fast as it really is because the PHP extension
 the probe slows things down. So do a paid attention to this time here. But this is
 not an absolute measurement you want to think about performance improvements more
 than absolute targets.
 
-Now if we look though the number one thing here is something about a debug class
-loader. OK. So one of the issue is that in Symfony right now we're we're profiling
+Now if we look though the number one thing here is something about a 
+`DebugClassLoader`. OK. So one of the issue is that in Symfony right now we're we're profiling
 things locally of course but we're in Symfony's development environment which loads
 lots of debugging tools like the web debug toolbar down here. So that's going to make
 profiling less useful because some of this stuff which won't be there in production
@@ -26,12 +26,21 @@ gets in the way. And so it's harder to see what the performance rooms are. So wh
 I'm to do is we are actually going to switch to the production environment right now
 while we profile.
 
-So I'm open on my dot in file here for an app end and change that to prod. So things
+So I'm open on my `.env` file here for an `APP_ENV` and change that to `prod`. So things
 are a little more realistic now. Whenever you do that pretty much after any change
 you make.
 
-We now need to go for a project and say cache call on clear and then cache calling
-warm up.
+We now need to go for a project and say `cache:clear` 
+
+```terminal-silent
+php bin/console cache:clear
+```
+
+and then `cache:warmup`.
+
+```terminal-silent
+php bin/console cache:warmup
+```
 
 All right. So let's profile again over here just refresh for good measure. BLACK
 FIRE.
@@ -41,7 +50,7 @@ Profile. This time we'll name it. Name it again. Show page after.
 In proud mode and you can see it's way faster 106 milliseconds sluts view to call.
 Hit that call graph and I'll close the other one. All right great. So a little more
 realistic. Hundred six milliseconds and now we are seeing a little bit more
-information PTO statement execute is actually the biggest deal before we look at this
+information `PDOStatement::execute()` is actually the biggest deal before we look at this
 though.
 
 No so we're here. I mean look at these recommendations I actually saw this over a
@@ -66,9 +75,9 @@ app should be dumped in production.
 And if you don't know what any of this stuff means you can click on this little
 question mark is going to give you more details about what's going on. But. Even if
 you're done with it is you go back to where the function lets you can see the number
-two item on here is actually a composer auto load thing. So you may not know that one
+two item on here is actually a composer autoload thing. So you may not know that one
 of the things that you're supposed to do when you run production is to run a special
-composer command that optimizes its auto loader. So this is right. Like if this were
+composer command that optimizes its autoloader. So this is right. Like if this were
 this is just something I didn't think about and it's got a recommendation over here
 that says hey this is probably something that you should do.
 
@@ -98,4 +107,8 @@ cache levels are. So those things called real path cache, PCR, cache and cache,
 internal string buffers. Um, those are all optimizations you've made to your P to P
 to I and I. And on production, you can see real values here to see if these are too
 low and if they need to be tweaked instead of you actually needing to guess. Anyways,
-let's now go and do the thing I said over here. [inaudible]
+let's now go and do the thing I said over here. 
+
+```terminal
+composer dump-autoload --optimize
+```

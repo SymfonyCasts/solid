@@ -4,7 +4,7 @@ chapters:
     - install
     - function-list
     - call-graph-comparison
-    - recommendations       # raw
+    - recommendations
     - cache-compare         # raw
     - n-plus-one            # raw
     - profile-all           # raw
