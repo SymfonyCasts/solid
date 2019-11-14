@@ -39,15 +39,13 @@ not useful. That's just going to basically the, the first function that's called
 always going to be a, is always going to have the most and the second function, then
 the third function and so on. So let's go back and look at exclusive time
 
-[inaudible].
-
 So apparently the biggest problem with the biggest problem according to exclusive
-time is this unit of work, create entity, whatever that is. If you use doctrine bit,
+time is this `UnitOfWork::createEntity`, whatever that is. If you use doctrine bit,
 you might know about that. But let's pretend we have no idea what that is. So before
 we dive in and look more about that. Well it's actually looking at another way that
 we can't order this, which is by calls. This is actually really interesting so we can
 see which functions we're called the most times. Apparently the function is called
-the most times 6,159 times is reflection property set value. Huh. I wonder who calls
+the most times 6,159 times is `ReflectionProperty::setValue`. Huh. I wonder who calls
 this. So I'm actually going to click and we can expand this. This is really cool
 cause it's gonna lay down. Uh, give us information about the amount of tone, wall
 time, total time. This took the amount of I Oh wait time this took, which is actually
@@ -55,25 +53,21 @@ zero and the amount of CPU time this took as well as the amount of memory this t
 up and the amount of network, uh, this took up. Now this is not a particularly time
 consuming, uh, function. You can see it says 9.13 milliseconds.
 
-Um,
-
 um, this wall time is always a wall time always = I, Oh wait, time plus CPU time. So
 you're going to see that in the futures right now. This one apparently is all CPU
 time. It doesn't touch the uh, uh, disk at all. Okay, so, but who actually calls
 this? I'm just curious. Like what's going on here? So above this, these three areas
 here, you can see that there are three different functions that call this and they
 call, you can see the size of these is because they call them different times. So I'm
-gonna click this first one and Whoa, check it out. We know it. That's that unit of
-work. Create entity. It calls this function 4,959 times. Wow. So it's definitely
+gonna click this first one and Whoa, check it out. We know it. That's that 
+`UnitOfWork::createEntity` It calls this function 4,959 times. Wow. So it's definitely
 looking like this is a problem area. If I click on the other two arrows, you can see
 the other two calls. This call is at 984 times and this calls at 216 times. Those are
 both from doctrine as well. So doctrine is clearly the problem in this case. All
 right, so let's close this stuff up and I'm going to go back and reordered by
 exclusive.
 
-Okay.
-
-And then let's click into create entity. Now, like I said, we are in the wall time
+And then let's click into `::createEntity`. Now, like I said, we are in the wall time
 dimension, which means everything is being ordered and visualized, uh, by time. But
 once you created into a function, you're going to be able to see, uh, the wall time,
 the I Oh wait time, the CPU time, the memory and the network time. So you can see all
@@ -86,8 +80,6 @@ maybe further down, which is a little bit more useful when you're looking at you
 code. And as before, if we are wanting to know who this calls, we can go down here
 and actually see, uh, kind of what methods this calls internally to do all of its
 work.
-
-[inaudible]
 
 what I'm really curious about is not who this calls but who is calling this function.
 Because we're calling this a thousand times. That's actually probably a problem. So
