@@ -32,7 +32,7 @@ This is actually a little Ajax call that happens on load. You can kind of see it
 loads all of this repository information over here. This is just a simple little, a
 API call that goes and finds the, uh, most popular repositories over from the Symfony
 casts a get hub page. It's a really good example for net. Rick never requests this
-other one here and this slash_sightings that's actually powering the forever scroll
+other one here and this `/_sightings` that's actually powering the forever scroll
 on this page as I scroll down more low. So that's just a really great way to actually
 get an idea like what's going on behind your scenes.
 
@@ -43,10 +43,10 @@ Ajax calls in a few seconds, in a few minutes. But let's check out over here the
 kind of get hub organization. Uh, one, as I mentioned, this goes and makes an Ajax
 call, uh, an API call to the get hub API to load repository information about the
 Symfony. A repositor on there. And this one is almost comical. You can see 438
-milliseconds, uh, 82% of it is curl multi-select. In other words, 82% of it is the
+milliseconds, uh, 82% of it is `curl_multi_select()`. In other words, 82% of it is the
 actual time it's taking to make the API call pretty obvious. Um, now kind of fun
-thing is if you look at the CPU time, which is only 74 milliseconds of that curl,
-multi-select is still the biggest offender, but you can see it's a lot less obvious
+thing is if you look at the CPU time, which is only 74 milliseconds of that 
+`curl_multi_exec()` is still the biggest offender, but you can see it's a lot less obvious
 what the critical path is here.
 
 Whereas if you click on IO /wait, because this includes network time, it's comically
