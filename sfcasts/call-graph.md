@@ -40,8 +40,8 @@ here's our controller being rendered... and then it renders a template. That's
 interesting: it means the problem is coming from *inside* a template... from
 inside the `body` block apparently. Then it jumps to a Twig extension called
 `getUserActivityText()`... that calls something else
-`CommentHelper::countRecentComments()`. That's the last function before it jumps
-into Doctrine.
+`CommentHelper::countRecentCommentsForUser()`. That's the last function before it
+jumps into Doctrine.
 
 ## Finding the Problem
 
