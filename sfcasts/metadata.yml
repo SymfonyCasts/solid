@@ -3,7 +3,8 @@ chapters:
     - the-pieces
     - install
     - function-list
-    - call-graph-comparison
+    - call-graph
+    - comparisons
     - recommendations
     - cache-compare
     - n-plus-one            # raw
