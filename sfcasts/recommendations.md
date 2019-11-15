@@ -1,6 +1,7 @@
 # Recommendations
 
-Coming soon...
+Head back to the Blackfire dashboard... and click into the latest profile - the
+one with our COUNT query improvement.
 
 Let's go back to blood blackfire and. Look at our latest.
 
@@ -17,7 +18,7 @@ the probe slows things down. So do a paid attention to this time here. But this 
 not an absolute measurement you want to think about performance improvements more
 than absolute targets.
 
-Now if we look though the number one thing here is something about a 
+Now if we look though the number one thing here is something about a
 `DebugClassLoader`. OK. So one of the issue is that in Symfony right now we're we're profiling
 things locally of course but we're in Symfony's development environment which loads
 lots of debugging tools like the web debug toolbar down here. So that's going to make
@@ -30,7 +31,7 @@ So I'm open on my `.env` file here for an `APP_ENV` and change that to `prod`. S
 are a little more realistic now. Whenever you do that pretty much after any change
 you make.
 
-We now need to go for a project and say `cache:clear` 
+We now need to go for a project and say `cache:clear`
 
 ```terminal-silent
 php bin/console cache:clear
@@ -107,7 +108,7 @@ cache levels are. So those things called real path cache, PCR, cache and cache,
 internal string buffers. Um, those are all optimizations you've made to your P to P
 to I and I. And on production, you can see real values here to see if these are too
 low and if they need to be tweaked instead of you actually needing to guess. Anyways,
-let's now go and do the thing I said over here. 
+let's now go and do the thing I said over here.
 
 ```terminal
 composer dump-autoload --optimize
