@@ -7,6 +7,6 @@ chapters:
     - comparisons
     - recommendations
     - cache-compare
-    - n-plus-one            # raw
-    - profile-all           # raw
-    - blackfire-cli         # raw
+    - n-plus-one
+    - profile-all
+    - blackfire-cli
