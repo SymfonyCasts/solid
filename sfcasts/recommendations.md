@@ -56,6 +56,10 @@ sense - that's executing database queries.
 
 ## Hello Recommendations
 
+***TIP
+Recommendations require a "Profiler" plan level or higher.
+***
+
 Back on our site, you *may* have noticed that each time we've profiled, a little
 exclamation icon has shown up. If you clicked that, it would take you to a
 "Recommendations" section of the profile. The exclamation point was telling us

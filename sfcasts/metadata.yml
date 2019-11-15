@@ -6,6 +6,7 @@ chapters:
     - call-graph
     - comparisons
     - recommendations
+    - property-caching
     - cache-compare
     - n-plus-one
     - profile-all
