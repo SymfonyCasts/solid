@@ -1,54 +1,77 @@
 # Using a Caching Layer & Proving its Worth
 
-Coming soon...
+Whenever we make something more performant, we often *also* make our code
+more complex. So, was the property-caching trick we just used worth
+it? Maybe... but I'm going to revert it.
 
-we have to think about whenever we talk, whenever we make something more performance,
-we also added like some complexity to our code. So is this one worth it? Prompt me.
-Maybe I would probably profile a few more pages to make sure this actually has a
-significant thing. But for me, I actually think that this might be over optimizing
-too early. Sure, I'm saving 13% in this case, but it's only 10 milliseconds, so I'm
-actually going to go over here and revert. This is going to take out my property
-caching and return `$this->calculateUserActivityText($user)` take out my thing there.
-This just is simpler code overall. So at this point we can either leave this and say,
-look, it's not worth optimizing. That might be a proper solution or we might try
-something different. So another thing that we can think of is, is actually just true
-caching.
+Remove the property caching logic and just return
+`$this->calculateUserActivityText($user)`. And... we don't need the `$userStatuses`
+property anymore.
 
-We can say, look, this little label here, it's not going to update that often. It's
-what if we cache that per user for an hour? Let's see how that changes things. So
-over inside of the service at the top, I'm going to auto wire in `CacheInterface`, the
-one from Symfony contracts cache. I use a little Alt + Enter trick to "Initialize fields"
-to create that property and set it. Now down here, I'll read a little bit of code
-that's actually going to put this into Symfonys cache off to cache. Key with
-`$key = sprintf('user_activity_text_'.`and then the `$user->getId()`. So a little a
-unique cache per user. And the way that you use somebodies cache is you say we're
-gonna return `$this->cache->get()` we pass it the `$key`. And if that exists in cache
-it'll return it.
+We *could* stop here and say: this spot is not worth optimizing. Or, we can try a
+different solution - like using a *real* caching layer. After all, this label
+probably won't change very often... and it's probably not *critical* that the
+label changes at the *exact* moment a user adds enough comments to get to the
+next level. Caching could be an easy win.
 
-Otherwise it's going to call this function. Pass us a `CacheItemInterface`. A object
-in our job inside of here is going to be to return the new value so that can be
-cacheed. So I'm actually going to say `use` over here cause I need to get the `$user`
-variable inside of here. We'll return `$this->calculateUserActivityText()`, pass it
-the `$user`. I'm also going to control the TTL here a little bit. I'll say
-`$item->expiresAfter(3600)` perfect. So does this help? I mean I'm sure it will, but is
-this a more significant help? Let's find out. Let's go over here. Oh, of course, 500
-eror. Cause I need to clear my cache
+## Adding Caching
 
-```terminal-silent
+Back in `AppExtension`, autowire Symfony's cache object by adding an argument
+type-hinted with `CacheInterface` - the one from `Symfony\Contracts\Cache`. I'll
+press Alt+Enter and select  "Initialize fields" to make PhpStorm create a new
+property with this name and set it in the constructor.
+
+Down in the method, let's first create a cache key that's specific to each user.
+How about: `$key = sprintf('user_activity_text_'.`and then `$user->getId()`.
+Wow, I *just* realized that my `sprintf` here is totally pointless.
+
+Then, `return $this->cache->get()` and pass this `$key`. If that item exists in
+the cache, it will return immediately. *Otherwise*, it will execute this callback
+function, pass us a `CacheItemInterface` object and *our* job will be to return
+the value that *should* be stored in cache.
+
+Hmm... I need the `$user` object inside here. Add `use` then `$user` to bring it
+into scope. Then return `$this->calculateUserActivityText($user)`. I think it's
+probably safe to cache this value for one hour: that's long enough, but not *so*
+long that we need to worry about adding a system to manually *invalidate* the cache.
+Set the expiration with `$item->expiresAfter(3600)`.
+
+So... does this help? Of course it will! More importantly, because we decided we
+don't need to worry about adding more complexity to *invalidate* the cache,
+it's probably a big win! But let's find out for sure.
+
+Move over and refresh. Boo - 500 error. We're in the `prod` environment... and I
+forgot to rebuild the cache:
+
+```terminal
 php bin/console cache:clear
 ```
 
-```terminal-silent
+And:
+
+```terminal
 php bin/console cache:warmup
 ```
 
-area now spent over here and refresh. Awesome. Let's profile, I'll give that a name
-as normal. Using a real cache view, the call collograph and yeah, this time it looks
-way lower. Uh, but I'm not going to trust that. Let's actually go and let's compare
-from the original one to this new one. And here you can see these are significant
-changes minus 23 requests. Um, and basically there's no downside. Even our, even our
-memory went down. Now if you want to, if you want to get even compare from the
-property caching, uh, method to this, and you can see it's a, it's basically better
-in every single category. So that's what I love about the comparison feature. Um,
-it's kind of a, a lean way for performance, just a try things, but actually validate
-that they work.
+## Profiling with Cache
+
+Refresh again. And... profile! I'll name this one: `[Recording] Show page real cache`.
+Open up the call graph: http://bit.ly/sf-bf-real-caching.
+
+This time things look *way* better. But let's not trust it: go compare the *original*
+profile - before we even did property caching - to this new one:
+http://bit.ly/sf-bf-compare-real-cache.
+
+Wow. The changes are significant... and there's basically no downside to
+the changes we made. Even our memory went down! You can also compare this to the
+property caching method:
+http://bit.ly/sf-bf-compare-prop-real-caching. Yea... it's way better
+
+And really, this is *no* surprise: *fully* caching things will... of course be
+faster! The *question* is how *much* faster? And if adding caching means that
+you *also* need to add a cache invalidation system, is that performance boost
+worth it? Since we don't need to worry about invalidation in this case, it was
+*totally* worth it.
+
+Next: let's find & solve a classic N+1 query problem. The final solution might
+not be what you traditionally expect.
