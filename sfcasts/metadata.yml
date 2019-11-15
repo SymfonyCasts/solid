@@ -5,7 +5,7 @@ chapters:
     - function-list
     - call-graph-comparison
     - recommendations
-    - cache-compare         # raw
+    - cache-compare
     - n-plus-one            # raw
     - profile-all           # raw
     - blackfire-cli         # raw
