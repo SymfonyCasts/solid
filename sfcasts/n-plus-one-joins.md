@@ -1,56 +1,99 @@
 # Fixing N+1 With a Join?
 
-Now is that something we care about? I don't know, maybe. Um, but that's the thing.
-Profiling, like you might not need it, you fix everything and you might need to wait
-until you get to production before you actually see if it's really a problem.
-Especially because fixing these things sometimes has added complexity,
+We made a *huge* leap forward by telling Doctrine to make `COUNT` queries to
+count the comments for each `BigFootSighting` instead of querying for *all* the
+comments *just* to count them. That's a big win.
 
-but there is, but there's kind of a proper solution to this N plus one problem. That's
-N plus one problem. Uh, when you're querying for all the sightings and then each row
-has to query for its own comments to get those, what you're supposed to do is instead
-query for all the articles into a join over to the con's table so that you can get
-all of the data at once. So let's try that. So let's go over here and the entire
-controller behind this is in `Controller/MainController`. And here's the `homepage()`.
-If you kind of follow the logic inside of this function, we're down here. You want,
-let's not do that.
+Could we go further... and make a smarter query that could grab all this data
+in *one* query? I mean, that *is* the *classic* solution to the N+1 problem: need
+the data for some Bigfoot sighting *and* their comments? Add a JOIN and get all
+the data at once! Let's give that a try!
 
-Let's do that. Okay, I'm gonna move over and uh, actually opened up
-`BigfootSightingRepository` and got a `findLatestQueryBuilder()`. This is the function if you did some
-digging, that is actually making, creating the query that is returning these results
-over here. And you can see it's a pretty simple query. It just queries from the, this
-table a orders by `createdAt` , uh, sets a max results. But that's it. It's just a
-normal query selecting only from this table. So let's add a `leftJoin()` on
-`big_foot_sightin.comments` alias that the `comments`, and then we will say,
-`addSelect(comments)`. So that says is it says, I do want to, um, I do want, I want to
-S I'm gonna do that. Join, actually want to select that data over there so we
-shouldn't need to, but just to be safe, let's clear our cache and warm
+## Adding he JOIN
+
+The controller for this page lives at `src/Controller/MainController.php` - it's
+the `homepage()` method. To help make the query, this uses a function in
+`src/Repository/BigfootSightingRepository.php` - this `findLatestQueryBuilder()`.
+*This* method ... if you did some digging ... creates the query that returns
+these results.
+
+And... it's fairly simple query: it grabs all the records from the `big_foot_sighting`
+table, orders them by `createdAt` and sets a max result - a `LIMIT`.
+
+To *also* get the comment data, add `leftJoin()` on `big_foot_sighting.comments`
+and alias that joined table as `comments`. Then use `addSelect('comments')` to
+not only *join*, but also *select* the comment data.
+
+Let's... see what happens! To be safe, let's clear the cache:
 
 ```terminal-silent
 php bin/console cache:clear
 ```
 
+And warm it up:
+
 ```terminal-silent
 php bin/console cache:warmup
 ```
 
-up and we'll go over here, refresh the page. Let's create another black file profile.
+Now, move over, refresh and profile! I'll call this one: `[Recording] Homepage with join`:
+https://bit.ly/sf-bf-join.
 
-We'll give that a quick name. And if you got called RAF and Oh Whoa, this looks
-weird, it actually looks worse. Let's compare it to be sure close. The other one. Uh,
-let's go from the `EXTRA_LAZY` to the new one. And wow, you can see this is much, much
-worse. CPU is way up net iOS web. It's up in every single category, especially
-network. The amount of data that went over the network and you forgot the queries.
-Look, we do have 25 fewer queries, but we have 7.6 more milliseconds. So the problem
-is that, sure we got rid of 25 queries, but we're now selecting all of the common
-data just to get the count. So we made, we made less queries, but that query is so
-much bigger in returns, so much more data that you can see how much more stuff we're
-sending over the network and it's slowing everything else down.
+Ok, go check it out! Woh! This... looks weird... it looks *worse*! Let's do a
+compare from the `EXTRA_LAZY` profile to the new one: https://bit.ly/sf-bf-join-compare.
 
-So it's a classic thing. You know, like the normal thing you might think of as a
-solution to this N plus one problem might may or not actually be the right solution.
-So I'm actually go over and remove that joint stuff over here, which means that we're
-going to kind of go back to this extra lazy solution and this profile now may happy
-with this. And I'm okay with the 27 day base requests. Maybe it's up to you. You can
-go in and see if you want to cache those further. But it's page is pretty fast. So
-I'd probably just push this to production and let production tell me if they are
-actually actually any real problems with this. A number of queries.
+Wow... this is much, much worse: CPU is way up, I/O... it's up in every category,
+especially network: the amount of data that went over the network. We *did* make
+less queries - victory! - but they took 8 milliseconds longer. We're now returning
+*way* more data than before.
+
+So this was a *bad* change. It seems obvious now - but in other situation where
+you're doing *different* things with the data, this *same* solution might work!
+Let's go back to the `EXTRA_LAZY` solution.
+
+## A Smarter Join?
+
+Yes, this *will* mean that we will once again have 27 queries. If you don't like
+that, there *is* one other solution: you could make the `JOIN` query smarter - it
+would look like this:
+
+```
+// src/Repository/BigFootSightingRepository.php
+public function findLatestQueryBuilder(int $maxResults): QueryBuilder
+{
+    return $this->createQueryBuilder('big_foot_sighting')
+        ->leftJoin('big_foot_sighting.comments', 'comments')
+        ->groupBy('big_foot_sighting.id')
+        ->addSelect('COUNT(comments.id) as comment_count')
+        ->setMaxResults($maxResults)
+        ->orderBy('big_foot_sighting.createdAt', 'DESC');
+}
+```
+
+In this case, instead of selecting *all* the comment data... which we don't need...
+this selects *only* the count. It gets the *exact* data we need, in one query.
+From a performance standpoint, it's probably the perfect solution.
+
+But... it has a downside: complexity. Instead of returning an array of
+`BigFootSighting` objects, this will return an array of arrays... where each
+has a `0` key that is the `BigFootSighting` object and a `1` key with the count.
+It's just... a bit weird to deal with. For example, the template would need to
+be updated to take this into account:
+
+```
+{% for sightingData in sightings %}
+    {% set sighting = sightingData[0] %}
+    {% set commentCount = sightingData[1] %}
+
+    {# ... #}
+		{{ sighting.title }}
+
+		{{ commentCount }}
+	{# ... #}
+{% endfor %}
+```
+
+*And*... because of the pagination that this app is using... this new query would
+actually produce a query error. So let's keep things how they are now. If the extra
+queries ever become a *real* problem on production, *then* we can think about spending
+time improving this.
