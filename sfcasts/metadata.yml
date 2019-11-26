@@ -9,5 +9,6 @@ chapters:
     - property-caching
     - cache-compare
     - n-plus-one
+    - n-plus-one-joins
     - profile-all
     - blackfire-cli
