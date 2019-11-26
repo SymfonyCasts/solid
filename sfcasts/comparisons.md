@@ -10,7 +10,7 @@ in fact help.
 Let's profile the page now - I'll refresh... then click to profile. Give it a name
 to stay organized `[Recording] Show page after count query`.
 
-Ok! Let's go see the call graph! http://bit.ly/sfcast-bf-profile2
+Ok! Let's go see the call graph! https://bit.ly/sfcast-bf-profile2
 
 Hey! 270 milliseconds total time - the last one was 415. So it *is* faster. We win!
 Tutorial over!
@@ -28,7 +28,7 @@ This leads me to one of my *favorite* tools from Blackfire: the ability to
 initial profile and then the page after using the COUNT query. On the right, hover
 over the "Compare" button on the original, click, then click the new one.
 
-Say hello to the *comparison* view: http://bit.ly/sf-bf-compare1-2.
+Say hello to the *comparison* view: https://bit.ly/sf-bf-compare1-2.
 Everything that's faster, or "better" is in blue. Anything that's slower or worse
 will be in red. And yea, it looks like the new profile is better in *every* single
 category. Ok, the I/O wait is higher - but .1 millisecond higher - that's just

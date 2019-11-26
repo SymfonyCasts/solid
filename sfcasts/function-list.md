@@ -14,7 +14,7 @@ will get a *huge* boost.
 By the way, throughout the tutorial, I'll give you links to view the *exact*
 profile on Blackfire that I'm navigating in the video. Feel free to open it up and
 play around. The first one is here:
-http://bit.ly/sfcasts-bf-profile1.
+https://bit.ly/sfcasts-bf-profile1.
 
 And yes, I know, the cool-looking graph in the middle is *calling* to us, but
 let's start by looking at the the left side: the list of function calls, ordered

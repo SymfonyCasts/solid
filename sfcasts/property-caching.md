@@ -2,7 +2,7 @@
 
 Now that we've got our application in production mode and we've dumped the autoloader,
 it's easier to see what the biggest performance problem is on this page:
-http://bit.ly/sf-bf-profile4
+https://bit.ly/sf-bf-profile4
 
 And actually, there might *not* be any more problems worth solving. I mean,
 it's loading in 104 milliseconds... *even* with the Probe doing all the profiling
@@ -109,12 +109,12 @@ php bin/console cache:warmup
 
 Back in the browser, refresh the page and... let's profile! I'll name this one
 `[Recording] show page try property caching`. View the call graph:
-http://bit.ly/sf-bf-profile-prop-caching.
+https://bit.ly/sf-bf-profile-prop-caching.
 
 Ok - `PDOStatement` still looks like a main problem... but I think we're a
 *little* faster. You know what? Let's just compare the two profiles. Go back
 to the dashboard and compare the previous profile to this one.
-http://bit.ly/sf-bf-compare-prop-caching. I'll close the old profile.
+https://bit.ly/sf-bf-compare-prop-caching. I'll close the old profile.
 
 Ok, so it *did* help - lower time in each dimension... and we saved 5 queries.
 So, this is a win, right? *Maybe*. If you profiled other Big foot sighting pages,

@@ -1,7 +1,7 @@
 # Recommendations
 
 Head back to the Blackfire dashboard... and click into the latest profile - the
-one with our COUNT query improvement - http://bit.ly/sfcast-bf-profile2.
+one with our COUNT query improvement - https://bit.ly/sfcast-bf-profile2.
 
 The critical path is now much less clear... there are kind of two critical paths...
 but neither end in a node with a red background... which would indicate an
@@ -47,7 +47,7 @@ php bin/console cache:warmup
 Ok, let's profile again! I'll refresh... just to make sure the page is
 working and... profile! I'll call this one `[Recording] Show page in prod mode`.
 Cool! 106 milliseconds is a huge improvement! Click to open the call graph:
-http://bit.ly/sf-bf-profile3
+https://bit.ly/sf-bf-profile3
 
 *Now* the function list and the call graph look a bit more useful. There's no
 *super* problematic, red-background node on the graph... but the function that
@@ -109,7 +109,7 @@ composer dump-autoload --optimize
 
 Perfect! Refresh the page... it works... and create another profile - I'll
 call this: `[Recording] Show page after optimized autoloader`. Click to view
-the call graph: http://bit.ly/sf-bf-profile4 and close the old one.
+the call graph: https://bit.ly/sf-bf-profile4 and close the old one.
 
 It's not *significantly* faster, but we've removed at least one heavy-looking
 function call from our list. That will help us focus on any *real* problems.

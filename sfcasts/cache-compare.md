@@ -56,16 +56,16 @@ php bin/console cache:warmup
 ## Profiling with Cache
 
 Refresh again. And... profile! I'll name this one: `[Recording] Show page real cache`.
-Open up the call graph: http://bit.ly/sf-bf-real-caching.
+Open up the call graph: https://bit.ly/sf-bf-real-caching.
 
 This time things look *way* better. But let's not trust it: go compare the *original*
 profile - before we even did property caching - to this new one:
-http://bit.ly/sf-bf-compare-real-cache.
+https://bit.ly/sf-bf-compare-real-cache.
 
 Wow. The changes are significant... and there's basically no downside to
 the changes we made. Even our memory went down! You can also compare this to the
 property caching method:
-http://bit.ly/sf-bf-compare-prop-real-caching. Yea... it's way better
+https://bit.ly/sf-bf-compare-prop-real-caching. Yea... it's way better
 
 And really, this is *no* surprise: *fully* caching things will... of course be
 faster! The *question* is how *much* faster? And if adding caching means that
