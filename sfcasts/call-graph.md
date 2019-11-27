@@ -52,28 +52,44 @@ Let's open up this template: `main/sighting_show.html.twig` - at
 If you look at the site itself, each commenter has a label next to them - like
 "hobbyist" or "bigfoot fanatic" - that tells us how *active* they are in the great
 and noble quest of finding BigFoot. Over in the Twig template, we *get* this text
-via a custom Twig filter called `user_activity_text`.
+via a custom Twig filter called `user_activity_text`:
+
+[[[ code('f1e1bd19b2') ]]]
 
 If you're not familiar with Twig, no problem. The important piece is that
 whenever this filter code is hit, a function inside `src/Twig/AppExtension.php`
-is called... it's this `getUserActivityText()` method. This counts how many "recent"
-comments this user has made... and via our complex & proprietary algorithm, it
-prints the correct label.
+is called... it's this `getUserActivityText()` method:
+
+[[[ code('25f70cc54f') ]]]
+
+This counts how many "recent" comments this user has made... and via our
+complex & proprietary algorithm, it prints the correct label.
 
 Back over in Blackfire, it told us that the last call before Doctrine was
 `CommentHelper::countRecentCommentsForUser()` - that's *this* function call
-right here! Let's go open that up - it's in the `src/Service` directory.
+right here!
+
+[[[ code('eebcbf8fdf') ]]]
+
+Let's go open that up - it's in the `src/Service` directory:
+
+[[[ code('91c2e18d2c') ]]]
 
 Ah. If you don't use Doctrine, you might not see the problem - but it's one
 that can easily happen no matter *how* you talk to a database. Hold
-Command or Ctrl and click the `getComments()` method to jump inside.
+Command or Ctrl and click the `getComments()` method to jump inside:
+
+[[[ code('36223d01bf') ]]]
 
 Here's the story: each `User` on our site has a database relationship to the
 `comment` table: every user can have many comments. The way our code is written,
 Doctrine is querying for *all* the data for *every* comment that a User has
 *ever* made... simply to then loop over them, and count how many were created within
-the last 3 months. It's a massively inefficient way to get a simple count. *This*
-is problem number one.
+the last 3 months:
+
+[[[ code('9ef46f3586') ]]]
+
+It's a massively inefficient way to get a simple count. *This* is problem number one.
 
 It seems obvious now that I'm looking at it. But the nice thing is that... it's
 not a huge deal that I did this wrong originally - Blackfire points it out. And
@@ -84,19 +100,29 @@ premature optimization.
 
 So let's fix this performance bug. Open up `src/Repository/CommentRepository.php`.
 I've already created a function that will use a direct COUNT query to get the
-number of recent comments *since* a certain date. Let's use this... instead of
-my current, crazy logic.
+number of recent comments *since* a certain date:
+
+[[[ code('df24b758bf') ]]]
+
+Let's use this... instead of my current, crazy logic.
 
 To access `CommentRepository` inside `CommentHelper` - this *is* a bit specific
 to Symfony - create a `public function __construct()` and *autowire* it by adding
-a `CommentRepository $commentRepository` argument. Add a
-`private $commentRepository` property... and set it in the constructor:
-`$this->commentRepository = $commentRepository`.
+a `CommentRepository $commentRepository` argument:
+
+[[[ code('a3de00027e') ]]]
+
+Add a `private $commentRepository` property... and set it in the constructor:
+`$this->commentRepository = $commentRepository`:
+
+[[[ code('333c9d8fc0') ]]]
 
 Now... I don't need *any* of this logic. Just return
 `$this->commentRepository->countForUser()`. Pass this `$user`... and go steal
 the `DateTimeImmutable` from below and use that for the second argument. Celebrate
-by killing the rest of the code.
+by killing the rest of the code:
+
+[[[ code('82442bb0ca') ]]]
 
 If we've done a good job, we will hopefully be calling that `UnitOfWork` function
 *many* less times - the 23 calls into Doctrine from `CommentHelper` eventually
