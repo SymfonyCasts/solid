@@ -1,6 +1,6 @@
 # Comparisons: Validate Performance Changes, Find Side Effects
 
-We've just updated our code to make a COUNT query instead of querying for *all*
+We've just updated our code to make a `COUNT` query instead of querying for *all*
 the comments for a user... just to count them. So, the page will *definitely* be
 faster. Right? Are you *absolutely* sure? Well, *I* think it will be faster... but
 sometimes making one part of your code faster... will make other parts slower.
