@@ -57,7 +57,7 @@ sense: that's executing database queries.
 ## Hello Recommendations
 
 ***TIP
-Recommendations require a "Profiler" plan level or higher.
+The Recommendations information requires a "Profiler" plan level or higher.
 ***
 
 Back on our site, you *may* have noticed that each time we've profiled, a little
