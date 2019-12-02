@@ -85,6 +85,10 @@ Is the Blackfire extension working? I don't know! Because we're using Symfony, a
 easy way to check is to hover over the web debug toolbar and click the
 "View phpinfo()" link. Let's see... yep! The Blackfire PHP extension is here.
 
+***TIP
+If you have XDebug installed, disable it for the best results.
+***
+
 ## Installing the Browser Extension
 
 At this point, our *server* is set up and ready to profile! Victory! The only
