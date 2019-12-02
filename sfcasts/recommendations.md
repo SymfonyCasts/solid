@@ -29,10 +29,13 @@ production. That extra noise makes finding the *true* performance issues harder.
 
 So, let's switch our app to the `prod` environment while profiling.
 
-Open up `.env`, find the `APP_ENV` variable, and change it to `prod`. That will
-make things more realistic... but it also means that after... pretty much *any*
-change to our code, we will need to clear & warm the cache. No big deal: at your
-terminal, run:
+Open up `.env`, find the `APP_ENV` variable, and change it to `prod`:
+
+[[[ code('4bef8cd1b5') ]]]
+
+That will make things more realistic... but it also means that after... pretty
+much *any* change to our code, we will need to clear & warm the cache. No big deal:
+at your terminal, run:
 
 ```terminal
 php bin/console cache:clear
