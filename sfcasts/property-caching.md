@@ -33,7 +33,7 @@ your code starts.
 Let's start from the top: `handleRaw()` is the framework booting up... and as
 we trace down... it renders our controller, renders our template... and
 we're once again inside the `body` block. This is really the same as last time!
-Our `AppExtension::getUserActivityText()` calls the `countForUser()` function 23
+Our `AppExtension::getUserActivityText()` calls the `countRecentCommentsForUser()` function 23
 times. That makes sense: we probably have 23 comments on the page... and for
 each comment, we need to count *all* the author's comments to print out this label.
 
