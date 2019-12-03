@@ -68,7 +68,9 @@ As we already discovered, the problem is coming from
 `AppExtension::getUserActivityText()`.
 
 Over in `src/Twig/AppExtension.php`, each time we render a comment, it calls
-`countForUser()` and passes the `User` object attached to this comment.
+`countForUser()` and passes the `User` object attached to this comment:
+
+[[[ code('1a4694acb5') ]]]
 
 ## Property Caching
 
@@ -82,13 +84,20 @@ more than once for a given user.
 
 Start by moving most of the logic into a private function called
 `calculateUserActivityText()`: this will have a `User` argument and return a
-string.
+string:
 
-Next, add a new property to the top of the file: `private $userStatuses = []`.
+[[[ code('21a6a9ac56') ]]]
+
+Next, add a new property to the top of the file: `private $userStatuses = []`:
+
+[[[ code('681ac88340') ]]]
+
 Back in the public function, here's the magic: if *not*
 `isset($this->userStatuses[$user->getId()])`, then set it by saying
 `$this->userStatuses[$user->getId()] = $this->calculateUserActivityText($user)`.
-At the bottom of the function, return `$this->userStatuses[$user->getId()]`.
+At the bottom of the function, return `$this->userStatuses[$user->getId()]`:
+
+[[[ code('ae6370d772') ]]]
 
 This is one of my *favorite* performance tricks because it has *no* downside,
 except for some extra code. If `getUserActivityText()` is called and passed the
