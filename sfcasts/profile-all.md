@@ -1,51 +1,76 @@
-# Profile All
+# Profile All Requests (Including Ajax)
 
-Coming soon...
+When you open the browser extension to create a profile, it has a few options that
+we've been ignoring so far.. and some of these are only available for certain
+Blackfire plans.
 
-Now one we've been profiling, you may not have noticed. A couple of options on here
-that I just want to mention. Um, and the options you see here may depend on what your
-black fire level is. So they do have something called a debugging mode where you can
-actually disable pruning and anonymization. So you're going to call trees that are
-full of garbage and have real information on them. Um, which is not as useful for,
-for debugging but is useful for um, uh, D not useful for profiling but better for
-debugging sells something. It's called the dis distributed profiling. This is
-incredible if you have a micro service architecture where you're making API requests
-in the background, if you install Blackfire in all of them, um, then by default when
-you enable a page, if that page makes an eight, makes an API request to one of your
-other microservice apps.
+## Debugging Mode
 
-The final, uh, profile is going to contain a sub profiles which are going to show you
-how your entire infrastructure is working together. You can also do disable
-aggregation. Uh, it only take one request information instead of multiple in case or
-as side effects. But it's a really cool thing. I'm gonna show you this profile all
-requests. So right now this looks like a pre traditional page here. Uh, but I'm
-actually going to hit uh, profile requests. And here you're actually going to start
-recording. So I'm gonna hit record and I'm going to refresh. And cool. You can
-already see there's actually two requests on here and if I scroll down a little bit,
-suddenly there's a third request. So let's just stop right there.
+***TIP
+Debugging mode is available via the Debugging add-on.
+***
 
-And when I click see these three here, these are the three profiles that were just
-created in the background. This one here is the homepage in these two here, actually
-Ajax calls. So without even thinking about it, surprise, we were able to discover two
-HS calls happening on the site. This first one here, the API /get hub organization.
-This is actually a little Ajax call that happens on load. You can kind of see it that
-loads all of this repository information over here. This is just a simple little, a
-API call that goes and finds the, uh, most popular repositories over from the Symfony
-casts a get hub page. It's a really good example for net. Rick never requests this
-other one here and this `/_sightings` that's actually powering the forever scroll
-on this page as I scroll down more low. So that's just a really great way to actually
-get an idea like what's going on behind your scenes.
+For example, "debugging mode" will tell Blackfire to *disable* pruning - that's
+when it removes data for functions that don't take a lot of resources -  and also
+disable anonymization - that's when it hides exact details used in SQL queries
+and HTTP requests. Debugging mode is useful if something weird is going on and
+you want to *fully* see what's happening inside a request.
 
-It is not the only way, however, it's also a really great way to profile form
-submits. You can hit record right before you submit the form. Now it's not the only
-way though, to a profile. Ajax calls. I'm gonna show you a really cool way to profile
-Ajax calls in a few seconds, in a few minutes. But let's check out over here the, uh,
+## Distributed Profiling
+
+***TIP
+Distributed profiling is available to Premium plan users or higher.
+***
+
+Another superpower of Blackfire is called distributed profiling... which you either
+won't care about... or it's the most awesome thing ever. Imagine you have a
+micro-service architecture where when you refresh the page, it might make HTTP
+requests to other microservices. If you have Blackfire installed on all of your
+microservices, Blackfire will automatically create profiles for *every* request
+made to every app. The final result is a profile with sub-profiles that show you
+how the entire infrastructure is working together. It's... pretty incredible.
+
+But, if you want to disable it and *only* profile this main app, you can do that
+with this option.
+
+## Disabling Aggregation
+
+The last option is to "disable aggregation". That's a fancy way of telling Blackfire
+that you want to make & profile just *one* request, instead of making 10 requests
+and averaging the results.
+
+## Profiling All Requests
+
+But what I *really* want to look at is the "Profile all requests" link. Hit
+"Record"... then refresh. Woh! Cool! It already made 2 requests! And if I scroll
+down a little bit... there's a third request! Let's stop right here.
+
+That jumps is to our dashboard. These *last* three profiles were just created:
+one for the homepage and two others - these are both AJAX calls! Surprise! Without
+even thinking about it, we discovered a few extra requests.
+
+This first one - `/api/github-organization` - is what loads this GitHub repository
+information on the right. This makes an API call for the most popular repositories
+under the Symfonycasts organization... which is kind of silly... but it was a *great*
+way to show how network requests look in Blackfire. We'll see that in a minute.
+
+This other request - for `/_sightings` is an AJAX call that powers the forever
+scroll on this page.
+
+Basically... I like using "profile all requests" in 3 situations. One, to get
+an idea of what's all happening on a page. Two, to profile AJAX requests... though
+I'll show you another way to do that soon. And three, to profile form submits: fill
+out the form, hit "Record", then submit.
+
+## Checking out the Network Requests
+
+But let's check out over here the, uh,
 kind of get hub organization. Uh, one, as I mentioned, this goes and makes an Ajax
 call, uh, an API call to the get hub API to load repository information about the
 Symfony. A repositor on there. And this one is almost comical. You can see 438
 milliseconds, uh, 82% of it is `curl_multi_select()`. In other words, 82% of it is the
 actual time it's taking to make the API call pretty obvious. Um, now kind of fun
-thing is if you look at the CPU time, which is only 74 milliseconds of that 
+thing is if you look at the CPU time, which is only 74 milliseconds of that
 `curl_multi_exec()` is still the biggest offender, but you can see it's a lot less obvious
 what the critical path is here.
 
