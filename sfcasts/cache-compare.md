@@ -5,8 +5,13 @@ more complex. So, was the property-caching trick we just used worth
 it? Maybe... but I'm going to revert it.
 
 Remove the property caching logic and just return
-`$this->calculateUserActivityText($user)`. And... we don't need the `$userStatuses`
-property anymore.
+`$this->calculateUserActivityText($user)`:
+
+[[[ code('2597dbf705') ]]]
+
+And... we don't need the `$userStatuses` property anymore:
+
+[[[ code('ad6a32065f') ]]]
 
 We *could* stop here and say: this spot is not worth optimizing. Or, we can try a
 different solution - like using a *real* caching layer. After all, this label
@@ -18,23 +23,36 @@ next level. Caching could be an easy win.
 
 Back in `AppExtension`, autowire Symfony's cache object by adding an argument
 type-hinted with `CacheInterface` - the one from `Symfony\Contracts\Cache`. I'll
-press Alt+Enter and select  "Initialize fields" to make PhpStorm create a new
-property with this name and set it in the constructor.
+press `Alt`+`Enter` and select  "Initialize fields" to make PhpStorm create a new
+property with this name and set it in the constructor:
+
+[[[ code('5031282329') ]]]
 
 Down in the method, let's first create a cache key that's specific to each user.
-How about: `$key = sprintf('user_activity_text_'.`and then `$user->getId()`.
+How about: `$key = sprintf('user_activity_text_'.`and then `$user->getId()`:
+
+[[[ code('cbdea6a9bb') ]]]
+
 Wow, I *just* realized that my `sprintf` here is totally pointless.
 
 Then, `return $this->cache->get()` and pass this `$key`. If that item exists in
-the cache, it will return immediately. *Otherwise*, it will execute this callback
-function, pass us a `CacheItemInterface` object and *our* job will be to return
-the value that *should* be stored in cache.
+the cache, it will return immediately:
+
+[[[ code('9cafd8e95d') ]]]
+
+*Otherwise*, it will execute this callback function, pass us a `CacheItemInterface`
+object and *our* job will be to return the value that *should* be stored in cache.
 
 Hmm... I need the `$user` object inside here. Add `use` then `$user` to bring it
-into scope. Then return `$this->calculateUserActivityText($user)`. I think it's
-probably safe to cache this value for one hour: that's long enough, but not *so*
-long that we need to worry about adding a system to manually *invalidate* the cache.
-Set the expiration with `$item->expiresAfter(3600)`.
+into scope. Then return `$this->calculateUserActivityText($user)`:
+
+[[[ code('95f4cc0300') ]]]
+
+I think it's probably safe to cache this value for one hour: that's long enough,
+but not *so* long that we need to worry about adding a system to manually *invalidate*
+the cache. Set the expiration with `$item->expiresAfter(3600)`:
+
+[[[ code('b2c76be435') ]]]
 
 So... does this help? Of course it will! More importantly, because we decided we
 don't need to worry about adding more complexity to *invalidate* the cache,
