@@ -64,35 +64,40 @@ out the form, hit "Record", then submit.
 
 ## Checking out the Network Requests
 
-But let's check out over here the, uh,
-kind of get hub organization. Uh, one, as I mentioned, this goes and makes an Ajax
-call, uh, an API call to the get hub API to load repository information about the
-Symfony. A repositor on there. And this one is almost comical. You can see 438
-milliseconds, uh, 82% of it is `curl_multi_select()`. In other words, 82% of it is the
-actual time it's taking to make the API call pretty obvious. Um, now kind of fun
-thing is if you look at the CPU time, which is only 74 milliseconds of that
-`curl_multi_exec()` is still the biggest offender, but you can see it's a lot less obvious
-what the critical path is here.
+Let's look closer at the `/api/github-organization` AJAX profile:
+https://bit.ly/sf-bf-github-org. As I mentioned, this makes a network request
+to the GitHub API to load repository information. The profile... is almost comical!
+438 milliseconds - 82% - of the wall time is from `curl_multi_select()` - that's
+the time spent making any API calls.
 
-Whereas if you click on IO /wait, because this includes network time, it's comically
-obvious. Now, one of the interesting things here is this is not the full call tree
-like right? You can see it goes right from Handel, the beginning of the framework
-being done all the way into the controller. Normally you see more layers than that.
-And if you switch to the CPU, you can see all kinds of extra layers. This is
-something that Blackfire does, which is really nice, and it's called pruning. It's
-gonna prune the, it removes the node information that's less important. So the more
-obvious your critical path is, the more stuff is going to be able to remove because
-it's just noise, it's garbage.
+It's kind of fun to look at this in the CPU dimension, which is only 74
+milliseconds. `curl_multi_exec()` is *still* the biggest offender... but it's
+a lot less obvious what the critical path is. Compare that with the I/O wait
+dimension, which includes network time. The critical path is *ridiculously*
+obvious. This is an extreme example of how different dimensions can be more or
+less useful depending on the situation.
 
-So in this case, it's incredibly easy to see what the path is. Also, you can see the
-a network calls themselves up here. So in here you can see actually there's two
-network calls here and there's one, uh, that returns a 1.5 kilobytes and another one
-that recurrence returns five, uh, kilobytes behind the scenes. You can say the
-network time, the time here is not actually honest. It's because of the asynchronous
-nature of the, uh, request I'm making. Um, but you can see that there's two API
-calls. So how do we fix this? Do we cache? Do we somehow try to make only one AP call
-API call both. We're actually gonna revisit and fix this problem later. For now, I
-wanted you to be aware of the profile all as a way to see what's going on your app
-and et cetera, et cetera, snacks. So we're actually gonna use the Blackfire command
-line tool, which is the second and my preferred way to profile Ajax requests as well
-as profile command line applications.
+One of the interesting things is that... this is *not* the full call graph.
+According to this, it goes straight from `handleRaw()` - which is the first
+call into the Symfony Framework - to our controller. In reality, there are more
+function calls in between. Switch back to the CPU dimension. Yep! This shows
+more nodes.
+
+*This* is the result of the "pruning" I mentioned a few minutes ago. Blackfire
+removes function calls that don't consume any significant resources so that
+the critical path from a *performance* standpoint, is more obvious. If you
+disabled pruning - that's the "Debugging mode" - you would see everything.
+
+In this situation, the critical path is obvious. You can also see the network
+requests on top. There are actually *two*: on that returns 1.5 kilobytes and
+another that returns 5.
+
+You can also see the network time... but at *least* if you're using the Symfony
+HTTP client like I am, these numbers aren't right - they're far too small.
+That's ok - because the overall cost is showing up correctly in all the other
+dimensions.
+
+So how do we fix this? Should we add some caching? Or somehow try to make only
+*one* API call instead of two?  We're actually gonna revisit and fix this problem
+later. For now, I wanted you to be aware of the "Profile All" feature. Next,
+let's check out the Blackfire command-line tool, which has *two* superpowers.
