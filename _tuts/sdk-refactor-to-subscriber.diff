@@ -1,0 +1,55 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 4bcc5a1..da05ffd 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -7,7 +7,6 @@ use App\Entity\User;
+ use App\Form\AgreeToUpdatedTermsFormType;
+ use App\GitHub\GitHubApiHelper;
+ use App\Repository\BigFootSightingRepository;
+-use Blackfire\Client;
+ use Doctrine\ORM\EntityManagerInterface;
+ use Doctrine\ORM\Tools\Pagination\Paginator;
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+@@ -55,14 +54,6 @@ class MainController extends AbstractController
+      */
+     public function gitHubOrganizationInfo(GitHubApiHelper $apiHelper)
+     {
+-        // replace with some conditional logic
+-        $shouldProfile = true;
+-
+-        if ($shouldProfile) {
+-            $blackfire = new Client();
+-            $probe = $blackfire->createProbe();
+-        }
+-
+         $organizationName = 'SymfonyCasts';
+         $organization = $apiHelper->getOrganizationInfo($organizationName);
+         $repositories = $apiHelper->getOrganizationRepositories($organizationName);
+diff --git a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+index 70ecaa0..e6df6e7 100644
+--- a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
++++ b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\EventSubscriber;
+ 
++use Blackfire\Client;
+ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+ use Symfony\Component\HttpKernel\Event\RequestEvent;
+ 
+@@ -9,7 +10,14 @@ class BlackfireAutoProfileSubscriber implements EventSubscriberInterface
+ {
+     public function onRequestEvent(RequestEvent $event)
+     {
+-        // ...
++        // replace with some conditional logic
++        $request = $event->getRequest();
++        $shouldProfile = $request->getPathInfo() === '/api/github-organization';
++
++        if ($shouldProfile) {
++            $blackfire = new Client();
++            $probe = $blackfire->createProbe();
++        }
+     }
+ 
+     public static function getSubscribedEvents()

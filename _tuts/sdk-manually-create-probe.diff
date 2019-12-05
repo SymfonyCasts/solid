@@ -1,0 +1,27 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index da05ffd..4bcc5a1 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -7,6 +7,7 @@ use App\Entity\User;
+ use App\Form\AgreeToUpdatedTermsFormType;
+ use App\GitHub\GitHubApiHelper;
+ use App\Repository\BigFootSightingRepository;
++use Blackfire\Client;
+ use Doctrine\ORM\EntityManagerInterface;
+ use Doctrine\ORM\Tools\Pagination\Paginator;
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+@@ -54,6 +55,14 @@ class MainController extends AbstractController
+      */
+     public function gitHubOrganizationInfo(GitHubApiHelper $apiHelper)
+     {
++        // replace with some conditional logic
++        $shouldProfile = true;
++
++        if ($shouldProfile) {
++            $blackfire = new Client();
++            $probe = $blackfire->createProbe();
++        }
++
+         $organizationName = 'SymfonyCasts';
+         $organization = $apiHelper->getOrganizationInfo($organizationName);
+         $repositories = $apiHelper->getOrganizationRepositories($organizationName);

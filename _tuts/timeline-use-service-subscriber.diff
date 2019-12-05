@@ -1,72 +1,87 @@
-diff --git a/src/EventSubscriber/AgreeToTermsSubscriber.php b/src/EventSubscriber/AgreeToTermsSubscriber.php
-index 227a6a8..9a86fa0 100644
---- a/src/EventSubscriber/AgreeToTermsSubscriber.php
-+++ b/src/EventSubscriber/AgreeToTermsSubscriber.php
-@@ -4,27 +4,25 @@ namespace App\EventSubscriber;
+diff --git a/src/Security/LoginFormAuthenticator.php b/src/Security/LoginFormAuthenticator.php
+index 17ade90..8485cfd 100644
+--- a/src/Security/LoginFormAuthenticator.php
++++ b/src/Security/LoginFormAuthenticator.php
+@@ -4,6 +4,7 @@ namespace App\Security;
  
  use App\Entity\User;
- use App\Form\AgreeToUpdatedTermsFormType;
+ use Doctrine\ORM\EntityManagerInterface;
 +use Psr\Container\ContainerInterface;
- use Symfony\Component\EventDispatcher\EventSubscriberInterface;
- use Symfony\Component\Form\FormFactoryInterface;
- use Symfony\Component\HttpFoundation\Response;
- use Symfony\Component\HttpKernel\Event\RequestEvent;
- use Symfony\Component\Security\Core\Security;
+ use Symfony\Component\HttpFoundation\RedirectResponse;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+@@ -18,22 +19,17 @@ use Symfony\Component\Security\Csrf\CsrfToken;
+ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
+ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 +use Symfony\Contracts\Service\ServiceSubscriberInterface;
- use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
- use Twig\Environment;
  
--class AgreeToTermsSubscriber implements EventSubscriberInterface
-+class AgreeToTermsSubscriber implements EventSubscriberInterface, ServiceSubscriberInterface
+-class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
++class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements ServiceSubscriberInterface
  {
-     private $security;
--    private $formFactory;
--    private $twig;
--    private $entrypointLookup;
+     use TargetPathTrait;
+ 
+-    private $entityManager;
+-    private $urlGenerator;
+-    private $csrfTokenManager;
+-    private $passwordEncoder;
 +    private $container;
  
--    public function __construct(Security $security, FormFactoryInterface $formFactory, Environment $twig, EntrypointLookupInterface $entrypointLookup)
-+    public function __construct(Security $security, ContainerInterface $container)
+-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
++    public function __construct(ContainerInterface $container)
      {
-         $this->security = $security;
--        $this->formFactory = $formFactory;
--        $this->twig = $twig;
--        $this->entrypointLookup = $entrypointLookup;
+-        $this->entityManager = $entityManager;
+-        $this->urlGenerator = $urlGenerator;
+-        $this->csrfTokenManager = $csrfTokenManager;
+-        $this->passwordEncoder = $passwordEncoder;
 +        $this->container = $container;
      }
  
-     public function onRequestEvent(RequestEvent $event)
-@@ -48,16 +46,16 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
-             return;
+     public function supports(Request $request)
+@@ -60,11 +56,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
+     public function getUser($credentials, UserProviderInterface $userProvider)
+     {
+         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+-        if (!$this->csrfTokenManager->isTokenValid($token)) {
++        if (!$this->container->get(CsrfTokenManagerInterface::class)->isTokenValid($token)) {
+             throw new InvalidCsrfTokenException();
          }
  
--        $form = $this->formFactory->create(AgreeToUpdatedTermsFormType::class);
-+        $form = $this->container->get(FormFactoryInterface::class)->create(AgreeToUpdatedTermsFormType::class);
+-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
++        $user = $this->container->get(EntityManagerInterface::class)->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
  
--        $html = $this->twig->render('main/agreeUpdatedTerms.html.twig', [
-+        $html = $this->container->get(Environment::class)->render('main/agreeUpdatedTerms.html.twig', [
-             'form' => $form->createView()
-         ]);
-         // resets Encore assets so they render correctly later
-         // only technically needed here because we should really
-         // "exit" this function before rendering the template if
-         // we know the user doesn't need to see the form!
--        $this->entrypointLookup->reset();
-+        $this->container->get(EntrypointLookupInterface::class)->reset();
+         if (!$user) {
+             // fail authentication with a custom error
+@@ -76,7 +72,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
  
-         $response = new Response($html);
-         $event->setResponse($response);
-@@ -69,4 +67,13 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
-             RequestEvent::class => 'onRequestEvent',
-         ];
+     public function checkCredentials($credentials, UserInterface $user)
+     {
+-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
++        return $this->container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, $credentials['password']);
      }
+ 
+     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+@@ -85,11 +81,21 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
+             return new RedirectResponse($targetPath);
+         }
+ 
+-        return new RedirectResponse($this->urlGenerator->generate('app_homepage'));
++        return new RedirectResponse($this->container->get(UrlGeneratorInterface::class)->generate('app_homepage'));
+     }
+ 
+     protected function getLoginUrl()
+     {
+-        return $this->urlGenerator->generate('app_login');
++        return $this->container->get(UrlGeneratorInterface::class)->generate('app_login');
++    }
 +
 +    public static function getSubscribedServices()
 +    {
 +        return [
-+            FormFactoryInterface::class,
-+            Environment::class,
-+            EntrypointLookupInterface::class,
++            EntityManagerInterface::class,
++            UrlGeneratorInterface::class,
++            CsrfTokenManagerInterface::class,
++            UserPasswordEncoderInterface::class,
 +        ];
-+    }
+     }
  }

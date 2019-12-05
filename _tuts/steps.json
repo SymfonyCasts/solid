@@ -64,7 +64,52 @@
             "id": "timeline-use-service-subscriber",
             "name": "Timeline: use service subscriber",
             "description": null
+        },
+        {
+            "id": "sdk-install-it",
+            "name": "SDK: install it",
+            "description": null
+        },
+        {
+            "id": "sdk-manually-enable-disable-probe",
+            "name": "SDK: Manually enable\/disable probe",
+            "description": null
+        },
+        {
+            "id": "sdk-showing-close",
+            "name": "SDK: showing close()",
+            "description": null
+        },
+        {
+            "id": "sdk-remove-enable-disable",
+            "name": "SDK: Remove enable\/disable",
+            "description": null
+        },
+        {
+            "id": "sdk-manually-create-probe",
+            "name": "SDK: Manually create probe",
+            "description": null
+        },
+        {
+            "id": "sdk-make-subscriber",
+            "name": "SDK: make:subscriber",
+            "description": null
+        },
+        {
+            "id": "sdk-refactor-to-subscriber",
+            "name": "SDK: refactor to subscriber",
+            "description": null
+        },
+        {
+            "id": "sdk-add-priority",
+            "name": "SDK: add priority",
+            "description": null
+        },
+        {
+            "id": "sdk-add-configuration",
+            "name": "SDK: Add Configuration",
+            "description": null
         }
     ],
-    "sha": "43f1b19bbe193affec5e1a47c2206d901e073480"
+    "sha": "a2fd581b13747b4aab4809ed7187c787e4fb6e7a"
 }

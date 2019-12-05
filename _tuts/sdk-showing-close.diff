@@ -1,0 +1,12 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index ea32e9e..262e994 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -30,6 +30,7 @@ class MainController extends AbstractController
+         ]);
+ 
+         $probe->disable();
++        $probe->close(); // optional - will auto-close at end of script
+ 
+         return $response;
+     }

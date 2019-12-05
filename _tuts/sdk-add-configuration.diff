@@ -1,0 +1,24 @@
+diff --git a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+index 1abd263..056a2df 100644
+--- a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
++++ b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+@@ -3,6 +3,7 @@
+ namespace App\EventSubscriber;
+ 
+ use Blackfire\Client;
++use Blackfire\Profile\Configuration;
+ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+ use Symfony\Component\HttpKernel\Event\RequestEvent;
+ 
+@@ -15,8 +16,10 @@ class BlackfireAutoProfileSubscriber implements EventSubscriberInterface
+         $shouldProfile = $request->getPathInfo() === '/api/github-organization';
+ 
+         if ($shouldProfile) {
++            $configuration = new Configuration();
++            $configuration->setTitle('Automatic GitHub org profile');
+             $blackfire = new Client();
+-            $probe = $blackfire->createProbe();
++            $probe = $blackfire->createProbe($configuration);
+         }
+     }
+ 

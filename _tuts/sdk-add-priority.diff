@@ -1,0 +1,14 @@
+diff --git a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+index e6df6e7..1abd263 100644
+--- a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
++++ b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+@@ -23,7 +23,8 @@ class BlackfireAutoProfileSubscriber implements EventSubscriberInterface
+     public static function getSubscribedEvents()
+     {
+         return [
+-            RequestEvent::class => 'onRequestEvent',
++            // warning: adding a priority will run before routing & security
++            RequestEvent::class => ['onRequestEvent', 1000],
+         ];
+     }
+ }
