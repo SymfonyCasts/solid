@@ -18,12 +18,14 @@ same problem now? And if so, why? Can we optimize it?
 Time to put on our profiling detective hats. Let's follow the hot path! We enter
 `MainController::homepage()` and render a template... so the problem is coming
 from our *template*. Interesting. Next `_sightings.html.twig` is rendered... and
-then something called `twig_length_filter` executes `loadOneToManyCollection`, which
+then something called `twig_length_filter` executes `loadOneToManyCollection()`, which
 is from Doctrine. Let's do some digging in that template:
 `templates/main/_sightings.html.twig`.
 
 We saw that it was referencing something called `twig_length_filter`. Search the
-template for `length`. Ah: `sighting.comments|length`.
+template for `length`. Ah: `sighting.comments|length`:
+
+[[[ code('2ef9d351d0') ]]]
 
 ## Finding the N+1 Problem
 
@@ -35,7 +37,9 @@ table to the `comment` table.
 If you're not familiar with Doctrine, when you call `sighting.comments`, at that
 moment, Doctrine queries for *all* of the comments for that specific `BigFootSighting`
 record. I'll open up `src/Entity/BigFootSighting.php`. Yep, we're accessing the
-`comments` property, which is a `OneToMany` relationship to `Comment`.
+`comments` property, which is a `OneToMany` relationship to `Comment`:
+
+[[[ code('a61746fb8d') ]]]
 
 The point is: for *each* `BigFootSighting` that we are rendering, Doctrine is making
 an *extra* query to fetch *all* the comments for that sighting. This is basically
@@ -47,7 +51,7 @@ You can see this in the SQL queries in Blackfire: we have one query from
 `big_foot_sighting` - the query above is related to the pagination logic - then
 *25* queries from the `comment` table.
 
-## Counting with fetch=EXTRA_LAZY
+## Counting with `fetch="EXTRA_LAZY"`
 
 Okay, we have identified the problem: we are not only making a lot of queries...
 but those queries are *also* fetching *all* the comment data... just to count them.
@@ -60,7 +64,9 @@ they would be much faster.
 In Doctrine, we can do this really easily. If you access a relationship - like
 the `comments` property - and *only* count it, we can *ask* Doctrine to do a
 COUNT query instead of loading *all* the comment data. How? Above the
-`comments` property, add `fetch="EXTRA_LAZY"`.
+`comments` property, add `fetch="EXTRA_LAZY"`:
+
+[[[ code('f831189e2a') ]]]
 
 Before we try this, don't forget that we're in the `prod` environment:
 run `cache:clear`:
@@ -79,7 +85,7 @@ Ok, let's see if this helps! Spin over, refresh the page and... profile! I'll ca
 this one: `[Recording] homepage EXTRA_LAZY` - https://bit.ly/sf-bf-extra-lazy.
 I'll close the other tab and view the call graph.
 
-Was this better? Well, `createEntity` isn't the biggest problem anymore...
+Was this better? Well, `createEntity()` isn't the biggest problem anymore...
 so that's a good sign! Let's compare to be sure: go from the original homepage...
 to the most recent profile: https://bit.ly/sf-bf-extra-lazy-compare.
 
