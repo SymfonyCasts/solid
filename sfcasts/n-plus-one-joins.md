@@ -83,8 +83,8 @@ be updated to take this into account:
 
 ```
 {% for sightingData in sightings %}
-    {% set sighting = sightingData[0] %}
-    {% set commentCount = sightingData[1] %}
+    {% set sighting = sightingData.0 %}
+    {% set commentCount = sightingData.comment_count %}
 
     {# ... #}
 		{{ sighting.title }}
