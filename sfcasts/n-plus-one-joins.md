@@ -77,7 +77,7 @@ From a performance standpoint, it's probably the perfect solution.
 
 But... it has a downside: complexity. Instead of returning an array of
 `BigFootSighting` objects, this will return an array of... arrays... where each
-has a `0` key that is the `BigFootSighting` object and a `1` key with the count.
+has a `0` key that is the `BigFootSighting` object and a `comment_count` key with the count.
 It's just... a bit weird to deal with. For example, the template would need to
 be updated to take this into account:
 
