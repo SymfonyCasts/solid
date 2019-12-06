@@ -13,3 +13,5 @@ chapters:
     - profile-all
     - blackfire-cli
     - command-line-scripts
+    - timeline
+    - service-subscriber
