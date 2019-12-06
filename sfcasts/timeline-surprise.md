@@ -1,6 +1,6 @@
 # Timeline: Finding a Hidden Surprise
 
-the way. All right, so I'm going to hit home, um, and scroll back up. And one of the
+One of the
 things I wanna look at is actually the `RequestEvent`. So this is the first event that
 Symfony dispatches and anything that listens to this happens before your controller.
 You can actually see that in here.
