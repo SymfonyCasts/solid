@@ -14,4 +14,5 @@ chapters:
     - blackfire-cli
     - command-line-scripts
     - timeline
+    - timeline-surprise
     - service-subscriber
