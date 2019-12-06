@@ -13,4 +13,6 @@ chapters:
     - profile-all
     - blackfire-cli
     - command-line-scripts
+    - timeline
+    - timeline-surprise
     - service-subscriber
