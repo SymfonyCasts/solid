@@ -1,6 +1,6 @@
 # Timeline: Finding a Hidden Surprise
 
-One if the big spots on the timeline is the `RequestEvent`. It's purple because
+One of the big spots on the timeline is the `RequestEvent`. It's purple because
 this is an event: the *first* event that Symfony dispatches. It happens before
 the controller is called... which is pretty obvious in this view.
 
@@ -14,7 +14,7 @@ the query for the `User` object that we're logged in as. Pretty cool.
 ## The Hidden Slow Listener
 
 There's one more big chunk under `RequestEvent`: something called
-`AgreeToTermsSubscriber`... which is taking 30 milliseconds. Let's open up that
+`AgreeToTermsSubscriber`... which is taking 30 milliseconds. Let's open that
 class and see what it does: `src/EventSubscriber/AgreeToTermsSubscriber.php`.
 
 Ah yes. Every now and then, we update the "terms of service" on our site. When
@@ -37,7 +37,7 @@ So... the fact that this is taking 30 milliseconds... even though it will almost
 Oh, and see this blue background? I love this: it's the memory footprint. If we
 trace over this call - this is about when the `AgreeToTermsSubscriber` happens -
 the memory starts at 3.44 megabytes... and finishes around 4.46. That's 1 megabyte
-of memory - kinda high for such a non-important function.
+of memory - kinda high for such a rarely-used function.
 
 The point is: this method doesn't take *that* long to run. And so, it may not have
 shown up as a performance critical path on the call graph. But thanks to the timeline,
@@ -46,19 +46,19 @@ long.
 
 ## Fixing the Slow Code
 
-Back in the code, the mistake I made is pretty embarrassing: I'm using some pretend
+Back in the code, the mistake I made is pretty embarrassing. I'm using some pretend
 logic to see whether or not we need to render the form. But... I put the check too
-late! We're doing all the work of rendering the form... even if we won't use it.
+late! We're doing all the work of rendering the form... even if we don't use it.
 
 Let's move that code all the way to the top. Ah, too far - it needs to be after
 the fake `$latestTermsDate` variable.
 
-That looks better. Let's try it! I'll refresh the page, profile again and call
+That looks better. Let's try it! I'll refresh the page. Profile again and call
 it `[Recording] Homepage authenticated fixed subscriber`: http://bit.ly/sf-bf-timeline-fix
 
 Let's jump straight to view the Timeline... double-click `RequestEvent` and this
 time... `AgreeToTermsSubscriber` is gone! We can see `RouterListener` and `Firewall`...
-but  *not* `AgreeToTermSubscriber`. That's not because our app isn't *calling*
+but *not* `AgreeToTermsSubscriber`. That's not because our app isn't *calling*
 it anymore: it is. It's because Blackfire hides function calls that take almost
 no resources. That's great.
 
