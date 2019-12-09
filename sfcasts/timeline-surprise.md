@@ -1,53 +1,68 @@
 # Timeline: Finding a Hidden Surprise
 
-One of the
-things I wanna look at is actually the `RequestEvent`. So this is the first event that
-Symfony dispatches and anything that listens to this happens before your controller.
-You can actually see that in here.
+One if the big spots on the timeline is the `RequestEvent`. It's purple because
+this is an event: the *first* event that Symfony dispatches. It happens before
+the controller is called... which is pretty obvious in this view.
 
-I'm going to zoom in by double clicking on this. Perfect. And you can see a couple of
-cool things. You can actually see the `RouterListener`. This is the routing layer
-happening. You can see the `Firewall`, this is where authentication takes place. And
-you can even dive in here and see what's going on. You can see the entity repository.
-It's actually eventually querying for our user object. So really cool stuff. But
-check out this almost half of the request of is something called `AgreeToTermsSubscriber`
-which is taking 30 milliseconds. Let me show you what that does. That
-lives in `src/EventSubscriber/AgreeToTermSubscriber.php`. So the idea is that every
-now and then maybe the terms of service update on your site. And so when a user comes
-to your site, you need to ask them once again to agree to your terms of service.
+Let's zoom in: by double-clicking the square. Beautiful! What happens inside this
+event? Apparently... the routing layer happens! That's `RouterListener`. You can
+also see `Firewall`: this is where authentication takes place. Security is a complex
+system... so being able to see a bit about what happens inside of it is pretty
+cool. At some point... it calls a method on `EntityRepository` and we can see
+the query for the `User` object that we're logged in as. Pretty cool.
 
-I know it's very boring lawyer stuff, but this is something that sometimes this has
-to happen. So you can see this goes and gets the authenticated user. If they're not
-logged in, it just doesn't, it does nothing. But if they are logged in it then some
-of this logic is fake here, but it then basically a renders a twig template with a
-form that has the new information about the agree to terms and a checkbox to agree to
-them and then goes down here and eventually renders that and actually sets that as a
-response. So instead of running the controller, it would show you the agree to terms
-box. But the key thing is that we store the last time the user agreed to the terms
-and we only showed them if the terms have been updated since they last agreed to
-them. So for 99.9% of the requests, this code most of this code and never needs to
-run. So the fact that this is taking 30 milliseconds is way too big.
+## The Hidden Slow Listener
 
-Also see this blue background back here, that is actually the memory footprint.
-That's one of the coolest things. So for example, I can actually trace over this. You
-see, this is about where the agreed to term subscriber happens. And you can see it's
-taken 3.44 megabytes. And as I trace over by the finish, it's taking 4.46 about one
-megabyte higher. So that's a lot of memory just for that one little uh, uh, class
-that isn't even rendering the, the form on, uh, in my situation. And if you hover
-over here, you can see the same thing about one megabyte of extra memory. So this is
-cool. This is an invisible layer. The timeline helped us find this. It's not a huge
-performance problem, but it's, but it's, but it's not ideal. And the mistake I made
-here is very obvious. I'm checking to see if I actually need to render this form, but
-I'm doing all the work to run to the form even before, even when I don't need it. So
-simple fix in this case. Now that we have this, I'm just going to move that code all
-the way to the top a little bit further down after my latest terms date. There we go.
-That looks better. So now this should exit earlier and we shouldn't have this
-problem. So let's actually try that. I'll refresh the page profile again because one
-[Recording] Homepage authenticated fixed subscriber.
+There's one more big chunk under `RequestEvent`: something called
+`AgreeToTermsSubscriber`... which is taking 30 milliseconds. Let's open up that
+class and see what it does: `src/EventSubscriber/AgreeToTermsSubscriber.php`.
 
-I want to finish this. I'll jump this time straight to view the timeline and I'll
-double clip again on the uh, request event and you can see this time look, it doesn't
-even show up here. You can see the `RouterListener`, the `Firewall` listener, and you
-don't even see our `AgreeToTermSubscriber` here. It's not because it's not being
-executed, but because Blackfire is pruning data that takes no time, that functions
-now so fast that it's not a problem at all. Next, we'll talk about something else.
+Ah yes. Every now and then, we update the "terms of service" on our site. When
+we do that, our lovely lawyers have told us that we need to require people to
+agree to the updated terms. *This* class handles that: it gets the authenticated
+user and, if they're not logged in, it does nothing. But if they *are* logged in,
+then it renders a twig template with an "agree to the terms" form. Eventually,
+*if* the terms have been updated since the last time this `User` agreed to them,
+it sets that form as the response instead of rendering the *real* page.
+
+We haven't seen this form yet... and... it's not really that important. Because
+we *rarely* update our terms, 99.99% of the requests to the site will *not*
+display the form.
+
+So... the fact that this is taking 30 milliseconds... even though it will almost
+*never* do anything... is kind of a lot!
+
+## Blue Memory Footprint
+
+Oh, and see this blue background? I love this: it's the memory footprint. If we
+trace over this call - this is about when the `AgreeToTermsSubscriber` happens -
+the memory starts at 3.44 megabytes... and finishes around 4.46. That's 1 megabyte
+of memory - kinda high for such a non-important function.
+
+The point is: this method doesn't take *that* long to run. And so, it may not have
+shown up as a performance critical path on the call graph. But thanks to the timeline,
+this invisible layer jumped out at us. And... I think it *is* taking a bit too
+long.
+
+## Fixing the Slow Code
+
+Back in the code, the mistake I made is pretty embarrassing: I'm using some pretend
+logic to see whether or not we need to render the form. But... I put the check too
+late! We're doing all the work of rendering the form... even if we won't use it.
+
+Let's move that code all the way to the top. Ah, too far - it needs to be after
+the fake `$latestTermsDate` variable.
+
+That looks better. Let's try it! I'll refresh the page, profile again and call
+it `[Recording] Homepage authenticated fixed subscriber`: http://bit.ly/sf-bf-timeline-fix
+
+Let's jump straight to view the Timeline... double-click `RequestEvent` and this
+time... `AgreeToTermsSubscriber` is gone! We can see `RouterListener` and `Firewall`...
+but  *not* `AgreeToTermSubscriber`. That's not because our app isn't *calling*
+it anymore: it is. It's because Blackfire hides function calls that take almost
+no resources. That's great.
+
+Next, we know that we can write code inside a function that is slow. But did you
+know that sometimes even the *instantiation* of an object can eat a lot of resources?
+Let's see how that looks in Blackfire and leverage a Symfony feature - service
+subscribers - to make instantiation lighter.
