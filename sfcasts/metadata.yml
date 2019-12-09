@@ -15,4 +15,5 @@ chapters:
     - command-line-scripts
     - timeline
     - timeline-surprise
+    - instantiation
     - service-subscriber
