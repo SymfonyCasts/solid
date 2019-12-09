@@ -12,8 +12,15 @@ once! Let's give that a try!
 ## Adding he JOIN
 
 The controller for this page lives at `src/Controller/MainController.php` - it's
-the `homepage()` method. To help make the query, this uses a function in
-`src/Repository/BigfootSightingRepository.php` - this `findLatestQueryBuilder()`.
+the `homepage()` method:
+
+[[[ code('8d5b5c8501') ]]]
+
+To help make the query, this uses a function in
+`src/Repository/BigFootSightingRepository.php` - this `findLatestQueryBuilder()`:
+
+[[[ code('4fffc80064') ]]]
+
 *This* method ... if you did some digging ... creates the query that returns
 these results.
 
@@ -22,7 +29,9 @@ table, orders them by `createdAt` and sets a max result - a `LIMIT`.
 
 To *also* get the comment data, add `leftJoin()` on `big_foot_sighting.comments`
 and alias that joined table as `comments`. Then use `addSelect('comments')` to
-not only *join*, but also *select* all the fields from `comment`.
+not only *join*, but also *select* all the fields from `comment`:
+
+[[[ code('c3d7c0c482') ]]]
 
 Let's... see what happens! To be safe, clear the cache:
 
@@ -58,7 +67,7 @@ Yes, this *will* mean that we will once again have 27 queries. If you don't like
 that, there *is* another solution: you could make the `JOIN` query smarter - it
 would look like this:
 
-```
+```php
 // src/Repository/BigFootSightingRepository.php
 public function findLatestQueryBuilder(int $maxResults): QueryBuilder
 {
@@ -81,16 +90,16 @@ has a `0` key that is the `BigFootSighting` object and a `comment_count` key wit
 It's just... a bit weird to deal with. For example, the template would need to
 be updated to take this into account:
 
-```
+```jinja
 {% for sightingData in sightings %}
     {% set sighting = sightingData.0 %}
     {% set commentCount = sightingData.comment_count %}
 
     {# ... #}
-		{{ sighting.title }}
+        {{ sighting.title }}
 
-		{{ commentCount }}
-	{# ... #}
+        {{ commentCount }}
+    {# ... #}
 {% endfor %}
 ```
 
