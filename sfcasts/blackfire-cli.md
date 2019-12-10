@@ -59,11 +59,10 @@ if we want to profile a page... isn't it easier just to *go* to that page in
 our browser and use the extension to profile it?
 
 Yep! Unless... you *can't* easily "go" to that page - like if you want to profile
-an AJAX request or an API endpoint. Check this out: back inside my browser,
-I'll open up the dev tools, go to the "Network" section and refresh. Notice I'm
-already filtered to XHR requests - so the `/api/github-organization` AJAX request
-pops up. Want to easily profile *just* that request? Right click on it and select
-"Copy as cURL".
+an AJAX request or an API endpoint. Check this out: I'll open up the dev tools, 
+go to the "Network" section and refresh. Notice I'm already filtered to XHR 
+requests - so the `/api/github-organization` AJAX request pops up. Want to easily 
+profile *just* that request? Right click on it and select "Copy as cURL".
 
 Now head *back* to your terminal and paste. Cool, right? It creates a *full*
 curl command that you can use to make that same request... *including* any session
