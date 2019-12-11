@@ -25,7 +25,7 @@ export default function(wrapperEl) {
 
         const html = `
         <h3>${organization.name} Repos</h3>
-        <small>${organization.description} (${organization.repositoryCount} repositories)</small>
+        <small>${organization.repositoryCount} public repositories</small>
         <table class="table table-striped table-dark table-borderless table-hover">
             <thead>
                 <tr class="bg-info">

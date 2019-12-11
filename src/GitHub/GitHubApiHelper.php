@@ -21,7 +21,6 @@ class GitHubApiHelper
 
         return new GitHubOrganization(
             $data['name'],
-            $data['description'],
             $data['public_repos']
         );
     }

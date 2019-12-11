@@ -4,7 +4,6 @@
   "build/runtime.js": "/build/runtime.js",
   "build/vendors~app.css": "/build/vendors~app.css",
   "build/vendors~app.js": "/build/vendors~app.js",
-  "build/images/bigfoot.png": "/build/images/bigfoot.0d16ea17.png",
   "build/fonts/fa-brands-400.ttf": "/build/fonts/fa-brands-400.06147b6c.ttf",
   "build/fonts/fa-brands-400.eot": "/build/fonts/fa-brands-400.5063b105.eot",
   "build/fonts/fa-brands-400.woff": "/build/fonts/fa-brands-400.c5e0f14f.woff",
@@ -17,6 +16,7 @@
   "build/fonts/fa-solid-900.woff": "/build/fonts/fa-solid-900.333bae20.woff",
   "build/fonts/fa-solid-900.woff2": "/build/fonts/fa-solid-900.44d537ab.woff2",
   "build/fonts/fa-solid-900.eot": "/build/fonts/fa-solid-900.8e4a6dcc.eot",
+  "build/images/bigfoot.png": "/build/images/bigfoot.0d16ea17.png",
   "build/images/fa-brands-400.svg": "/build/images/fa-brands-400.a9c4bb73.svg",
   "build/images/fa-regular-400.svg": "/build/images/fa-regular-400.7b9568e6.svg",
   "build/images/fa-solid-900.svg": "/build/images/fa-solid-900.c2801fb4.svg"
