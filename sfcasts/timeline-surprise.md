@@ -15,15 +15,25 @@ the query for the `User` object that we're logged in as. Pretty cool.
 
 There's one more big chunk under `RequestEvent`: something called
 `AgreeToTermsSubscriber`... which is taking 30 milliseconds. Let's open that
-class and see what it does: `src/EventSubscriber/AgreeToTermsSubscriber.php`.
+class and see what it does: `src/EventSubscriber/AgreeToTermsSubscriber.php`:
+
+[[[ code('9d6ada090e') ]]]
 
 Ah yes. Every now and then, we update the "terms of service" on our site. When
 we do that, our lovely lawyers have told us that we need to require people to
 agree to the updated terms. *This* class handles that: it gets the authenticated
-user and, if they're not logged in, it does nothing. But if they *are* logged in,
-then it renders a twig template with an "agree to the terms" form. Eventually,
-*if* the terms have been updated since the last time this `User` agreed to them,
-it sets that form as the response instead of rendering the *real* page.
+user and, if they're not logged in, it does nothing:
+
+[[[ code('1fa1592c36') ]]]
+
+But if they *are* logged in, then it renders a twig template with an
+"agree to the terms" form:
+
+[[[ code('5008a57426') ]]]
+
+Eventually, *if* the terms have been updated since the last time this `User`
+agreed to them, it sets that form as the response instead of rendering the *real*
+page.
 
 We haven't seen this form yet... and... it's not really that important. Because
 we *rarely* update our terms, 99.99% of the requests to the site will *not*
@@ -48,10 +58,16 @@ long.
 
 Back in the code, the mistake I made is pretty embarrassing. I'm using some pretend
 logic to see whether or not we need to render the form. But... I put the check too
-late! We're doing all the work of rendering the form... even if we don't use it.
+late!
+
+[[[ code('c6f6a310ad') ]]]
+
+We're doing all the work of rendering the form... even if we don't use it.
 
 Let's move that code all the way to the top. Ah, too far - it needs to be after
-the fake `$latestTermsDate` variable.
+the fake `$latestTermsDate` variable:
+
+[[[ code('24c600ffac') ]]]
 
 That looks better. Let's try it! I'll refresh the page. Profile again and call
 it `[Recording] Homepage authenticated fixed subscriber`: http://bit.ly/sf-bf-timeline-fix
