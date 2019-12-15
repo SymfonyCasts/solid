@@ -20,7 +20,7 @@ composer dump-autoload --optimize
 ```
 
 Let's create a fresh profile of the homepage. I'll call this one:
-`[Recording] Homepage prod`. Click to view the call graph: http://bit.ly/sf-bf-instantiation
+`[Recording] Homepage prod`. Click to view the timeline: http://bit.ly/sf-bf-instantiation
 
 Overall, this request is pretty fast. Click into the "Memory" dimension. The
 biggest call is `Composer\Autoload\includeFile`: that's *literally* Composer

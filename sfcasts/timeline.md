@@ -9,12 +9,16 @@ running in the background on each request. Blackfire is going to help us notice 
 ## Back to the dev Environment
 
 Before we profile this page, open up the `.env` file and switch *back* to the
-`dev` environment. What I'm about to show you is more of a *debugging* tool than
-a *profiling* tool. We're switching back to the `dev` environment both to make
-our life a little bit easier - no need to clear the cache after changes - *and*
-because when your code executes more slowly, Blackfire tends to prune, or remove,
-less stuff. That's *bad* for trying to find performance issues, but *good* if your
-goal is to debug something... or understand how your app is working.
+`dev` environment:
+
+[[[ code('64b1720aaa') ]]]
+
+What I'm about to show you is more of a *debugging* tool than a *profiling* tool.
+We're switching back to the `dev` environment both to make our life a little bit
+easier - no need to clear the cache after changes - *and* because when your code
+executes more slowly, Blackfire tends to prune, or remove, less stuff. That's *bad*
+for trying to find performance issues, but *good* if your goal is to debug something...
+or understand how your app is working.
 
 I'll refresh the page to make sure that it works. Yep! Our handy web debug toolbar
 on the bottom is back! Let's profile! I'll call this one

@@ -44,7 +44,7 @@ ln -sfv /usr/local/opt/blackfire-agent/*.plist ~/Library/LaunchAgents/
 Then spin back over again, copy the `launchctl load` command... and paste that.
 
 ```terminal-silent
-lauchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.blackfire-agent.plist
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.blackfire-agent.plist
 ```
 
 Cool! If everything worked, the Blackfire agent is now running in the background.

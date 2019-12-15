@@ -3,7 +3,11 @@
 As handy as the CLI tool is for profiling AJAX requests, its *true* purpose is
 something different: it's to allow us to profile our custom command-line scripts.
 Let's check out an example. I've already created a command line script that you
-can execute by calling `bin/console app:update-sighting-scores`.
+can execute by calling:
+
+```terminal
+php bin/console app:update-sighting-scores
+```
 
 What does it do? Let me show you! Each Bigfoot sighting on the site has, what we
 call, a "Bigfoot believability score". Right now, this shows zero for *every* sighting.
@@ -20,13 +24,16 @@ php bin/console app:update-sighting-scores
 It takes a few seconds... and when we go back to the site and refresh... we find
 out that this Bigfoot sighting in *kind of* believable - a score of 5 out of 10.
 
-The code for this lives at `src/Command/UpdateSightingScoresCommand.php`. You
-*might* already see a problem. But if you don't... that's ok! Let's see what
+The code for this lives at `src/Command/UpdateSightingScoresCommand.php`:
+
+[[[ code('c8b793a778') ]]]
+
+You *might* already see a problem. But if you don't... that's ok! Let's see what
 Blackfire thinks. This time, run that *same* command, but put `blackfire run`
 at the beginning:
 
 ```terminal-silent
-blackfire run php bin/console app:update-sighting-scores
+blackfire run bin/console app:update-sighting-scores
 ```
 
 Woh. It's a *lot* slower now: we're seeing evidence of how the PHP extension
@@ -44,10 +51,15 @@ That's cool because the result is a *super* simple call graph: here's our
 command... here's `EntityManager::flush()`... and then it goes into deep
 Doctrine stuff.
 
-Let's check out the command and look for the `EntityManager::flush()` call.
+Let's check out the command and look for the `EntityManager::flush()` call:
+
+[[[ code('4810ce612d') ]]]
+
 Yep! I flush once each time at the end of the loop, which updates that database
 row. If you're familiar with Doctrine, you might know the problem: you don't
-*need* to call `flush()` inside the loop. Instead, move this *after* the loop.
+*need* to call `flush()` inside the loop. Instead, move this *after* the loop:
+
+[[[ code('c651727cb3') ]]]
 
 With this change, Doctrine will try to perform *all* update queries at the *same*
 time... which even lets it try to *optimize* those queries if it can. But the *big*
@@ -80,20 +92,63 @@ It's beyond the scope of this tutorial, but I *love* to make my command-line
 scripts *super* forgiving. If this were a real app, I would probably save the
 datetime that I last calculated the score for each record and use that to query
 for *only* the rows that have *not* been updated in the last 24 hours. I would
-*also* move the `flush()` back into the loop. Thanks to those changes, if this
-command failed half-way through, the first half of the records would already be
-updated and we could run the command again to *resume* with the ones that are
-still *not* updated.
+*also* move the `flush()` back into the loop:
+
+```php
+$sightings = $this->bigFootSightingRepository
+    ->findAllScoreNotUpdatedSince(new \DateTime('-1 month'));
+
+foreach ($sightings as $sighting) {
+    // ...
+
+    $sighting->setScore($score);
+    $sighting->setScoreLastUpdatedAt(new \DateTime());
+    $this->entityManager->flush();
+}
+```
+
+Thanks to those changes, if this command failed half-way through, the first half
+of the records would already be updated and we could run the command again to *resume*
+with the ones that are still *not* updated.
 
 But wouldn't that make the command super-slow again? Yep! And with the help of
 Blackfire, you can test solutions that improve performance without making the
 command less reliable. For example, we could make the first query only return
 an array of integer ids. Then, inside the loop, use that id to query for the
 *one* object you need. That would mean we only have *one* `BigFootSighting` object
-in memory at a time instead of all of them. You can go further by calling
-`EntityManager::clear()` after `flush()` to, sort of, "clear" Doctrine's memory
-of the `BigFootSighting` object you just finished... so that it doesn't check it
-for changes when we call `flush()` during the *next* time through the loop.
+in memory at a time instead of all of them:
+
+```php
+$sightingIds = $this->bigFootSightingRepository
+    ->findIdsScoreNotUpdatedSince(new \DateTime('-1 month'));
+
+foreach ($sightingIds as $id) {
+    $sighting = $this->bigFootSightingRepository->find($id);
+
+    $sighting->setScore($score);
+    $sighting->setScoreLastUpdatedAt(new \DateTime());
+    $this->entityManager->flush();
+}
+```
+
+You can go further by calling `EntityManager::clear()` after `flush()` to, sort of,
+"clear" Doctrine's memory of the `BigFootSighting` object you just finished...
+so that it doesn't check it for changes when we call `flush()` during the *next* time
+through the loop:
+
+```php
+$sightingIds = $this->bigFootSightingRepository
+    ->findIdsScoreNotUpdatedSince(new \DateTime('-1 month'));
+
+foreach ($sightingIds as $id) {
+    $sighting = $this->bigFootSightingRepository->find($id);
+
+    $sighting->setScore($score);
+    $sighting->setScoreLastUpdatedAt(new \DateTime());
+    $this->entityManager->flush();
+    $this->entityManager->clear($sighting);
+}
+```
 
 The point is: like with *everything*, make your code do what it needs to...
 then use Blackfire to solve the real performance issues... if you have any.
