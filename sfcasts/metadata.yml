@@ -17,3 +17,12 @@ chapters:
     - timeline-surprise
     - instantiation
     - service-subscriber
+    - sdk
+    - automatic-profiling
+    - phpunit-assertions
+    - profile-assertions
+    - blackfire-player
+    - deploying
+    - environments
+    - builds-scenarios
+    - scenario-assertions
