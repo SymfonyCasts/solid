@@ -69,12 +69,12 @@ php bin/console cache:warmup
 
 Move back over... I'll close some tabs and... refresh. Profile again: I'll call
 this one: `[Recording] Homepage service subscriber`:
-http://bit.ly/sf-bf-service-subscriber. View the call graph.
+https://bit.ly/sf-bf-service-subscriber. View the call graph.
 
 Excellent! Go back to the "Memory" dimension and search for "login". The call is
 still here but it's taking a lot less memory *and* less time. Let's compare this to
 be sure though. Click back to the homepage and go from the previous profile to
-this one: http://bit.ly/sf-bf-service-subscriber-compare.
+this one: https://bit.ly/sf-bf-service-subscriber-compare.
 
 Nice! The wall time is down by 4%... CPU is down and memory *also* decreased...
 but *just* a little bit.
