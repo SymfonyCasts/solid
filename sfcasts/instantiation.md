@@ -1,7 +1,11 @@
 # Spotting Heavy Object Instantiation
 
 I want to show a... more *subtle* performance problem. To even *see* it, we need
-to go back to the `prod` environment. Make sure to run `cache:clear`:
+to go back to the `prod` environment:
+
+[[[ code('698fc11371') ]]]
+
+Make sure to run `cache:clear`:
 
 ```terminal-silent
 php bin/console cache:clear
@@ -49,23 +53,30 @@ I know, we don't often think about how much time or how much memory it takes to
 call is for the instantiation of Doctrine's Connection service.
 
 Go down a little bit... I'm looking for something specific... here it is:
-`getLoginFormAuthenticatorService`. This is responsible for instantiating a
+`getLoginFormAuthenticatorService()`. This is responsible for instantiating a
 `LoginFormAuthenticator` object in our app. It's not a particularly problematic
 function though: it's 10th on the list... only takes 2.56 milliseconds and uses about
 500 kilobytes.
 
 ## Checking the Instantiation of LoginFormAuthenticator
 
-Let's check out the class: `src/Security/LoginFormAuthenticator.php`. As its
-name suggests, this is responsible for authenticating the user when they submit
-the login form.
+Let's check out the class: `src/Security/LoginFormAuthenticator.php`:
+
+[[[ code('fd3bf2ea51') ]]]
+
+As its name suggests, this is responsible for authenticating the user when they
+submit the login form.
 
 But, there's something special about this class. Due to the way the Symfony
 security system works, Symfony instantiates this object on *every* request. It does
 that so it can then call `supports()` to figure out if this service should be
-"activated" on this request or not. For this class, it *only* needs to its work
-when the URL is `/login` and this is a `POST` request. In *every* other situation,
-`supports()` returns false and *no* other methods are called on this class.
+"activated" on this request or not:
+
+[[[ code('412f2b425a') ]]]
+
+For this class, it *only* needs to its work when the URL is `/login` and this
+is a `POST` request. In *every* other situation, `supports()` returns false
+and *no* other methods are called on this class.
 
 So let's think about this. Instantiating this class takes about 3 milliseconds
 and 500 kilobytes... which is not a *ton*... but since *all* it needs to do for
@@ -77,11 +88,15 @@ The question is: *why* does it take so many resources to instantiate? Well, 500
 kilobytes is not a *ton*, but this *is* - according to Blackfire - one of the
 *most* expensive objects that is created on this request. Why?
 
-Check out the constructor. In order to instantiate this class, Symfony needs
-to make sure the `EntityManager` is instantiated... and the `UrlGenerator`.. and
-the `CsrfTokenManager`... and the `UserPasswordEncoder`. If any of *these* services
-have their *own* dependencies, even *more* objects may need to be instantiated.
-In rare situations, creating a service can be a *huge* performance problem.
+Check out the constructor:
+
+[[[ code('2e55155e0b') ]]]
+
+In order to instantiate this class, Symfony needs to make sure the `EntityManager`
+is instantiated... and the `UrlGenerator`.. and the `CsrfTokenManager`... and the
+`UserPasswordEncoder`. If any of *these* services have their *own* dependencies,
+even *more* objects may need to be instantiated. In rare situations, creating
+a service can be a *huge* performance problem.
 
 In the case of the `EntityManager` and the `UrlGenerator`... those are pretty
 core objects that would *probably* be needed and thus instantiated by *something*
