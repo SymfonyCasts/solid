@@ -91,6 +91,11 @@
             "description": null
         },
         {
+            "id": "sdk-delete-me1",
+            "name": "SDK: delete me1",
+            "description": null
+        },
+        {
             "id": "sdk-make-subscriber",
             "name": "SDK: make:subscriber",
             "description": null
@@ -98,6 +103,16 @@
         {
             "id": "sdk-refactor-to-subscriber",
             "name": "SDK: refactor to subscriber",
+            "description": null
+        },
+        {
+            "id": "sdk-only-on-master-requests",
+            "name": "SDK: only on master requests",
+            "description": null
+        },
+        {
+            "id": "sdk-add-terminateevent",
+            "name": "SDK: Add TerminateEvent",
             "description": null
         },
         {
@@ -109,7 +124,47 @@
             "id": "sdk-add-configuration",
             "name": "SDK: Add Configuration",
             "description": null
+        },
+        {
+            "id": "sdk-disable-auto-profiling",
+            "name": "SDK: disable auto-profiling",
+            "description": null
+        },
+        {
+            "id": "test-add-test-assertion",
+            "name": "Test: add test assertion",
+            "description": null
+        },
+        {
+            "id": "test-refactor-to-1-http-request",
+            "name": "Test: refactor to 1 http request",
+            "description": null
+        },
+        {
+            "id": "test-typo-count",
+            "name": "Test: typo count",
+            "description": null
+        },
+        {
+            "id": "test-fix-typo",
+            "name": "Test: fix typo",
+            "description": null
+        },
+        {
+            "id": "test-refactor-into-separate-method",
+            "name": "Test: Refactor into separate method",
+            "description": null
+        },
+        {
+            "id": "test-clean-up-original-method",
+            "name": "Test: clean up original method",
+            "description": null
+        },
+        {
+            "id": "test-blackfire-group",
+            "name": "Test: blackfire group",
+            "description": null
         }
     ],
-    "sha": "a2fd581b13747b4aab4809ed7187c787e4fb6e7a"
+    "sha": "6766e74068281343437f824e02cc0a6a4faa9bcf"
 }

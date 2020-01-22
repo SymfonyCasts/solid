@@ -1,0 +1,15 @@
+diff --git a/tests/Controller/MainControllerTest.php b/tests/Controller/MainControllerTest.php
+index b4c5427..e624e40 100644
+--- a/tests/Controller/MainControllerTest.php
++++ b/tests/Controller/MainControllerTest.php
+@@ -21,6 +21,10 @@ class MainControllerTest extends WebTestCase
+         $this->assertArrayHasKey('organization', $data);
+     }
+ 
++    /**
++     * @group blackfire
++     * @requires extension blackfire
++     */
+     public function testGetGitHubOrganizationBlackfireHttpRequests()
+     {
+         $client = static::createClient();

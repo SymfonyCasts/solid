@@ -1,0 +1,47 @@
+diff --git a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+index 5b0078a..4b731a5 100644
+--- a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
++++ b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+@@ -3,11 +3,18 @@
+ namespace App\EventSubscriber;
+ 
+ use Blackfire\Client;
++use Blackfire\Probe;
+ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+ use Symfony\Component\HttpKernel\Event\RequestEvent;
++use Symfony\Component\HttpKernel\Event\TerminateEvent;
+ 
+ class BlackfireAutoProfileSubscriber implements EventSubscriberInterface
+ {
++    /**
++     * @var Probe|null
++     */
++    private $probe;
++
+     public function onRequestEvent(RequestEvent $event)
+     {
+         if (!$event->isMasterRequest()) {
+@@ -20,7 +27,14 @@ class BlackfireAutoProfileSubscriber implements EventSubscriberInterface
+ 
+         if ($shouldProfile) {
+             $blackfire = new Client();
+-            $probe = $blackfire->createProbe();
++            $this->probe = $blackfire->createProbe();
++        }
++    }
++
++    public function onTerminateEvent(TerminateEvent $event)
++    {
++        if ($this->probe) {
++            $this->probe->close();
+         }
+     }
+ 
+@@ -28,6 +42,7 @@ class BlackfireAutoProfileSubscriber implements EventSubscriberInterface
+     {
+         return [
+             RequestEvent::class => 'onRequestEvent',
++            TerminateEvent::class => 'onTerminateEvent',
+         ];
+     }
+ }

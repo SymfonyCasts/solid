@@ -1,0 +1,15 @@
+diff --git a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+index e6df6e7..5b0078a 100644
+--- a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
++++ b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
+@@ -10,6 +10,10 @@ class BlackfireAutoProfileSubscriber implements EventSubscriberInterface
+ {
+     public function onRequestEvent(RequestEvent $event)
+     {
++        if (!$event->isMasterRequest()) {
++            return;
++        }
++
+         // replace with some conditional logic
+         $request = $event->getRequest();
+         $shouldProfile = $request->getPathInfo() === '/api/github-organization';

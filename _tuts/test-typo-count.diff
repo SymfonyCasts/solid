@@ -1,0 +1,13 @@
+diff --git a/tests/Controller/MainControllerTest.php b/tests/Controller/MainControllerTest.php
+index 2108ad8..b691079 100644
+--- a/tests/Controller/MainControllerTest.php
++++ b/tests/Controller/MainControllerTest.php
+@@ -15,7 +15,7 @@ class MainControllerTest extends WebTestCase
+         $client = static::createClient();
+ 
+         $blackfireConfig = (new Configuration())
+-            ->assert('metrics.http.requests.count == 1');
++            ->assert('metrics.http.requests.vount == 1');
+ 
+         $this->assertBlackfire($blackfireConfig, function() use ($client) {
+             $client->request('GET', '/api/github-organization');
