@@ -164,7 +164,52 @@
             "id": "test-blackfire-group",
             "name": "Test: blackfire group",
             "description": null
+        },
+        {
+            "id": "metrics-blackfire-yaml-with-1-test",
+            "name": "Metrics: .blackfire.yaml with 1 test",
+            "description": null
+        },
+        {
+            "id": "player-bootstrap-scenario-bkf",
+            "name": "Player: bootstrap scenario.bkf",
+            "description": null
+        },
+        {
+            "id": "player-add-1-scenario-2-pages",
+            "name": "Player: add 1 scenario, 2 pages",
+            "description": null
+        },
+        {
+            "id": "player-add-1-expect",
+            "name": "Player: add 1 expect",
+            "description": null
+        },
+        {
+            "id": "player-add-failing-expect",
+            "name": "Player: add failing expect",
+            "description": null
+        },
+        {
+            "id": "player-fix-failing-expect",
+            "name": "Player: fix failing expect",
+            "description": null
+        },
+        {
+            "id": "player-typo-a-method-name",
+            "name": "Player: typo a method name",
+            "description": null
+        },
+        {
+            "id": "player-fix-typo",
+            "name": "Player: fix typo",
+            "description": null
+        },
+        {
+            "id": "player-example-assert",
+            "name": "Player: example assert",
+            "description": null
         }
     ],
-    "sha": "6295112b6cc532de2081dd446149b9424f06ec8b"
+    "sha": "756efcc47e67bacce256ec862d495855ce998816"
 }

@@ -1,0 +1,13 @@
+diff --git a/scenario.bkf b/scenario.bkf
+index fc56c23..0eab422 100644
+--- a/scenario.bkf
++++ b/scenario.bkf
+@@ -10,6 +10,8 @@ scenario
+         name "Homepage"
+         expect status_code() == 200
+         expect css("tbody.js-sightings-list tr").count() > 10
++        # won't work yet/unless you run inside an "environment"
++        assert sql.queries.count < 30
+ 
+     click link("Log In")
+         name "Log in page"

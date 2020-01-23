@@ -1,0 +1,10 @@
+diff --git a/scenario.bkf b/scenario.bkf
+new file mode 100644
+index 0000000..972ffbd
+--- /dev/null
++++ b/scenario.bkf
+@@ -0,0 +1,4 @@
++name "Various scenarios for the site"
++
++# Can be override with option "--endpoint=http://newendpoint.com"
++endpoint "https://localhost:8000"
