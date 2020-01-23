@@ -13,7 +13,7 @@ index da05ffd..628bc35 100644
          return $this->json([
              'organization' => $organization,
 diff --git a/src/GitHub/GitHubApiHelper.php b/src/GitHub/GitHubApiHelper.php
-index f33c217..9acc60f 100644
+index f33c217..ec93026 100644
 --- a/src/GitHub/GitHubApiHelper.php
 +++ b/src/GitHub/GitHubApiHelper.php
 @@ -8,6 +8,8 @@ class GitHubApiHelper
@@ -49,7 +49,7 @@ index f33c217..9acc60f 100644
                 \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s\Z', $repoData['updated_at'])
             );
 +
-+           if (false === $repoData['private']) {
++           if ($repoData['private'] === false) {
 +               ++$publicRepoCount;
 +           }
 +       }

@@ -1,12 +1,12 @@
 diff --git a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
-index ce68ff0..bdb749f 100644
+index ce68ff0..043eb12 100644
 --- a/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
 +++ b/src/EventSubscriber/BlackfireAutoProfileSubscriber.php
 @@ -26,6 +26,9 @@ class BlackfireAutoProfileSubscriber implements EventSubscriberInterface
          $request = $event->getRequest();
          $shouldProfile = $request->getPathInfo() === '/api/github-organization';
  
-+        // stop out testing code from profiling
++        // stop our testing code from profiling
 +        $shouldProfile = false;
 +
          if ($shouldProfile) {
