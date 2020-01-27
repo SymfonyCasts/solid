@@ -1,3 +1,0 @@
-# Phpunit Assertions
-
-Coming soon...

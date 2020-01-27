@@ -17,9 +17,9 @@ chapters:
     - timeline-surprise
     - instantiation
     - service-subscriber
-    - sdk
-    - automatic-profiling
-    - phpunit-assertions
+    - manual-instrumentation
+    - auto-profile
+    - performance-tests
     - profile-assertions
     - blackfire-player
     - deploying
