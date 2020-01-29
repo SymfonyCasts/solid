@@ -19,7 +19,7 @@ chapters:
     - service-subscriber
     - manual-instrumentation
     - auto-profile
-    - performance-tests #raw
+    - performance-tests
     - profile-assertions #stub
     - blackfire-player #stub
     - deploying #stub
