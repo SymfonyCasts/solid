@@ -18,11 +18,11 @@ chapters:
     - instantiation
     - service-subscriber
     - manual-instrumentation
-    - auto-profile
-    - performance-tests
-    - profile-assertions
-    - blackfire-player
-    - deploying
-    - environments
-    - builds-scenarios
-    - scenario-assertions
+    - auto-profile #raw
+    - performance-tests #raw
+    - profile-assertions #stub
+    - blackfire-player #stub
+    - deploying #stub
+    - environments #stub
+    - builds-scenarios #stub
+    - scenario-assertions #stub

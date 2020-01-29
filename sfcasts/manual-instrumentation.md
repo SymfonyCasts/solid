@@ -13,12 +13,12 @@ the agent, which aggregates it, prune some data in, ultimately sends it to Black
 So what is the thing that tells the PHP extension to activate? As we know, the PHP
 extension does not profile every request. So what is the thing that says, Hey, PSB
 extension start profiling. We know that it's either the browser extension that
-activates it or the black fire's command line utility, which we used earlier and
-through things like Blackfire, PHP and then a command.
+activates it or the Blackfire's command line utility, which we used earlier and
+through things like `blackfire php` and then a command.
 
 One of the byproducts of the way that the extension is activated is that M is that
 the instrumentation is activated before even the first line of code is executed. That
-means every single line of peach because you have it goes into the profile. This is
+means every single line of PHP code you have it goes into the profile. This is
 called an auto instrumentation. The idea that the instrument instrumentation
 automatically starts, so this leads me to two interesting questions. First, could we
 trigger a profile in a different way? Could we, for example, dynamically tell the PHP
@@ -27,20 +27,23 @@ question is, regardless of who triggers the profile, could we actually zoom in a
 only profile some of our page like maybe we only want to profile the controller code
 instead of profiling the entire requests code? Let's actually start with that second
 thing. The idea of actually own actually profiling only part of our code and not all
-of it. To help with this, we're going to install black fires, SDK, fire terminal and
-run a composer require Blackfire /PHP dash SDK. This is a normal PHP library that is
-going to help you interact directly with Blackfire.
+of it. To help with this, we're going to install Blackfire's, SDK, fire terminal and
+run a 
 
-When that finishes. Let's move over in find a source controller, main controller. So
+```terminal
+composer require blackfire/php-sdk
+```
+
+This is a normal PHP library that is going to help you interact directly with Blackfire.
+
+When that finishes. Let's move over in find a `src/Controller/MainController.php`. So
 here's the controller for our homepage. So let's pretend that when we profile the
 homepage, we don't want to profile all of our code. We want to zoom into just what's
-happening inside of our controller. So we can do that by saying, okay, prob =
-Blackfire pro colon colon. Get main instance. Remember the PHP extension is called
+happening inside of our controller. So we can do that by saying, okay, 
+`$prob = \BlackfireProbe::getMainInstance()`. Remember the PHP extension is called
 the probe. So we're actually asking here is certainly PHP extension thing. Then we'll
-say probe enable. And at the bottom I'll set the uh, rendered template to a response
-and say, probe, arrow, disable, and then I want to return that response.
-
-[inaudible]
+say `$probe->enable()`. And at the bottom I'll set the uh, rendered template to a `$response`
+and say, `$probe->disable()`, and then I want to `return $response`.
 
 okay, so what does this do exactly? The first thing I want you to notice is that if I
 refresh a bunch of times and then go to blackfire.io I do not have any new profiles
@@ -51,26 +54,22 @@ profile some of the code. So check this out. Let's add it. Yeah, profile here. I
 call this one recording only instrument, some code, and let's view click to view the
 call graph
 
-and
-
-awesome. So visa, zoom in here you can see there's actually less information than
-normal. Basically it does show a couple things like main and handle raw, but
-basically it jumps straight to the homepage.
-
-Okay.
+and awesome. So visa, zoom in here you can see there's actually less information than
+normal. Basically it does show a couple things like `main()` and `handleRaw()`, but
+basically it jumps straight to the `homepage()`.
 
 What's happening here is that the only code that it is instrumenting, the only code
-that it's collecting information on is the code that's between the enable and the
-disabled. This actually confused me the first time I saw what really happens behind
+that it's collecting information on is the code that's between the `enable()` and the
+`disable()`. This actually confused me the first time I saw what really happens behind
 the scenes is that as soon as we use the browser extension to tell the probe to S to
-do its job, the peep extension does start instrumenting immediately. But as soon as
-it hits this probe, enable it basically forgets everything the probe enables says
+do its job, the PHP extension does start instrumenting immediately. But as soon as
+it hits this probe, enable it basically forgets everything the `$probe->enable()` says
 start here. So if you've already collected some before this, get rid of that, get rid
 of that auto instrumented, uh, information and start collecting information right
-here. And then once it hits, probe disable, that's when it stops. And you can
-actually use the probe enable and pro disable multiple times in your code if you want
+here. And then once it hits, `$probe->disable()`, that's when it stops. And you can
+actually use the `$probe->enable()` and `$probe->disable()` multiple times in your code if you want
 to profile different parts. Uh, and the same thing, you can also option, they called
-probe->close. You'll see this in their documentation that basically tells the PHP
+`$probe->close()`. You'll see this in their documentation that basically tells the PHP
 extension to finish its work and send to the agent. You don't need to do that because
 that automatically happens at the end of the script anyways. Uh, but it's up to you.
 
@@ -78,8 +77,8 @@ So yeah, it's an interesting feature. It may
 
 be useful and only some edge cases, but it's a nice way of showing how you can
 actually control which parts of your code, uh, get instrumented. Fun fact about this
-is that we, when we started this, we installed the Blackfire PHP SDK library. We
-actually haven't used that yet. This Blackfire pro class is not from the PHP SDK
+is that we, when we started this, we installed the `blackfire/php-sdk` library. We
+actually haven't used that yet. This `\BlackfireProbe` class is not from the `php-sdk`
 library. This is a class that's available. As long as you have the Blackfire PHP
 extension installs, we're actually interacting directly with the extension. In fact,
 the only reason I installed the PHP SDK is because that, uh, it actually gives us
