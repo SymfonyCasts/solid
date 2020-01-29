@@ -1,197 +1,104 @@
 # Performance Tests
 
-Coming soon...
+Let's profile the Github API endpoint again. I'll cheat and go directly to
+`/api/github-organization`. Click to profile this. I'll call it:
+`[Recording] GitHub Ajax HTTP requests` because we're going to look a bit closer
+at the HTTP requests to GitHub that our code makes.
 
-Let's profile our github api request. Again, I can cheat and go to 
-`/api/github-organization` and let's click to profile this. I'll call it recording 
-github Ajax HTTP requests because that's actually what we're going to talk about. And then I'll
-head to view the call graph. Okay. This requests actually you can see it was very
-slow, 1.83 seconds, a lot slower than we've been seeing and that was probably just by
-chance. We can see curl multi-select as the problem because the GitHub API is a
-little bit slow right now. And that's what I want to talk about. If you look up here,
-I could actually see that there were two um, HTTP requests to my application. And
-actually if you kind of look into these different API endpoints that we're using, we
-can actually get all of the information that we need in our application with just one
-HTTP request. So basically what I'm saying is our page is making one more HTTP
-requests than it needs to. And you could kind of consider this a performance bug.
-We're making two HTP requests and we own when we only need one. Now normally with
-bugs, if we're being awesome and following best practices before fixing above, we
-write a test for it and actually we can do the same thing with Blackfire. We can
-write, we can add assertions to our tests that assert that this end point only makes
-one HTTP request. It's actually pretty awesome.
+Click to view the call graph: http://bit.ly/sf-bf-http-requests
 
-So move over and go to the `tests/Сontroller/MainControllerTest.php`. I've
-already gone ahead and set up a functional test here that goes to 
-`/api/github-organization` and check some basic data on that. We can run this by running 
+Oh wow - this request was *super* slow - 1.83 seconds - a lot slower than we've
+seeing before... *probably* just by chance. We can see that `curl_multi_select()`
+is the problem because our code makes some requests to the GitHub API... and it
+apparently is running a bit slow at the moment.
+
+## We have a Performance "Bug"
+
+And, lucky for us, that's *exactly* what I wanted to talk about. On top, Blackfire
+tells me that we made *two* HTTP requests. And HTTP requests are *always* expensive
+for performance.
+
+If you studied the data from the two API endpoints that we're using, you would
+discover that it's possible to get all the information that we need in our
+app with just *one* HTTP request... and some clever code.
+
+What I'm saying is: our page is making one more HTTP requests than it *truly*
+needs to. If you think about it... that's kind of a performance "bug": we're
+making 2 HTTP requests when we only need one.
+
+In an ideal world, when we find a bug, the process for fixing it looks like this.
+First, write a test for the *expected* behavior. Second, run that test and watch
+it fail. And third, fix the bug and make sure the test passes.
+
+Whelp, when it comes to a *performance* bug, we can do the *exact* same thing:
+we can write a functional test and *assert* that this endpoint only makes one
+HTTP request. It's... pretty awesome.
+
+## Running the Functional Test
+
+Find your editor and open `tests/Сontroller/MainControllerTest.php`. I already
+set up a functional test that goes to
+`/api/github-organization` and checks some basic data on the response. Let's
+makes sure this passes. Run PHPUnit and point it directly at this class:
 
 ```terminal
 php bin/phpunit tests/Controller/MainControlerTest.php
 ```
 
-and then I'll point directly at this one test class. So it
-just runs those tests the first time you run the script. That'll probably need to
-download PHP unit in the background. Once it finishes, it runs our tests. The
-assertions pass life is good. So check this out. We can add assertions about our
-performance right inside of this test. The way to do it is first make sure you have
-the SDK installed, which we just installed because we're going to use a Trait from it
-called `TestCaseTrait`. Next, inside the method, well credit, a new `$blackfireConfig`
-object, like what our config variable, which is a new `Configuration`, the one from
-`Blackfire\Profile`, the same one that we used earlier. Need to double check on that
-and then we can call methyl on this called `assert()`. We actually add assertions. These
-are very interesting. I'm going to put the assertion first and then we'll talk about
-it. `metrics.http.requests.count == 1`
+The first time you run this script, it will probably download PHPUnit in the
+background. When it finishes... go tests go! All green.
 
-and that's it.
+## Adding a Performance Assertion
 
-Finally down here we're going to say `$this->assertBlackfire()` and we do as you
-pass this, that `$blackfireConfig` object and then a callback. So this is a
-little confusing at first, but what's going to happen here is that when we call 
-`$this->assertBlackfire()` it will call this callback. Inside of that callback, we will do
-whatever work we want to. We can make one to 10 age to give you the requests and then
-ultimately one that's called back finishes. It will run this assertion against the
-HTTP requests that was made here to get this to work. I also need to use the client
-variable. I'll show you a little bit more about what's going on behind the scenes
-there if it's still not clear to you. All right, so check this out. We can now run
-our tests again
+Here's the idea: in addition to asserting that this response contains JSON
+with an `organization` key, I *also* want to assert that it only made on HTTP
+request. To do that, first add a trait from the SDK: `use TestCaseTrait`. Next,
+in the method, add `$blackfireConfig = new Configuration()` - the one from
+`Blackfire\Profile`: the same `Configuration` class we used earlier to give our
+profile a name. This time call `assert()` with a *very* special string inside:
+`metrics.http.requests.count == 1`.
 
-```terminal-silent
-php bin/phpunit tests/Controller/MainControlerTest.php
-```
+I'll show you where that came from soon. Finally, below this, call
+`$this->assertBlackfire()` and pass this the `$blackfireConfig` and then a
+callback.
 
-and... it fails. Check us out. Failed that `metrics.http.requests.count == 1`. This is really
-cool. What happened is when this made the request to `/api/github-organization`, this
-made a real Blackfire profile behind the screens. Behind the scenes. You can even
-copy this URL and go check it out and over here you can see where on theS this
-assertions tab, which is something we're going to talk more about later. And you can
-see that this too, we're actually making to eight spirit quest did not equal one. So
-there are several things I want to say about this. First of all, when you run this
-test, it does make a real Blackfire profile in the background. However, if you go to
-your homepage, you won't see them.
+So... this confused me at first. When we call `$this->assertBlackfire()` it will
+execuite this callback. Inside, we will do whatever work we want - like making
+the request. When the callback finishes, Blackfire will execute this assertion.
+And... I need to `use ($client)` to get this to work.
 
-That's simply because if I'll hold command or control and click `assertBlackfire()`. If
-you look at the assert live-fire method, it actually uses the SDK just like we did to
-`createProbe()` and `endProbe()`. It actually creates a profile in the background. When
-it does that, it also adds this skip timeline thing by default, which basically means
-make a profile but don't put it on our my profiles page, which just to make sure that
-it doesn't get cluttered up with extra garbage. You could totally override that if
-you wanted on that configuration object that we passed if you didn't want it to show
-up.
+If this doesn't make sense yet - don't worry - we'll dive a bit deeper.
 
-More importantly though, I want to talk about this metric stuff here. So two things I
-want to know is by far has a great metric system and inside the metric what you're
-using is an expression and what this basically is is a language that's very similar
-to JavaScript. It's technically Symfony's expression language if you want to read
-more about it. So metrics is probably an object and then we're calling an HTTP
-property or request property account property and asserting that = one. The second
-thing, probably even more important is how the heck did I know that this was the
-exact string I need to use here to do this assertion? This goes back if you look at
-our profile to the timeline. Remember when we checked on the timeline, we talked
-about how on the left side there are these timeline metrics, which at that point were
-just a nice fancy way to color different sections of the timeline.
-
-But really the most useful part of these metrics is that these metrics just give you
-access to low level information about what's going on. So for example, there's a
-metric called `symfony.events.count` which = seven. And you could use that in a
-metric if you for some reason wanted to assert that certain number of methods were
-called. So if I were looking to do an assertion about HTD period HTTP requests, I
-would go up the search here and to search for HTTP. And I say there's curl requests
-and requests. If you're not sure which one to use, you can look at the difference
-between them because this is going to show you the real data. So here you can see
-that there's a metric called `http.requests` and then there's a bunch of metrics
-about it. So I can say `http.requests.count` or `http.requests.memory`
-or `.io`, any of these things on here. So that was the key. I started with `metrics.`
-We can then reference any of the metrics in the system, which is super powerful.
-
-Okay. So we now have proven that we have a performance bug in our application because
-our tests fail so that we can fix this. And the fix for this is not really that
-important because Hey, we don't care. This is a tutorial at Blackfire, but B, we have
-a, um, if a test now, which is going to prove that once we have the fixed done that
-it does work correctly. So the logic is H keep your questions in 
-`src/GitHub/GitHubApiHelper.php`, and we have two public functions in here that make the two API
-requests. And basically we can get all the information from this second HTTP request.
-So I'm not gonna fill you in with the exact details, but we're basically going to add
-some caching via new  property called `$githubOrganizations`.
-
-And then as we loop over the repositories for a specific organization, we can
-actually store information about this organization because it's on that endpoint. So
-what I'll do here is I can add a new variable here called `$publicRepoCount`. It's one
-of the things that we put on our record for our organization. And then down here I
-can say if `$repoData['privet'] === false`. That's one of the keys on
-the repo data. Then we'll say `++$publicRepoCount`. So as we're looping over
-the repositories, we're just counting how many public repositories there are. And
-finally down here we'll say if not is set `$this->githubOrganizations[$organization]`
-So this is an organization that we haven't seen yet on this
-request we're going to say 
-`$this->githubOrganizations[$organization] = new GitHubOrganization()`
-
-And this needs two pieces of information. The organization name, which we can
-actually probably just use the `$organization` variable, but you can also get this off
-of the data with `$data[0]` to get the first repository `['owner']['login']`. And then the
-other thing we are recording as the public was the `$publicRepoCount`. So now every
-time we call this method will actually capture this organization's information and
-store it on this property. So if we call this method first and then this method, we
-can actually do less work by looking that up, check this out. We can say if is set
-`$this->githubOrganizations[$organization]` then we can just return
-that immediately without doing any work. And in fact, if you looked in the
-controller, we're already calling things in this order. The controller will just swap
-the order of these things so that the repository is the one it's called first and
-gets all that cache data set up. Phew. Okay. So let's say that helps. It was a bit of
-a complicated fix, but thanks to our test we can know for sure 
+But right now... try it! Run the tests again:
 
 ```terminal-silent
 php bin/phpunit tests/Controller/MainControlerTest.php
 ```
 
-and it does. So that proves that we have reduced the query count from two to one.
+And... it fails! Woo! Failed that `metrics.http.requests.count == 1`. This is
+really cool.
 
-Okay. So thanks these metrics, there's a lots of things that we can assert and one of the
-things I love about this system is, you know, if you, if even if you do typo one of
-these, uh, variables, when you run it, 
+## Performance Tests Create Real Profiles
 
-```terminal-silent
-php bin/phpunit tests/Controller/MainControlerTest.php
-```
+Behind the scenes, the Blackfire SDK created a *real* profile for the request.
+You can even copy this profile URL and go check it out! This takes us to an "assertions"
+tab. We're making 2 requests instead of the expected one. We'll talk more about
+assertions later.
 
-you're going to get a really clear error.
-Specifically, you're going to get an error about profiling and you're going to get a
-link directly to go look at that profile. And that's going attain, going to contain
-the information that you need. So you can see here the following assertions are not
-valid `metrics.http.requests.vounts`, property `vount` does not exist. Available ones
-are, and it tells you all the available things and even as documentation to more
-about the assertion. So just really, really friendly how that was works.
+Ok, but how did this *really* work? It's beautifully simple. When you run the test,
+it *does* make a real Blackfire profile in the background. However, if you go to
+your Blackfire homepage, you won't see it.
 
-So let's fix our typo. Now, the one downside to the Blackfire tests, they do slow your
-test down because it needs to talk to Blackfire and have it create that profile. So
-as a best practice, we usually like to isolate our performance tests from our normal
-tests. So check this out. I'm going to copy the method name here, make a new one
-called `testGetGitHubOrganizationBlackfireHttpRequests()`. And what we'll put
-inside of here, I'll copy everything from the previous method, but really all we need
-here is just, uh, creating the `$client`, creating `$blackfireConfig`. And then inside of
-`assertBlackfire()`, we just make the request. Once this black callback finishes, it
-will then run the asserts on it. Now up here in our original method, we can simplify
-things a little bit. So I can, I'll copy all my code that's inside the callback and
-just replace it with what we had before.
+Why? Hold Command or Ctrl and click the `assertBlackfire()` method. I love it:
+this method uses the SDK - just like we did - to create a *real* profile. When
+it does that, it *also* adds a `skip_timeline` option, which simply tells Blackfire
+to hide this from our profile page... so it doesn't get cluttered up with all
+these test profiles. You can *totally* override that if you wanted... via the
+`Configuration` object that we passed.
 
-So this is a very straightforward test that actually test the endpoint and this is
-testing just the performance now above the Blackfire one we can say `@group blackfire`
-that's really powerful because now we can run just the Blackfire tests or
-we could run our tests with a `--exclude-group=blackfire` and that would
-Jen just our one test, not the other one. You can see just one test, two assertions
-on that and while we're here, another nice thing to do is say 
-`@requires extension blackfire` So if for some reason somebody is running this on a system that
-doesn't have Blackfire, it'll automatically Mark those tests as skipped a. My last
-thing that I want to tell you, and we're going to talk more about this in the next
-video, is that you really need to be careful with these assertions to try not to use
-time based assertions.
+In reality, the Blackfire PHPUnit integration is doing the *exact* same thing
+that we just finished doing in our code: manually creating a new profile. This
+is *really* nothing new. I love that!
 
-One of the easiest things to do is create a test and say that the test should take
-the request should take less than 500 milliseconds, but there's so much variability
-with time. It depends on your machine ends on if the cache was warmed up, that those
-tests tend to be very fragile and fail a lot. What you want to be looking for is more
-specific things that will not just randomly change over time, like the number of HTTP
-requests or the number of database requests or something else. So next, we're
-actually going to talk about this metrics, these assertions system a bit more. You
-can add these assertions and tests obviously, but you can also globally add these
-assertions so that anytime you run a profile from any page, if that page makes too
-many HTTP requests or it makes too many database requests, you're going to see a big
-metric failure inside that profile.
+Except... for this metrics thing. Where did that string come from? And what else
+can we use? Let's dive into metrics next.

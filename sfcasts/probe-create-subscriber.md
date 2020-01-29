@@ -1,111 +1,122 @@
-# Creating an Auto Probe Early in your Code
+# Creating an Automatic Probe Early in your Code
 
-Coming soon...
+Once we determine that we want to *create* a probe dynamically in our code,
+we *really* want to do that as *early* as possible so that Blackfire can
+"instrument" as much of our *code* as possible.
 
-and it's just that easy. The one downside of this is that it only profiles a small
-bit of your code. The problem is that until we actually call create pro PHP, the PHP
-extension, the pro but doesn't know that it's supposed to be collecting data. So it
-only starts collecting data starting right here. To make matters worse, I think it
-might even stop when it garbage collects that pro variable. So if you want to provide
-more code, a great way to do this in Symfony is with a subscriber. So I'm gonna go
-over to my terminal and run
+## Generating the Event Subscriber
 
-```terminal
-php bin/console make:subscriber
-```
-
-let's generate a subscriber first. Make sure that we are back in the dev environment.
-I forgot to switch back to that. Uh, and I want the make commands to be available.
-
-Let's spend over now then
+In Symfony, we can do that with an event subscriber... which we will *generate*
+to be super lazy. First, in `.env`, make sure that you're back in the `dev`
+environment. Then, find your terminal and run:
 
 ```terminal
 php bin/console make:subscriber
 ```
 
-and let's call this the `BlackfireAutoProfileSubscriber`
+Call it `BlackfireAutoProfileSubscriber`... and we want to listen to
+`RequestEvent`: Go check out the code
+`src/EventSubscriber/BlackfireAutoProfileSubscriber.php`.
 
-and we are going to listen to this along and request event class. So I'll put that in
-there. Perfect. Let's go check that out. `src/EventSubscriber/BlackfileAutoProfileSubscriber`
-So on request event, which is an event that happens very early on
-and Symfony, that's where we're going to start the profile. So I'm going to copy all
-of my shit profile code, remove it from my controller and put it into here. Now we
-can actually improve this a little bit. I'm going to say `$request = $event->getRequest()`
-and we can say is uh, to make this a little more realistic, we'll only
-profile for that specific Ajax request, which is has the URL
-`/api/github-organization` So I can say, `$shouldProfile = $request->getPathInfo() ===`
+So, when this `RequestEvent` happens - which Symfony dispatches *super* early
+when handling a request, we want to create & enable the probe. Copy all
+of the `$shouldProfile` code, remove it from the controller and paste it here.
 
-that URL and I'll read type the TM client to make sure
-we get the use statement for that. Now that should be ready, but before we try it,
-I'm going to cover one other edge case situation. I'm going to say, if not
-`$event->isMasterRequest()`, then `return`. It's might not be important for you,
-but Symfony has this system of making sub requests. We don't want to profile those. We want to
-profile just the actual request itself and ignore this being triggered multiple
-times. That can make things screwy.
+## Creating the Prove in the Subscriber
 
-All right, so let's try this.
-I'll close that and let's go over here and refresh. Once again, that will make the
-Ajax request. You can see it's slow, should be triggering a new profile
+Now add `$request = $event->getRequest()`. To make this *only* profile the GitHub
+organization AJAX call - whose URL is `/api/github-organization` - set
+`$shouldProfile` equal to `$request->getPathInfo() === '/api/github-organization'`.
+In a real app, I would add *more* code to make sure `$shouldProfile` is *only*
+true on the *very* specific requests we want to profile.
 
-and it did.
+Now I'll re-type the `t` on `Client` and select the correct `Client` class so
+that PhpStorm adds that `use` statement to the top of the class for me. Thanks
+PhpStorm!
 
-So let's open up that guy. Oh boy and Oh, weird. 281 microseconds. So let me give
-this a name real quick. AutoFarm subscriber.
+But before we try this, I want to code for one edge case: if *not*
+`$event->isMasterRequest()`, then `return`. It might not be important in your
+app, but Symfony has a "sub-request" system... and the short explanation is that
+we don't want to profile those: they are not *real* requests... and would make a
+big mess of things.
 
-One of the things I've learned with the SDKs, you do need to be a little bit careful
-when you work with it. This somehow actually confuse the profile in some really
-strange things happen. You can see the entire request is actually talking about bra
-`Blackfire\Probe::enable` to get the best results. What we actually want to do is always
-make sure that we close the probe. So basically after we're done, we want to say
-`$probe->close()`, but we don't want to do it here. We want to do it at the end of the
-request. This is actually a cause because of the garbage control. So doing that is
-actually going to be really easy. We're just going to listen to a second event and
-I'll call it `TerminateEvent::class`. I'll say `onTerminateEvent()`,
+Ok, let's try this! I'll close a tab... then refresh the homepage... which
+causes the AJAX request to be made. You can see it's slow. Now reload the list
+of profiles on Blackfire... there it is! Open it up.
 
-I'll do a little Alt + Enter shortcut
-and it create method. You create that method and I'll add a type
-hint `TerminateEvent $event`. So now what we can do is we'll just set that probe on a
-property. So here I'll say `private $probe` even get a little documentation here that
-says this is either going to be a `Probe` instance from `\Blackfire` or `null`, because if we're
-inside the inside of her, if save, and I'll say
-`$this->probe = $blackfire->createProbe()`
-So it may be said or may be no, and very simply in `onTerminateEvent`, we can
-say if `$this->probe`,
+And... oh wow, oh weird! 281 *microseconds*. Give this a name:
+`[Recording] Auto from subscriber`: http://bit.ly/sf-bf-broken-auto-profile
 
-`$this->probe->close()`. So if we did open that and create that probe, then we will close
-it. This should fix the problem. Also, while we're here, I'm going to make this a
-little bit cooler, this `onRequestEvent`. I'm going to turn that into an array and
-add this and add a second image to the right, which is `1000` this syntax looks a
-little strange, but we're saying is we're giving this event a priority of 1000 so
-that will make this event run even earlier in Symfony so that even more code will get
-profiled. And also before we try this, I'm gonna add one other little nice thing
-here, which is that optionally you can create some configuration about the profile.
-So I'm gonna say `$configuration = new Configuration()` from `Blackfire\Profile`
-And what I like to do is a, there's a number of different things that you
-can do inside of here. A lot of them are more accustomed. What I like to do is at
-least `setTitle()`. So here we can say automatic get hub org profile and we passed
-this down here on recall call `createProbe()`.
+This profile is... broken. That's 281 *microseconds* - so .281 milliseconds.
+And the entire profile is just the `Probe::enable()` call itself!
 
-All right, so let's see how all that stuff works together. So let's move over here.
-I'm going to close that profile, refresh the page. That should trigger a profile for
-this AJAXrequest. Let's go over refresh and
-okay. See currently processing because I refresh too quickly. There it is. Automatic
-get up org profile. If I opened this up in a new tab, yeah, this looks much better.
-This looks like a normal, uh, thing. You can see the main on request event. Um, you
-do see some weird things with create probe and enables since they wrap everything. So
-it's not going to look quite as clean as a normal request, but you do get all the
-basic information that you want.
+## Probe Auto-Close Too Early
 
-So to avoid making a million of these profiles, let's spin over here and I'm going to
-add a [inaudible]
+What happened!? Well... remember: the `$probe` object automatically calls
+`close()` on *itself* as soon as that variable is garbage collected... which
+happens at the end of the subscriber method. That means.... we profiled exactly
+*one* line of code: `$probe->enable()`.
 
-`$shouldProfile = false` We'll stop our testing code from profiling.
+The solution is to call `$probe->close()` manually... which - more importantly -
+will require us to store the `Probe` object in a way where PHP *won't* garbage collect
+it too early.
 
-All right, next let's talk about running Blackfire in tests. This is actually a
-really cool, we can run our unit tests or we can run our functional tests and
-actually very use Blackfire to verify that certain performance things happens. This
-is the best way to fix and prevent future performance bumps from happening. And now
-that you understand the SDK system, how that system works is going to make a lot of
-sense.
+So here's the goal: call `$probe->close()` as *late* as possible during the request
+lifecycle. We can do this by listening to a *different* event: when
+`TerminateEvent::class` is dispatched - that's *very* late in Symfony - call
+the `onTerminateEvent()` method.
 
-Okay.
+I'll hit an Alt + Enter shortcut to create that method... then add the argument
+`TerminateEvent $event`.
+
+To be able to call `$probe->close()`, we need to store the probe object on a property.
+Add `private $probe` with some documentation that says that this will either be
+a `Probe` instance from `Blackfire` or `null`. Update the code below to be
+`$this->probe = $blackfire->createProbe()`.
+
+Finally, inside `onTerminateEvent`, if `$this->probe` - I should *not* have put
+that exclamation point, that's a mistake - then `$this->probe->close()`.
+
+If you assume that I did *not* include the exclamation point... then this makes
+sense! *If* we created the probe, then we will close it. Problem solved. And...
+*really*... the fact that we set the probe onto a *property* is the real magic:
+that will prevent PHP from garbage-collecting that object... which will prevent
+it from closing itself until we're ready.
+
+## Increasing the Event Priority
+
+While we're here, let's make this a little bit cooler. Change `onRequestEvent`
+to be an array... and add `1000` as the second item. This syntax is... weird. But
+the result is good: it says that we want to listen to this event with a priority
+of 1000. That will make our code run even *earlier* so that even *more* code will
+get profiled.
+
+## Configuration: Name your Profile
+
+Oh, and there's one other cool thing we can do: we can *configure* the profile.
+Add `$configuration = new Configuration()` from `Blackfire\Profile`. Thanks to
+this, we can control a number of things about the profile... the best being
+`->setTitle()`: `Automatic GitHub org Profile`. Pass this to `createProbe()`.
+
+That's it! Let's see how things whole thing works. Back at the browser, I'll
+close the old profile... and refresh the homepage. Once the AJAX call finishes...
+reload the Blackfire profile list. Ah! We were too fast - it's still processing.
+Try again and... there it is!
+
+Open it up! http://bit.ly/sf-bf-auto-profile-subscriber
+
+*Much* better. A few things might still look a *bit* odd... because we're
+still not profiling *every* single line of code. For example, `Probe::enable()`
+seems to wrap everything. But all the important data is there.
+
+To avoid making a *million* of these profiles as we keep coding, I'll go back to
+the subscriber and avoid profiling entirely by setting `$shouldProfile = false`.
+
+Next: you already write automated tests for your app to help *prove* that key
+features never have bugs. You... ah... do write tests right? Let's... say you
+do. Me too.
+
+Anyways, have you ever thought about writing automated tests to prevent
+*performance* bugs? Yep, that's possible! We can use Blackfire *inside* our test
+suite to add performance *assertions*. It's pretty sweet... and now that we
+understand the SDK, it will feel great.

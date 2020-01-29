@@ -8,10 +8,10 @@ First, something tells the Blackfire PHP extension - the "Probe":
 
 > Hey! Start profiling!
 
-Which basically means that it starts collecting *tons* of data about... everything.
-The process of collecting this data is called *instrumentation*... because when
-a concept is *too* simple, sometimes we like to invent confusing words.
-*Instrumentation* means that the PHP extension is collection data.
+Which basically means that it starts collecting *tons* of data. The process
+of collecting data is called *instrumentation*... because when a concept is
+*too* simple, sometimes we tech people like to invent confusing words.
+*Instrumentation* means that the PHP extension is collecting data.
 
 The second step is that - eventually - something tells the PHP extension to *stop*
 "instrumentation" and to send the data. The collection of data is known as a
@@ -19,37 +19,43 @@ The second step is that - eventually - something tells the PHP extension to *sto
 prune some stuff and ultimately sends it to the Blackfire server.
 
 So: what is the "thing" that tells the PHP extension to activate? We know that
-the PHP extension doesn't profile *every* request... so what is the "thing" that
-says:
+the PHP extension doesn't profile *every* request... so what is it that says:
 
 > Hey PHP extension "probe" thing: start profiling!
 
 The answer - *so* far - is: the browser extension: it sends special information
 that tells the probe to do its thing. Or, if you use the `blackfire` command line
-utility, which we used earlier to profile a command, then *it* is what tells the
+utility, which we did earlier to profile a command, then *it* is what tells the
 PHP extension to activate.
 
 In either situation, the extension is activated *before* even the *first* line
-of PHP code is executed. That means that *every* single line of PHP code is
+of code is executed. That means that *every* single line of PHP code is
 "instrumented": our final profile contains *everything*. This is called
 auto-instrumentation: instrumentation starts automatically.
 
-This leads to two interesting questions. First, could we trigger a profile in a
-different way? Could we, for example, dynamically tell the PHP extension to create
-a profile from *inside* or code under some specific condition? And second,
-*regardless* of who *triggers* the profile, could we "zoom in" and only collect
-profiling data for *part* of our code? Like, could we create a profile that only
-collects data about the code in our controller instead of the entire request?
+This naturally leads to three interesting questions.
 
-Let's actually start with that second question: profiling a *specific* part of
-our code, instead of the whole thing. To be *fully* honest, I don't think this
-first part has a *ton* of practical use-cases, but it'll give you an even better
-idea of what Blackfire is doing behind the scenes.
+First, who *is* baby Yoda? I mean, is he... like, related to Yoda? Or just the
+same species?
+
+The second question is: could we trigger, or *create* a Blackfire profile in a
+*different* way? Could we, for example, dynamically tell the PHP extension to create
+a profile from *inside* our code under some specific condition?
+
+And third, *regardless* of who *triggers* the profile, could we "zoom in" and
+only collect profiling data for *part* of our code? Like, could we create a profile
+that only collects data about the code from our controller instead of the
+entire request?
+
+Let's actually start with that last question: profiling a *specific* part of
+our code, instead of the whole thing. To be *fully* honest, I don't know if this
+part has a *ton* of practical use-cases, but it *will* give you an even better
+idea of how Blackfire works behind the scenes.
 
 ## Installing the Blackfire SDK
 
 To help with this crazy experiment, we're going to install Blackfire's PHP SDK.
-Find your terminal, dial your modem to the Internet, and run:
+Find your terminal, dial up your modem to the Internet, and run:
 
 ```terminal
 composer require blackfire/php-sdk
@@ -58,9 +64,9 @@ composer require blackfire/php-sdk
 This is a normal PHP library that helps interact directly with Blackfire from
 *inside* your code. You'll see how.
 
-When that finishes, move over and open `src/Controller/MainController.php`. Ok:
-this is the controller for our homepage. Let's pretend that when we profile the
-homepage, we don't want to collect data about *all* of our code. Nope, we want
+When it finishes, move over and open `src/Controller/MainController.php`. Ok:
+this is the controller for our homepage. Let's pretend that when we profile this
+page, we don't want to collect data about *all* of our code. Nope, we want
 to, sort of, "zoom in" and see *only* what's happening inside the controller.
 
 ## Manually Instrumenting Code
@@ -68,16 +74,16 @@ to, sort of, "zoom in" and see *only* what's happening inside the controller.
 We can do that by saying `$probe = \BlackfireProbe::getMainInstance()`. Remember:
 the PHP extension is called the "probe"... that's important if you want this to
 make sense. Then call `$probe->enable()`. At the bottom, I'll set the rendered
-template to a `$response` variable, then add `$probe->disable()` and finish with
+template to a `$response` variable, add `$probe->disable()` and finish with
 `return $response`.
 
 Okay, so... what the heck does this do? The first thing I want you to notice is
 that if I refresh the homepage a bunch of times... and then go to
 https://blackfire.io, I do *not* have any new profiles. Adding this code does
-not "trigger" a new profile to be created: it does *not*  tell the PHP extension -
-the "probe" that it should to do its work.
+not "trigger" a new profile to be created: it does *not* tell the PHP extension -
+the "probe" - that it should to do its work.
 
-Instead, *if* a profile is currently being created, this tells the profile *when*
+Instead, *if* a profile is currently being created, this tells the probe *when*
 to start collecting data. Hmm, this isn't going to *quite* make sense until we
 see it in action. Trigger a new profile on the homepage. I'll call this one:
 `[Recording] Only instrument some code`.
@@ -90,22 +96,22 @@ on top - `main()` and `handleRaw()`... but basically it jumps straight to the
 
 ## How Disabling Auto-Instrumentation Works
 
-What's happening here is that the *only* code that it "instrumented", the *only*
-code that it collected information on, is the code between the `enable()` and
-`disable()` calls.
+What's happening here is that the *only* code that the probe "instrumented", the
+*only* code that it collected information on, is the code between the `enable()`
+and `disable()` calls.
 
 This... completely confused me the first time I saw it. What *really* happens is
 this: as soon as we use the browser extension to tell the probe to do its job,
-the PHP extension starts instrumenting, um, collection data, *immediately*. So
-it *is* collecting data about *every* line of PHP code.
+the PHP extension starts instrumenting - so, collection data - *immediately*.
+Initially, it *is* collecting data about *every* line of PHP code.
 
-But as *soon* as it sees this `$probe->enable()`, it basically *forgets* about
-all the data collected so far. The `$probe->enable()` call says:
+But as *soon* as it sees `$probe->enable()`, it basically *forgets* about all
+the data collected so far. The `$probe->enable()` call says:
 
 > Hey! Start instrumenting *here*. If you've already collected some data before
-> this, get rid of it.
+> thanks to auto-instrumentation, get rid of it.
 
-This effectively *disables* auto-instrumentation: we're not *controlling* which
+This effectively *disables* auto-instrumentation: we're now *controlling* which
 code is instrumented instead of it happening automatically. Once the code hits
 `$probe->disable()` instrumentation stops.
 
@@ -118,8 +124,8 @@ their documentation. That tells the PHP extension that you're *definitely* done
 profiling and it can send the data to the agent. But, it's not *strictly* required,
 because it'll be sent automatically when the script ends anyways.
 
-So... this feature is *maybe* useful... but it's a nice intro into taking more
-control of the profiling process.
+So... this feature is *maybe* useful... but it's *definitely* a nice intro into
+taking more control of the profiling process.
 
 ## We haven't used the SDK Yet
 
@@ -129,12 +135,13 @@ library: it's from the Blackfire PHP *extension*. As long as you have the
 extension installed, that class will exist. We're interacting *directly* with
 the extension.
 
-So... why did we install the SDK if we didn't need it? Because it gave us
-auto-complete on that class, nothing more. The SDK has a, sort of, "stub" version
-of this class. This is *not* the code that was *actually* executed when we called
-those methods - but having this at least shows us what methods and arguments
-are allowed.
+So... why did we install the SDK if we didn't need it? Because... it gave us
+auto-complete on that class. And you all know that I freakin' *love* auto-complete.
+
+The SDK has a, sort of, "stub" version of this class. This is *not* the code that
+was *actually* executed when we called those methods... but having this at least
+shows us what methods and arguments exist.
 
 Next, let's actually *use* the PHP SDK to do something a bit more interesting.
 I want to *create* a profile automatically in my code *without* needing to use
-the extension. This *does* have real-world use-caes.
+the browser extension. This *does* have real-world use-cases.

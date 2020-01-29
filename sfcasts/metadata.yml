@@ -21,6 +21,7 @@ chapters:
     - auto-profile
     - probe-create-subscriber
     - performance-tests
+    - metrics
     - profile-assertions #stub
     - blackfire-player #stub
     - deploying #stub
