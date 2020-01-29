@@ -18,7 +18,7 @@ chapters:
     - instantiation
     - service-subscriber
     - manual-instrumentation
-    - auto-profile #raw
+    - auto-profile
     - performance-tests #raw
     - profile-assertions #stub
     - blackfire-player #stub
