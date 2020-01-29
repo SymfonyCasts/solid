@@ -19,6 +19,7 @@ chapters:
     - service-subscriber
     - manual-instrumentation
     - auto-profile
+    - probe-create-subscriber
     - performance-tests
     - profile-assertions #stub
     - blackfire-player #stub
