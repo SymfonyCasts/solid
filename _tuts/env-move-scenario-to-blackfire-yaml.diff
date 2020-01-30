@@ -1,5 +1,5 @@
 diff --git a/.blackfire.yaml b/.blackfire.yaml
-index 8a2bd73..3a6fc4c 100644
+index 8a2bd73..7f465f2 100644
 --- a/.blackfire.yaml
 +++ b/.blackfire.yaml
 @@ -3,3 +3,20 @@
@@ -17,7 +17,7 @@ index 8a2bd73..3a6fc4c 100644
 +            name "Homepage"
 +            expect status_code() == 200
 +            expect css("tbody.js-sightings-list tr").count() > 10
-+            # won't work yet/unless you run inside an "environment"
++            # won't work until we're using Blackfire environment
 +            assert metrics.sql.queries.count < 30
 +
 +        click link("Log In")

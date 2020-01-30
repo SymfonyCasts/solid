@@ -1,13 +1,14 @@
 diff --git a/scenario.bkf b/scenario.bkf
-index fdbd745..0d2e8d3 100644
+index d2a095c..68a9636 100644
 --- a/scenario.bkf
 +++ b/scenario.bkf
-@@ -8,6 +8,8 @@ scenario
+@@ -8,6 +8,9 @@ scenario
  
-     visit url('/')
+     visit url("/")
          name "Homepage"
 +        expect status_code() == 200
  
      click link("Log In")
-         name "Log in page"
+         name "Login page"
 +        expect status_code() == 200
++

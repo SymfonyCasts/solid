@@ -1,17 +1,17 @@
 diff --git a/scenario.bkf b/scenario.bkf
-index 972ffbd..fdbd745 100644
+index feca60f..d2a095c 100644
 --- a/scenario.bkf
 +++ b/scenario.bkf
 @@ -2,3 +2,12 @@ name "Various scenarios for the site"
  
- # Can be override with option "--endpoint=http://newendpoint.com"
+ # override with --endpoint option
  endpoint "https://localhost:8000"
 +
 +scenario
 +    name "Basic Visit"
 +
-+    visit url('/')
++    visit url("/")
 +        name "Homepage"
 +
 +    click link("Log In")
-+        name "Log in page"
++        name "Login page"

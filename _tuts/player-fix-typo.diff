@@ -1,13 +1,13 @@
 diff --git a/scenario.bkf b/scenario.bkf
-index 4827bc7..fc56c23 100644
+index 92c4244..92be148 100644
 --- a/scenario.bkf
 +++ b/scenario.bkf
 @@ -9,7 +9,7 @@ scenario
-     visit url('/')
+     visit url("/")
          name "Homepage"
          expect status_code() == 200
 -        expect css("tbody.js-sightings-list tr").ount() > 10
 +        expect css("tbody.js-sightings-list tr").count() > 10
  
      click link("Log In")
-         name "Log in page"
+         name "Login page"
