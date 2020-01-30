@@ -1,0 +1,13 @@
+diff --git a/.symfony.cloud.yaml b/.symfony.cloud.yaml
+index 68fd174..fd3f292 100644
+--- a/.symfony.cloud.yaml
++++ b/.symfony.cloud.yaml
+@@ -8,7 +8,7 @@ runtime:
+         - mbstring
+         - ctype
+         - iconv
+-        
++        - blackfire
+ 
+ build:
+     flavor: none

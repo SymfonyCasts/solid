@@ -1,0 +1,24 @@
+diff --git a/.blackfire.yaml b/.blackfire.yaml
+index 12aa912..205d3d3 100644
+--- a/.blackfire.yaml
++++ b/.blackfire.yaml
+@@ -3,6 +3,10 @@
+         path: "/.*"
+         assertions:
+             - "metrics.http.requests.count <= 1"
++    "Pages are suddenly not *much* slower":
++        path: "/.*"
++        assertions:
++            - "percent(main.wall_time) < 30%"
+ 
+ scenarios: |
+     #!blackfire-player
+@@ -15,7 +19,7 @@ scenarios: |
+             expect status_code() == 200
+             expect css("tbody.js-sightings-list tr").count() > 10
+             assert metrics.sql.queries.count < 30
+-            assert main.wall_time < 100
++            assert main.wall_time < 100ms
+ 
+         click link("Log In")
+             name "Log in page"

@@ -1,0 +1,25 @@
+diff --git a/.blackfire.yaml b/.blackfire.yaml
+index 8a2bd73..3a6fc4c 100644
+--- a/.blackfire.yaml
++++ b/.blackfire.yaml
+@@ -3,3 +3,20 @@
+         path: "/.*"
+         assertions:
+             - "metrics.http.requests.count <= 1"
++
++scenarios: |
++    #!blackfire-player
++
++    scenario
++        name "Basic Visit"
++
++        visit url('/')
++            name "Homepage"
++            expect status_code() == 200
++            expect css("tbody.js-sightings-list tr").count() > 10
++            # won't work yet/unless you run inside an "environment"
++            assert metrics.sql.queries.count < 30
++
++        click link("Log In")
++            name "Log in page"
++            expect status_code() == 200

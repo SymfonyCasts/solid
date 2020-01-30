@@ -1,5 +1,5 @@
 diff --git a/.symfony.cloud.yaml b/.symfony.cloud.yaml
-index 81fdea3..ce4f509 100644
+index b1c05fe..68fd174 100644
 --- a/.symfony.cloud.yaml
 +++ b/.symfony.cloud.yaml
 @@ -22,6 +22,9 @@ web:

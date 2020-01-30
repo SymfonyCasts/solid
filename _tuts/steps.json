@@ -216,10 +216,45 @@
             "description": null
         },
         {
+            "id": "sfcloud-tweak-php-version",
+            "name": "SfCloud: tweak PHP version",
+            "description": null
+        },
+        {
             "id": "sfcloud-add-database",
             "name": "SfCloud: Add database",
             "description": null
+        },
+        {
+            "id": "sfcloud-enable-bf-extension",
+            "name": "SfCloud: enable bf extension",
+            "description": null
+        },
+        {
+            "id": "env-move-scenario-to-blackfire-yaml",
+            "name": "Env: move scenario to .blackfire.yaml",
+            "description": null
+        },
+        {
+            "id": "env-remove-comment",
+            "name": "Env: remove comment",
+            "description": null
+        },
+        {
+            "id": "env-homepage-wall-time-assert",
+            "name": "Env: homepage wall time assert",
+            "description": null
+        },
+        {
+            "id": "env-trying-comparison",
+            "name": "Env: trying comparison",
+            "description": null
+        },
+        {
+            "id": "env-using-variable",
+            "name": "Env: using variable",
+            "description": null
         }
     ],
-    "sha": "f0bbc6f68a8c20d2d1d4ef69d5daccabf6c5237f"
+    "sha": "0f7d97eccf97a71a0a931ef119f91cae07a788b4"
 }
