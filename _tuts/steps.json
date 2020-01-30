@@ -214,7 +214,12 @@
             "id": "sfcloud-project-init",
             "name": "SfCloud: project:init",
             "description": null
+        },
+        {
+            "id": "sfcloud-add-database",
+            "name": "SfCloud: Add database",
+            "description": null
         }
     ],
-    "sha": "0f7c7c8687c81a18ccb701d574e1188ddf904ece"
+    "sha": "f0bbc6f68a8c20d2d1d4ef69d5daccabf6c5237f"
 }
