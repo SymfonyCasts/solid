@@ -1,122 +1,155 @@
 # All about Metrics
 
-Coming soon...
+Where did this metrics string come from - this `metrics.http.requests.count` thing?
+There are two things I want to say about this. First, Blackfire stores *tons* of
+raw data about your profile in little "categories" of information called metrics.
+More on that soon. And second, inside the `assert()` call, you're using a special
+"expression" language that's very similar to JavaScript - it's technically
+Symfony's ExpressionLanguage if you want to read more. Behind-the-scenes, `metrics`
+is probably some object internally... and we're referencing an `http` property,
+then a `requests`... then a `count` property & then we're comparing it to 1.
 
-More importantly though, I want to talk about this metric stuff here. So two things I
-want to know is by far has a great metric system and inside the metric what you're
-using is an expression and what this basically is is a language that's very similar
-to JavaScript. It's technically Symfony's expression language if you want to read
-more about it. So metrics is probably an object and then we're calling an HTTP
-property or request property account property and asserting that = one. The second
-thing, probably even more important is how the heck did I know that this was the
-exact string I need to use here to do this assertion? This goes back if you look at
-our profile to the timeline. Remember when we checked on the timeline, we talked
-about how on the left side there are these timeline metrics, which at that point were
-just a nice fancy way to color different sections of the timeline.
+## What Metrics are Available
 
-But really the most useful part of these metrics is that these metrics just give you
-access to low level information about what's going on. So for example, there's a
-metric called `symfony.events.count` which = seven. And you could use that in a
-metric if you for some reason wanted to assert that certain number of methods were
-called. So if I were looking to do an assertion about HTD period HTTP requests, I
-would go up the search here and to search for HTTP. And I say there's curl requests
-and requests. If you're not sure which one to use, you can look at the difference
-between them because this is going to show you the real data. So here you can see
-that there's a metric called `http.requests` and then there's a bunch of metrics
-about it. So I can say `http.requests.count` or `http.requests.memory`
-or `.io`, any of these things on here. So that was the key. I started with `metrics.`
-We can then reference any of the metrics in the system, which is super powerful.
+Ok, cool. So... how the heck did I know to use this *exact* string to get the HTTP
+call count? This goes back to the Blackfire timeline. On the profile, click the
+timeline link.
 
-Okay. So we now have proven that we have a performance bug in our application because
-our tests fail so that we can fix this. And the fix for this is not really that
-important because Hey, we don't care. This is a tutorial at Blackfire, but B, we have
-a, um, if a test now, which is going to prove that once we have the fixed done that
-it does work correctly. So the logic is H keep your questions in
-`src/GitHub/GitHubApiHelper.php`, and we have two public functions in here that make the two API
-requests. And basically we can get all the information from this second HTTP request.
-So I'm not gonna fill you in with the exact details, but we're basically going to add
-some caching via new  property called `$githubOrganizations`.
+When we talked about the timeline earlier, we talked about how, on the left side,
+there are these "timeline" metrics. At that point, there were just a nice way
+to add color to different sections of the timeline.
 
-And then as we loop over the repositories for a specific organization, we can
-actually store information about this organization because it's on that endpoint. So
-what I'll do here is I can add a new variable here called `$publicRepoCount`. It's one
-of the things that we put on our record for our organization. And then down here I
-can say if `$repoData['privet'] === false`. That's one of the keys on
-the repo data. Then we'll say `++$publicRepoCount`. So as we're looping over
-the repositories, we're just counting how many public repositories there are. And
-finally down here we'll say if not is set `$this->githubOrganizations[$organization]`
-So this is an organization that we haven't seen yet on this
-request we're going to say
-`$this->githubOrganizations[$organization] = new GitHubOrganization()`
+But *now* we understand that there is a *lot* more power behind this info: this
+shows us *all* the pieces of data we can use in our tests... and in other places
+we'll talk about soon.
 
-And this needs two pieces of information. The organization name, which we can
-actually probably just use the `$organization` variable, but you can also get this off
-of the data with `$data[0]` to get the first repository `['owner']['login']`. And then the
-other thing we are recording as the public was the `$publicRepoCount`. So now every
-time we call this method will actually capture this organization's information and
-store it on this property. So if we call this method first and then this method, we
-can actually do less work by looking that up, check this out. We can say if is set
-`$this->githubOrganizations[$organization]` then we can just return
-that immediately without doing any work. And in fact, if you looked in the
-controller, we're already calling things in this order. The controller will just swap
-the order of these things so that the repository is the one it's called first and
-gets all that cache data set up. Phew. Okay. So let's say that helps. It was a bit of
-a complicated fix, but thanks to our test we can know for sure
+For example, there's a metric called `symfony.events.count` which equals seven.
+You could use that in a metric if, for some reason you wanted to assert that a
+certain number of events were dispatched. If I needed to do an assertion about
+the number of HTTP requests, I would probably search the metrics for http.
+Apparently there are two... and if you looked closer, you'd find that `http.requests`
+is *perfect*. Most of these metrics have data about multiple dimensions - we
+can say `http.requests.count` to get the actual count or `http.requests.memory`
+to get how much memory they used.
+
+In the test system, we start with `metrics.` then use *anything* we can find here.
+
+## Fixing the Performance Bug
+
+So we now have a performance bug in our application that we've *proven* with
+a test. At this point, the actual way we *fix* that bug is not as important: all
+we care about is that we can change some code and get this test to pass.
+
+The logic for the API calls lives in `src/GitHub/GitHubApiHelper.php`: it has
+two public function and each makes one API request.
+
+Basically, we can get all the information we need by *only* making this *second*
+HTTP request. I don't want to get into the details - so I'll just talk you through
+it. Add a new property called `$githubOrganizations` set to an empty array.
+
+As we loop over the repositories for a specific organization, we can actually
+*store* the information organization info. Add a new variable called
+`$publicRepoCount` set to 0: the number of public repos an organization has is
+one of the pieces of data we need.
+
+Then, inside the `foreach`: if `$repoData['private'] === false` - that's one of
+the keys on `$repoData` - say `++$publicRepoCount`. So as we're looping over
+the repositories, we're counting how many are public.
+
+Finally, at the bottom, if *not* `isset($this->githubOrganizations[$organization])`,
+then `$this->githubOrganizations[$organization] = new GitHubOrganization()`. This
+needs two pieces of info. The first is the organization name. We can probably use
+the `$organization` argument... or you can use `$data[0]` - to get the first
+repository - then `['owner']['login']`. For the second argument, pass
+`$publicRepoCount`.
+
+Now, *each* time we call this method, we *capture* the organization's information
+and store it on this property. So if we call this method *first* and *then* the
+other method... we could *cheat* and return the `GitHubOrganization` object that's
+stored on the property. It's property caching!
+
+Check it out: if `isset($this->githubOrganizations[$organization])` then return
+that immediately without doing any work.
+
+So... *are* we calling these two methods in the "correct" order to get this to
+work? Check out the controller. Nope! Swap these two lines so that the *first*
+call will set up the caching for the second.
+
+Phew! Okay... let's see if that helps. It was a complicated fix... but thanks
+to our test, we will know for *sure* if it worked. Run the test:
 
 ```terminal-silent
 php bin/phpunit tests/Controller/MainControlerTest.php
 ```
 
-and it does. So that proves that we have reduced the query count from two to one.
+They pass! That *proves* we reduced the HTTP calls from two to one.
 
-Okay. So thanks these metrics, there's a lots of things that we can assert and one of the
-things I love about this system is, you know, if you, if even if you do typo one of
-these, uh, variables, when you run it,
+## Typos in Metrics
+
+What I *love* about the metrics system is that there are *many* to choose from.
+What I *don't* love is that you need to manually look up everything that's available.
+*Fortunately*, if you make a typo - the error is great. Change `count` to `vount`
+and re-run the test:
 
 ```terminal-silent
 php bin/phpunit tests/Controller/MainControlerTest.php
 ```
 
-you're going to get a really clear error.
-Specifically, you're going to get an error about profiling and you're going to get a
-link directly to go look at that profile. And that's going attain, going to contain
-the information that you need. So you can see here the following assertions are not
-valid `metrics.http.requests.vounts`, property `vount` does not exist. Available ones
-are, and it tells you all the available things and even as documentation to more
-about the assertion. So just really, really friendly how that was works.
+> An error occurred when profiling the test
 
-So let's fix our typo. Now, the one downside to the Blackfire tests, they do slow your
-test down because it needs to talk to Blackfire and have it create that profile. So
-as a best practice, we usually like to isolate our performance tests from our normal
-tests. So check this out. I'm going to copy the method name here, make a new one
-called `testGetGitHubOrganizationBlackfireHttpRequests()`. And what we'll put
-inside of here, I'll copy everything from the previous method, but really all we need
-here is just, uh, creating the `$client`, creating `$blackfireConfig`. And then inside of
-`assertBlackfire()`, we just make the request. Once this black callback finishes, it
-will then run the asserts on it. Now up here in our original method, we can simplify
-things a little bit. So I can, I'll copy all my code that's inside the callback and
-just replace it with what we had before.
+And when we follow the profile link... check out that error!
 
-So this is a very straightforward test that actually test the endpoint and this is
-testing just the performance now above the Blackfire one we can say `@group blackfire`
-that's really powerful because now we can run just the Blackfire tests or
-we could run our tests with a `--exclude-group=blackfire` and that would
-Jen just our one test, not the other one. You can see just one test, two assertions
-on that and while we're here, another nice thing to do is say
-`@requires extension blackfire` So if for some reason somebody is running this on a system that
-doesn't have Blackfire, it'll automatically Mark those tests as skipped a. My last
-thing that I want to tell you, and we're going to talk more about this in the next
-video, is that you really need to be careful with these assertions to try not to use
-time based assertions.
+> The following assertions are not valid... Property "vount" does not exist,
+> available ones are: ... and it lists all the properties.
 
-One of the easiest things to do is create a test and say that the test should take
-the request should take less than 500 milliseconds, but there's so much variability
-with time. It depends on your machine ends on if the cache was warmed up, that those
-tests tend to be very fragile and fail a lot. What you want to be looking for is more
-specific things that will not just randomly change over time, like the number of HTTP
-requests or the number of database requests or something else. So next, we're
-actually going to talk about this metrics, these assertions system a bit more. You
-can add these assertions and tests obviously, but you can also globally add these
-assertions so that anytime you run a profile from any page, if that page makes too
-many HTTP requests or it makes too many database requests, you're going to see a big
-metric failure inside that profile.
+That's *super* friendly. Fix the typo.
+
+## Organizing Blackfire Assertions into Separate Test Cases
+
+The *one* downside to adding Blackfire assertions in your tests is that they *do*
+slow things down because instrumentation happens and we need to wait for Blackfire
+to create the profile.
+
+Because of that, as a best practice, we usually like to isolate our performance
+tests from our normal tests. Check it out: copy the test method name, paste it
+below, and call it `testGetGitHubOrganizationBlackfireHttpRequests()`. And...
+copy the contents of the original method and paste here. Here, we just need to
+create the `$client`, create `$blackfireConfig` and, inside `assertBlackfire()`,
+*just* make the request.
+
+Back in the original method, we can simplify... in fact we can go *all* the way
+back to the way it was before: create the client, make the request, assert something.
+
+*Why* is this useful? Because *now* we can *skip* the Blackfire tests if we're
+just trying to get something to work. How? Above the performance test, add
+`@group blackfire`.
+
+Thanks to that, we can add `--exclude-group=blackfire` to *avoid* the Blackfire
+tests:
+
+```terminal
+php bin/phpunit tests/Controller/MainControlerTest.php --exclude-group=blackfire
+```
+
+Yep! Just one test, two assertions. Another nice detail is to add
+`@requires extension blackfire`. With this, if someone is *missing* the Blackfire
+extension, instead of the tests exploding, they will be marked as skipped.
+
+## Don't do Time-Based Assertions
+
+The *last* thing I want to mention about assertions is this: please, please *please*
+avoid time-based assertions. They're the *easiest* to create - I know. It's
+*super* tempting to want to create an assertion that the request should take
+less than 500 milliseconds. If you *do* this, you will hate your tests.
+
+Why? Because there's *way* too much variability in time - the request might run
+fast enough on one machine, but *not* fast enough on another. Or your server
+*might* just have a bad day... and suddenly your tests are failing. Relying on
+time makes your tests fragile.
+
+Next, we're going to talk *more* about metrics and assertions. We know that we
+can add assertions to profiles that our tests create. But we an *also* add
+*global* assertions: tests that are run *any* time you create a profile for
+*any* page... or for a specific page. If you want to make sure that a specific
+page - or *any* page - doesn't make more than 10 database queries, you can add
+an "assertion" for that and see a *big* failure if you break the rules.
