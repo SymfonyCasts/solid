@@ -22,8 +22,8 @@ chapters:
     - probe-create-subscriber
     - performance-tests
     - metrics
-    - profile-assertions #stub
-    - blackfire-player #stub
+    - assertions #raw
+    - blackfire-player #raw
     - deploying #stub
     - environments #stub
     - builds-scenarios #stub
