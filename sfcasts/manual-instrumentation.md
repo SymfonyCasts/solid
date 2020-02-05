@@ -64,18 +64,29 @@ composer require blackfire/php-sdk
 This is a normal PHP library that helps interact directly with Blackfire from
 *inside* your code. You'll see how.
 
-When it finishes, move over and open `src/Controller/MainController.php`. Ok:
-this is the controller for our homepage. Let's pretend that when we profile this
-page, we don't want to collect data about *all* of our code. Nope, we want
+When it finishes, move over and open `src/Controller/MainController.php`:
+
+[[[ code('5efb26151b') ]]]
+
+Ok: this is the controller for our homepage. Let's pretend that when we profile
+this page, we don't want to collect data about *all* of our code. Nope, we want
 to, sort of, "zoom in" and see *only* what's happening inside the controller.
 
 ## Manually Instrumenting Code
 
-We can do that by saying `$probe = \BlackfireProbe::getMainInstance()`. Remember:
-the PHP extension is called the "probe"... that's important if you want this to
-make sense. Then call `$probe->enable()`. At the bottom, I'll set the rendered
-template to a `$response` variable, add `$probe->disable()` and finish with
-`return $response`.
+We can do that by saying `$probe = \BlackfireProbe::getMainInstance()`:
+
+[[[ code('a9a0b1e8d5') ]]]
+
+Remember: the PHP extension is called the "probe"... that's important if you want
+this to make sense. Then call `$probe->enable()`:
+
+[[[ code('eebd633917') ]]]
+
+At the bottom, I'll set the rendered template to a `$response` variable, add
+`$probe->disable()` and finish with `return $response`:
+
+[[[ code('27613dd79d') ]]]
 
 Okay, so... what the heck does this do? The first thing I want you to notice is
 that if I refresh the homepage a bunch of times... and then go to
@@ -98,7 +109,9 @@ on top - `main()` and `handleRaw()`... but basically it jumps straight to the
 
 What's happening here is that the *only* code that the probe "instrumented", the
 *only* code that it collected information on, is the code between the `enable()`
-and `disable()` calls.
+and `disable()` calls:
+
+[[[ code('df396b7518') ]]]
 
 This... completely confused me the first time I saw it. What *really* happens is
 this: as soon as we use the browser extension to tell the probe to do its job,
@@ -120,7 +133,11 @@ in your code if you want to profile different pieces: `$probe->enable()` only
 forgets data it's already collected the *first* time you call it.
 
 Oh, and you can *also* optionally call `$probe->close()` - you'll see this in
-their documentation. That tells the PHP extension that you're *definitely* done
+their documentation:
+
+[[[ code('2f98e2bc2d') ]]]
+
+That tells the PHP extension that you're *definitely* done
 profiling and it can send the data to the agent. But, it's not *strictly* required,
 because it'll be sent automatically when the script ends anyways.
 
