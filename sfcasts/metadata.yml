@@ -27,5 +27,6 @@ chapters:
     - deploy
     - sf-cloud-database
     - environments
+    - env-profile
     - builds-scenarios #stub
     - scenario-assertions #stub
