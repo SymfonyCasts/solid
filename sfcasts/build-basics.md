@@ -1,75 +1,101 @@
 # Automatic Performance Checks: Builds
 
-Coming soon...
+Head back to https://blackfire.io, click "Environments" and click into our
+"Sasquatch Sightings Production" Environment.
 
-I back by Fred IO and let's click environments and let's click and look at our new
-environments. So interesting. It actually takes us not to have profiles tab but to
-builds tab and if you look over here, look at periodic builds, builds are started
-every six hours and we can even change that to a different levels and down below
-there was a bunch of notification channels where you can set up lots of different
-ways that you want to be notified of the results of this build that thing. So what
-the heck is a build anyways? Well it's find out, let's trigger one manually. We can
-actually hit start a build. It has our end part right there. We can give it a title
-if we want. I'll just hit start a new build and interesting it says untitled scenario
-and then it went to the homepage. Chickens out. What it actually did is actually went
-and created a single Blackfire profile for our homepage on production and hold on a
-second. There's a lot of interesting things going on here. First of all, we've seen
-this word scenario before. This isn't word that we saw inside of the Blackfire player
-file that we created earlier. More on that soon. Second, the reason that it created a
-pro when we, the reason that the build made a single
+Interesting. By default, it takes us *not* to the profiles tab... but to a tab
+called "Builds". And, look on the right: "Periodic Builds", "Builds are started
+every 6 hours"... which we could change to a different interval.
 
-profile to the homepage is because if you look back and builds, when we set up our
-environment, we created one URL to test this as a step one. We went through very
-quickly, well, we just configured one URL. Let's actually create a second. You were
-out here. One of the other pages that we've been working with is /API /get hub
-organization. So that's just this JSON end point. So let's copy that you well, let's
-add that as a second URL to test. It's now let's save and let's start a second build.
-So it's like before it creates a one untitled scenario. Ah, but this time it actually
-profiled both pages and the glory and shit. And check this out.
+Further below, there are a bunch of "notification channels" where you can tell
+Blackfire that you want to be *notified* - like via Slack - of the results of this
+"build" thing.
 
-The bill shows up as green and the reason is you can see one successful constraint.
-Remember we added a constraints that a constraint or a test that every page should
-have one or zero HTTP requests. So thanks to the one test that we put in
-Blackfire.yaml
+## Hello Builds
 
-every our bills can actually pass or fail. This build is passing because all the URLs
-are being configured or making one or fewer HTTP requests. This is the real beauty of
-his test section. You can actually start to configure, um, different constraints that
-should pass whenever these builds happen. But there's even more cool stuff going on
-here. If you click down here, you can see player output. Check this out. It actually
-shows us what's going on behind the background to make this happen. The Blackfire
-servers are actually using the Blackfire player
+Ok, what the *heck* is a build anyways? To find out, let's trigger one manually.
+Click "Start a Build". The form pre-fills the URL to our site... cool... and we
+can apparently give it a title if we want. Let's... just start the build.
 
-and kind of look closely here. Look at this. It says input scenario visit URL method
-gets, and then visit URL, get hub organization. You kind of use your imagination
-here. What this is doing is it's actually running in the Blackfire player and it's
-writing scenarios just like the scenarios that we have in our BKF file. It's actually
-writing scenarios and passing them to the Blackfire player. So behind the scenes it's
-using the Blackfire player. You can even see it reloading the homepage and they get
-up organization page multiple times. So that's the um, uh, the 10 times that each
-profile creates.
+This takes us to a new page where.... interesting: it's running an
+"Untitled Scenario"... then it looks like it went to the homepage... and created
+a profile?
 
-So with just a very tiny bit of configuration, we now have Blackfire creating a build
-every six hours, which means it creates a profile for these two, these two pages and
-thanks to our one test, which we only have one right now, but we at least have one.
-Our builds can show as passing or failing and we can even set up notifications to
-notify us whenever, for example, a build fails, but the fact that this is using a,
-the Blackfire player behind the scenes makes me wonder, instead of just configuring
-these URLs, can we actually have a build run our scenario file. I mean, this is a lot
-more powerful. We can click on link so we can fill out forms and we can add asserts
-on specific pages instead of having only these global, uh, tests. And the answer is
-yes. And that is really how you start to unlock the power.
+Lets... back up: there are a *lot* of interesting things going on here. And I
+*love* interesting things!
 
-We're going to talk about that next. But before we do, I want to show you what it
-looks like after you've let your system create a number of profiles. So I'm just
-going on here and give you a peek into the Symfony cast production. Once you have a
-number of profiles, you can see here, I have about a week where their profiles, you
-actually start getting this really cool graph, some of the bills. So if I scroll down
-here, you can actually see I have many bills here that are having every six hours and
-we can actually see some history over time of how our OPC cache is performing. Our
-cache hits, um, our cache settings, you can see my op cache intern strings Buffer's
-actually full, so I need to fix that. And anything else that you can think of over
-time, um, on those, on your site. So it's a great way to keep an eye on things and I
-can click into any of these bills if I want to and actually go and check out the
-profile that was created, um, for that particular thing. All right, so next, let's go
-back to our environment and make the build smarter by executing our custom scenarios.
+First, we've *seen* this word "scenario" before. Earlier, we used the
+`blackfire-player` utility: a command-line tool that's *made* by the Blackfire
+people... but can be used totally outside of the profiling tool. We created a
+`scenario.bkf` file where we defined a *scenario* and used the special
+`blackfire-player` language to tell it to go to the homepage, assert a few things,
+then click on the "Log In" link and check something else. At that time, this was
+a cool tool that you could use to "crawl" a site and test things on it. The
+"build" used the same "scenario" word. That's not an accident - more on that soon.
+
+## Build "URLs to Test"
+
+The *second* important thing is that this profiled the *homepage* because, when
+we created our environment, we configured one "URL to test": the homepage. That's
+what the build is doing: "testing" - meaning *profiling* - that page.
+
+Let's add a second URL. One other page we've been working with a lot is
+`/api/github-organization`: this JSON endpoint. Copy that URL and add it as a
+*second* "URL to test". Click save... then manually create a *second* build.
+
+Like before, it creates this "Untitled Scenario" thing. Ah! But *this* time it
+profiled *both* pages! The build *also* shows up as green: the build "passed".
+
+This is a *critical* piece of builds. It's not *simply* that a build is an automated
+way to create a profile for a few pages. That would be pretty worthless. The *real*
+value is that you can write performance *tests*. Check it out: it says
+"1 successful constraint" - which is that "HTTP Requests should be limited to 1
+per page". Hey! That's the "test" that *we* set up inside `.blackfire.yaml`!
+
+The *real* beauty of `tests` is *not* that the "Assertions" tab will look red when
+you're looking inside a profile. The *real* beauty is that you can configure
+performance *constraints* that should pass *whenever* these builds happen. If a
+build *fails* - maybe because you introduced some slow code - you can be notified.
+
+## Build Log: blackfire-player
+
+But there's even *more* cool stuff going on. Near the bottom, click to see the
+"Player output". Woh! It shows us how builds work behind-the-scenes: the Blackfire
+server uses the `blackfire-player`!
+
+Look closer: it's running a *scenario*: `visit url()`, `method 'GET'`, then
+`visit url()` of `/api/github-organization`. It's a bit hard to read, but this
+*converted* our 2 "URLs to test" a scenario - with the same format as our
+`scenario.bkf` file - then *passed* that to `blackfire-player`. You can even see
+it *reloading* both pages multiple times to get 10 samples - that's one of the
+options it added in the scenario.
+
+So with just a very *tiny* bit of configuration, Blackfire is now creating a build
+every six hours. Each time, it profiles these two pages and, thanks to our one test,
+if either page makes more than one HTTP request, the build will fail. By setting
+up a notification, we'll know about it.
+
+The fact that the build system uses `blackfire-player` makes me wonder: instead
+of configuring these URLs, can we *instead* have the build system run our custom
+scenario file? I mean, it's a *lot* more powerful: we can visit pages, but also
+click links and fill out forms. We can *also* add *specific* assertions to *each*
+page... in addition to our one "global" test about HTTP requests.
+
+The answer is to this question is... of course! And it's where the build system
+*really* starts to shine. We'll talk about that next.
+
+## History & Graphs from Automated Builds
+
+But before we do, I want you to see what the builds page looks like once it's
+had enough time to execute a few automated builds. Let's check out the
+SymfonyCasts environment. Woh! It's graph time! Because this environment has
+a *history* of automated builds, Blackfire creates some super cool graphs:
+like how cache hit percentage and our cache settings. You can see that my
+`OPcache Interned Strings Buffer` cache is full... and I need to tweak some
+config to increase that.
+
+I can also see how the different URLs are performing over time for wall time,
+I/O, CPU, Memory & network as well as several other things. We can also click to
+see more details about any build... and even look at any of its profiles.
+
+Next: let's make the build system smarter by executing our custom scenarios.
