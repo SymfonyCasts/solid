@@ -29,4 +29,5 @@ chapters:
     - environments
     - env-profile
     - build-basics
+    - build-scenarios
     - scenario-assertions #stub
