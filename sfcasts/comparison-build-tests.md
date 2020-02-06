@@ -1,30 +1,58 @@
 # Testing a Build Compared to the Last Build
 
-Coming soon...
+A *long* time ago in this tutorial, we talked about Blackfire's *truly* awesome
+"comparison" feature. If you profiled a page, made a change, then profiled it
+again, you can *compare* those two profiles to see *exactly* how your change
+impacted performance.
 
-We already know that. For example, if you profile page and then make a change, then
-profile it again. You can use the comparison feature in Blackfire to actually compare
-those two profiles to see if the, if your site got faster or slower. When you use the
-environment system, you can do the exact same thing with your bills and actually turn
-them into tests. So for example, you could say, Hey, I want the on the homepage. I
-want to make sure that between one build and the next build at the homepage doesn't,
-for example, get, doesn't have a wall time that's 30% slower. You can actually write
-an assertion to make sure that it didn't compare Tivoli get much worse.
+When you use the build system, you can do the *exact* same thing... and you can
+*even* write "tests" that *compare* a build to the *previous* build. For example,
+you could say:
 
-Took it out. Let's add a conservative new global metric, I'll call it. Pages are not
-suddenly much slower and we'll set this to run on every single page. So I'll use the
-slash.star and for the assertions we can use a really cool thing called percent
-percent of main dot wall time less than or equal to 30% there's also a diff, if you
-wanted to say that the wall time was not 50 milliseconds slower. For example, I'm
-going to go over here and let's commit that adding a global wall time dif assert and
-I will do Symfony deploy. Now, if we dash dash bypass the checks.
+> Yo! If the wall time on the homepage is *suddenly* 30% *slower* than the
+> previous build, that should be a failure.
 
-Now, if we waited for that to finish deploying and then we went over here and created
-a new custom build, we would not see that executed. In fact, let's see that once the
-deploy finishes. Okay, good. Let's go over here and let's start a bill. I won't give
-it a name and it does the exact same thing it did before. It goes through our one
-scenario which profiles the homepage and also profiles the login page. Now if you
-look at the three successful constraints here, you see the global one for HTTP
+## Adding a Comparison Test with percent()
+
+*How* can we do that? It's dead simple. Add a new global metric - how about
+"Pages are not suddenly much slower" and set this to run on every page:
+`path: /.*`. For the assertion, we can use a special function called percent:
+`percent(main.wall_time) < 30%`.
+
+That's it! There's also another function called `diff()`. If you said
+`diff(metrics.sql.queries.count) < 2` it means that the *difference* between
+the number of SQL queries on the new profile versus the old profile should be
+less than 2.
+
+Let's see what this looks like! Find your terminal and commit these changes:
+
+```terminal-silent
+git add .
+git commit -m "adding global wall time diff assert"
+```
+
+And... deploy!
+
+```terminal-silent
+symfony deploy --bypass-checks
+```
+
+## Comparison Tests: Not for Manual Builds
+
+But... bad news. If we waited for that to finish deploying... and then triggered
+a new custom build... we would *not* see that metric. In fact, I want you to see
+that. Wait for the deploy to finish - okay, good - then move back over and start
+a build.
+
+This does what we expect: it executes our scenario and creates 2 profiles.
+Look at the 3 successful constraints for the homepage: we see the other global
+test about "HTTP requests should be limited"... but we don't see the new one.
+What gives?
+
+
+---> HERE
+
+one for HTTP
 request should be limited, but we do not see the new one at all. There's a reason for
 that. These diff constraints, percent and diff. They only run in two different
 situations. First when your periodic builds run. So every six hours you will see the
