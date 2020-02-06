@@ -24,7 +24,7 @@ chapters:
     - metrics
     - assertions
     - blackfire-player
-    - deploying #stub
+    - deploy
     - environments #stub
     - builds-scenarios #stub
     - scenario-assertions #stub

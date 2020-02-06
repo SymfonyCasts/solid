@@ -1,3 +1,0 @@
-# Deploying
-
-Coming soon...
