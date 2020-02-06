@@ -1,68 +1,141 @@
 # Database Tricks on SymfonyCloud
 
-Coming soon...
+We just deployed to SymfonyCloud!!! Well, I mean, we *did*... but it doesn't...
+ya know... *work* yet. Because this is the *production* 500 error, we can't see
+the real problem.
 
-500 air. Okay, so let's see what's going on. Nice thing is we can spin back over here
-and run Symfony logs and this will actually allow us to look at the production logs.
-So let's actually look at our app, our VAR alarm prod.
+No worries! Head back to your terminal. The `symfony` command has an easy way to
+check the production logs. It is...
 
-That log right here app is the directory that the applications deployed to. So I'll
-hit zero and of course an exception has been occurred, connection refused. So this is
-actually a database connection problem. Not surprising cause we haven't even set up a
-database yet. So let's go do that. I'm gonna go over here and just Google for Symfony
-cloud my SQL and we just need to add a little bit of configuration to get this
-working. Uh, we're gonna modify two files. The first one is this start Symfony
-services.yaml. This is where you tell Symfony cloud that you need a database, maybe
-elastic search, maybe Retis hospital. A common up here. That's, this is Maria DB. So
-that's why the version of 10.2 you see here as Maria DB version. Now notice we've
-used the key my database here. That can be anything that's going to become important
-in the second change would we're going to make, which is in that Symfony cloud.yaml.
+```terminal
+symfony logs
+```
 
-Inside of here we need to add eight relationship's key. This is what binds our
-container to this database. Right now we don't have a relationships key yet, so let's
-just add them, say relationships and then what we're going to put here is a database
-set to the string. My database, colon, my SQL. That syntax is a little funny that my
-here is referring to whatever we call here and because this is a my SQL type, that's
-what we put over here. Now the really important thing here is we call this database.
-The effect of that is that Symfony cloud will expose the connection parameters to
-that database as database_URL, which is important because that's the environment
-variable that we're actually using for our database. So we did want to call this
-database because it makes all the configuration just work instantly. All right, so
-let's go back over here. I'm to hit control C to get out of my logging. Well commit
-with adding as a cloud database and then we'll say Symfony deploy again.
+This prints a list of *all* the logs. The `app/` directory is where our application
+is deployed to - so the first item is our app's `var/log/prod.log` file. You can
+also check out the raw access log... or everything. Hit 0 to "tail" the `prod.log`
+file. And... there it is:
 
-Oh of course I need to do my dash dash bypass checks. This time that deploys faster
-is loading composer dependencies from cache and when it finishes, I'm going to be
-even lazier this time and say Symfony open remote. That's a little command to open
-the remote. You were out in my browser and this time we've got it. It works just like
-that. We have a deployed site. There's not much data on it, which doesn't make it
-very interesting. In a real site, you probably start using your site. And this would
-naturally fill up with data. Um, to make it a little more interesting for us, let's
-actually run our fixtures on production. Now this is a little bit tricky because the
-fixtures bundle is something that is not, is a dev dependency. So it's not even
-installed on production. So you can't actually run Symfony as S H to SSH onto a
-Symfony cloud.
+> Ab exception has occurred... Connection refused.
 
-But if we did this, the doctrine fixtures bundle isn't actually installed here. So
-instead we're gonna do as a cool tunneling feature. I'm gonna say Symfony tunnel
-open. That's actually going to expose the, uh, uh, my production services and in this
-case the database service locally so I can actually communicate with them, uh, via
-local ports. Now I can override the database URL environment parameter by saying
-database, you all = my SQL corn /lash root colon. Uh, because the production database
-uses, um, root user with no password, it can do that because it's completely isolated
-and nothing on the internet can talk to it. And now because of that tunnel, we can
-say one to seven dot. zero.zero.one colon, 3000 /and then the date name of the
-database is always Maine. Now we can say bin console, doctrine, fixtures,
+## Adding a Database to SymfonyCloud
 
-load.
+I recognize this: it's a database error.... which... hmm... makes sense: we haven't
+told SymfonyCloud that we *need* a database! Let's go do that!
 
-You're overriding the database, your environment for this command in. It's using the
-tunnel at the top of the database. There's actually an easier way to do this type of
-thing. Um, but we'll talk about that in some future Symfony cloud tutorial. Now,
-because this is going over a remote connection, this can actually take a little bit
-of time to run. So be patient. This might actually take several minutes to finish.
-When it does, let's move over. And there we go. Our production site with at least
-some data to make it interesting. So next, let's get Blackfire set up on our server,
-which is both can be super simple, but also different than you might expect because
-we're going to leverage it in super important feature. New feature inside of
-Blackfire called environments. [inaudible].
+Google for "SymfonyCloud MySQL" to find... oh! A page that talks about *exactly*
+that. Ok, we're going to need to add a little bit of config to 2 files. The first
+is `.symfony/services.yaml`. This is where you tell SymfonyCloud about all the
+"services" you need - like a database service, or ElasticSearch or Redis or
+RabbitMQ.
+
+Copy the config for `.symfony/services.yaml`... then open that file and paste
+this in. The database is actually MariaDB, which is why the version here is 10.2:
+MariaDB version 10.2.
+
+Notice that we've used the key `mydatabase`. That can be *anything* you want: we'll
+*reference* this string from the *other* config file we need to change:
+`.symfony.cloud.yaml`.
+
+Inside *that* file, we need a `relationships` key: this is what *binds* the
+web container to that database service. Let's see... we don't have a
+`relationships` key yet, so let's add it: `relationships` and, below, add our
+*first* relationship with a special string: `database` set to `mydatabase:mysql`.
+
+This syntax... is a little funny. The `mydatabase` part is referring to whatever
+key we used in `services.yaml` - and then we say `:mysql` because that service is
+a `mysql` type.
+
+The *really* important thing is that we called this relationship `database`. Thanks
+to this `SymfonyCloud` will expose an environment variable called `DATABASE_URL`.
+It's literally `DATABASE_URL` and not `PIZZA_URL` because we called the relationship
+`database` instead of `pizza`... which would have been less descriptive, but more
+delicious.
+
+This is important because `DATABASE_URL` happens to be the environment variable
+that our app will use to connect to the database. In other words, our app will
+*instantly* know how to connect to the new database.
+
+Back at the terminal, hit "Ctrl+C" to exit from logging. Let's add the two changes
+and commit them:
+
+```terminal
+git add .
+git commit -m "adding SfCloud database"
+```
+
+Now, deploy!
+
+```terminal
+symfony deploy
+```
+
+Oh, duh - run with the `--bypass-checks` flag:
+
+```terminal-silent
+symfony deploy --bypass-checks
+```
+
+The deploy will still take some time - it has a lot of work to do - but it'll
+be faster this time. When it finishes... it dumps the same URL as before - that
+URL won't change. But to be even *lazier* than last time, let's tell the command
+to open this URL in my browser *for* me:
+
+```terminal
+symfony open:remote
+```
+
+## Tunneling to the Database
+
+And... we have a deployed site! Woo! The database is empty... but if this were
+a real app, it would start to be populated by *real* users entering their *real*
+Bigfoot sightings.
+
+But... to make this a bit more interesting for *us*, let's load the fixture data
+one time on production.
+
+This is a little bit tricky because the fixture system  - which comes from
+DoctrineFixturesBundle - is a composer "dev" dependency... which means that
+it's not even *downloaded* on production - that's good for performance. If it
+*were*, we could run:
+
+```terminal
+symfony ssh
+```
+
+to ssh into our container, and then run the command to load the fixtures. But...
+that won't work.
+
+No problem! We can do something cooler. Exit out of ssh, and run:
+
+```terminal
+symfony tunnel:open
+```
+
+I *love* this feature. Normally, the remote database isn't accessible by *anything*
+other than our container - you can't connect to it from anywhere else on the
+Internet. It's totally firewalled. But *suddenly*, we can connect to the production
+database locally on port 30000. We can *use* that to run the fixtures command
+locally - but send the data up to *that* database. Do it by running:
+
+```terminal
+DATABASE_URL=mysql://root:@127.0.0.1:30000/main php bin/console doctrine:fixtures:load
+```
+
+Ok, let's break this down. First, there is actually a *much* easier way to do all
+of this... but I'll save that for some future SymfonyCloud tutorial. Basically,
+we're running the `doctrine:fixtures:load` command but sending it a *different*
+`DATABASE_URL`: one that points at our production database. When you open a
+tunnel, you can access the database with `root` user, no password - and the
+database is called main.
+
+The only problem is that this command... takes *forever* to run. I'm not sure
+exactly why - but go grab some coffee and come back in a few minutes.
+
+When it finishes... yes! Go refresh the page! Ha! We have a production site with
+at least *enough* data to make profiling it interesting.
+
+Next, let's do that! Let's configure Blackfire on production! That's easy right?
+Just repeat the Blackfire install process on a different server... right? Yep!
+Wait, no! Bah! To explain, we need to talk about a *wonderful* concept in Blackfire
+called "environments".
