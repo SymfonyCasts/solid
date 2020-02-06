@@ -1,5 +1,5 @@
 diff --git a/.blackfire.yaml b/.blackfire.yaml
-index 205d3d3..ae52429 100644
+index be4ff48..21a6d91 100644
 --- a/.blackfire.yaml
 +++ b/.blackfire.yaml
 @@ -19,7 +19,7 @@ scenarios: |
