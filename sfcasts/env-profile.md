@@ -1,57 +1,71 @@
 # Production Profile: Cache Stats & More Recommendations
 
-Coming soon...
+We just profiled our *first* page on production, which is using the Blackfire Server
+Id and Token for the Blackfire *environment* that we created.
 
-We've just created our first profile on production and we configured our production
-server, not to use our personal Blackfire server ID and server token, but a server ID
-and server token for hour production Blackfire environment that we created. So if you
-go to blackfire.io and click over to environments and click into our environments,
+## Profiles Belong to the Environment
 
-you'll see that there's a profiles tab here. And now our profiles actually show up
-directly under this environment. So that's what I mean when the profiles are sent to
-the environment, this is where they live. And the nice thing about the environment is
-that we can add members to the environment and they're all gonna be able to, uh, get
-and they're all gonna be able to get access to these profiles for convene. If you go
-to backfire.io your homepage, the profile also shows up on your, um, main dashboard.
-But that's purely confer convenience. I want you to think this lives in this
-environment. You can even see that it talks about that right here. All right, so
-let's actually click into look at this profile. Of course, it's basically the same
-that we've primarily the same that we've been seeing. Uh, when we've been, um,
-profiling locally. The first thing I want you to, uh, I want to point out though is
-that if you hover over and look at the cache information, we talked about this
-earlier, this shows you various different caches on your system and whether or not
-they have available space. Now that you're on production, this is very valuable
-information. For example, if your op cache fills fills up, your site is going to
-start running slowly and you might not even realize that happens. But if this is a
-super easy way to see the status of things. So if any of these fill up, you can read
-some documentation about them and they'll tell you what setting you need to change to
-make that cache bigger.
+Go to https://blackfire.io and click "Environments", open our new environment...
+and click the "Profiles" tab. Yep! Whenever *anyone* creates a profile using this
+environments credentials, it will now show up *here*: the profile *belongs* to
+this environment. We haven't invited any other users to this environment yet, but
+if we did, they would *immediately* be able to access this area *and* trigger new
+profiles with *their* browser extension.
 
-The other thing I want to show you is that my account, if you click on
-recommendations, we've now unlocked these security and quality recommendations.
-Security and quality recommendations are actually Blackfire add ons. And now that in
-my, in my environment has those add on. So I now see them. So you can actually see
-this first recommendation here is coming from the security recommendation. Second
-one's a quality recommendation. The third one is the normal performance
-recommendation that we've been seeing. So the first one is actually telling us that
-our composer dependencies are out of date. The second one is talking about some
-garbage collector that should be disabled in production. And if you're not sure about
-that, as always, you can click in and go a lot more information about what's going
-on. Now one of the really cool things about all of these recommendations is that you
-can easily turn them into tests. So if you click on assertions, you remember that we
-created one test that said that everything that's profiled should, uh, have one HTTP
-request or less. And we configure that inside of our dot Blackfire.yaml file. We set
-up this test here and it said every time we run any profile, um, we should make sure
-that this, uh, expression passes.
+If you go to back to https://backfire.io to see your dashboard, the new profile
+*also* shows up here. But that's purely for convenience. The profile *truly*
+belongs to the environment - you can even see that right here - but Blackfire
+places *all* profiles that *I* create on this page... to make life nicer.
 
-If you look over on the recommendations and click on it every, all more information,
-all of these at the bottom and includes something that you can copy into your
-Blackboard..yaml file to make that type of test. So it's a great way to, uh, if you
-like some of these recommendations to actually turn them into tests so you see them
-as, um, uh, under the assertion section. And in a minute, these assertions are going
-to become much more important because we're going to talk, because next we're going
-to talk about something very important that environments allows us to do. And that is
-to create builds. That's where Blackfire automatically profiles your site at every
-few hours, and those builds will fail or pass based on your assertions. This is a
-fundamentally important concept with environments, and we're going to talk about it
-next.
+Click the profile to jump into it. Of course... this basically looks *exactly*
+like any profile we created on our local machine. But it *does* have a few
+differences.
+
+## Caching Information
+
+Hover over the environment name to find... "Cache Information". We talked about
+this earlier: it shows stats about *various* different caches on your server and
+how much space each has available. Now that we're profiling production, this data
+is *super* valuable!
+
+For example, if your OPcache filled up, your site would start to slow down
+*considerably*... but it's not very obvious when that happens. It's not like there
+are alarms that go off once PHP runs out of OPcache space. But with this, you can
+easily see how things *really* look, right now on production. If any of these are
+full or nearly full, you can read documentation to see which settings you need to
+tweak to make that cache bigger.
+
+## Quality & Security Recommendations
+
+The *other* thing I want to show you is under "Recommendations" on the left.
+There are 3 *types* of recommendations... and we have one of each: the first is
+a security recommendation, the second is a *quality* recommendation and the third
+a *performance* recommendation. Only the *performance* recommendation comes standard:
+the other two required an "Add on"... which I didn't have until I started using
+my organization's plan.
+
+As always, to get a *lot* more info about a problem and how to fix it, you can
+click the question mark icon.
+
+## Converting Recommendations into ASsertions
+
+One of my *favorite*  things about recommendations is that you can *easily* turn
+any of these into an *assertion*. If you click on assertions, you'll remember that
+we created one "test" that said that every page should have - at *maximum* - one
+HTTP request.
+
+We configured that inside of our `.blackfire.yaml file`: we added `tests`, configured
+this test to apply to every URL, and leveraged the metrics system to write an
+expression.
+
+Back on the recommendations, click to see more info... then scroll down. *Every*
+recommendation contains code that you can copy into your `.blackfire.yaml` file
+convert that recommendation into a *test* or "assertion".
+
+That *might* not seem that important at first: it *does* look like doing that would
+simple *move* this from a "warning" under the "Recommendations" to a "failure"
+under "Assertions". That's cool... but at this point, that's just a visual difference.
+
+*But*! In a few minutes, we'll discover that these assertions are *much* more
+important than they seem. To see why, we need to talk about the *key* feature and
+superpower of environments: *builds*.
