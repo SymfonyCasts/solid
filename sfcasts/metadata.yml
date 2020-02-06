@@ -26,6 +26,6 @@ chapters:
     - blackfire-player
     - deploy
     - sf-cloud-database
-    - environments #stub
+    - environments
     - builds-scenarios #stub
     - scenario-assertions #stub
