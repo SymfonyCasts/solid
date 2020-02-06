@@ -30,4 +30,5 @@ chapters:
     - env-profile
     - build-basics
     - build-scenarios
+    - custom-metrics
     - scenario-assertions #stub

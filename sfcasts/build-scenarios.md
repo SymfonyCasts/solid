@@ -1,107 +1,104 @@
 # Builds with Custom Scenarios
 
-Coming soon...
+A few chapters ago, we created this `scenario.bkf` file. It's written in a special
+`blackfire-player` *language* where we write one or more "scenarios" that, sort
+of, "crawl" a webpage, asserting things, clicking on links and even submitting
+forms. This a simple scenario - the tool can do a lot more.
 
-A few minutes ago, we created this scenario that becameF file, which is a language
-which can be used by the Blackfire player to execute these nice little scenarios and
-this tool, it really has nothing to do with Blackfire. It's just a tool that read can
-read these scenarios and visit this page, do some assertions on it, click link and so
-on. We ran this, you ran this by saying Blackfire player run and then pointing it at
-that file and we also added a little dash dash SSL dash, no verify just because we
-have, it isn't like our SSL certificate locally and that's how it works, but we can
-do well. We can use this scenario actually now to power the build behind our
-environment. Here's how I want you to copy this entire scenario. Then I'll close this
-BKI file and go to that black Friday Yammel and add a new key here called scenarios.
-This has a bit of a funny syntax here. We're going to put a pipe, which means it's a
-multiline, a format and emo and then pound sign, exclamation point, Blackfire dash
-player. That's just the format they want in this file. Now we can paste that into
-here. Make sure that this scenario is just like this. It's invented out four spaces.
+On the surface, apart from its name, this has *nothing* to do with the Blackfire
+profiler system: `blackfire-player` is just a cool tool that can read these
+scenarios and do what they say. At your terminal, run this file:
 
-Now as soon as we do this, we can still, if we want to just execute this via the
-Blackfire player. Now I can say Blackfire player and instead of running scenario that
-BKF I can point this to the Blackford at Yammel file and it's smart enough to know
-that it can look under this scenario is key for our scenarios. If I run that, the
-only thing it's missing is that it says unable to crawl a non absolute URI. /did you
-forget to set an endpoint when you have these individual files, there is an end point
-configuration. That endpoint configuration doesn't exist in that Blackfire .yaml so
-you just need to pass as an option. So I can say dash dash endpoint = HTTPS colon
-//local host colon 8,000 perfect. Okay, so the really important thing though is like
-what does this allow us to do? So I'm actually going to commit this moving scenarios
-into Blackfire config file and then do a Symfony deploy to get that up on production
-with my dash dash bypass checks.
+```terminal
+blackfire-player run scenario.bkf --ssl-no-verify
+```
 
-Once that finishes, let's go see what that changed. Now, first of all, if we just
-went to our site right now and for example, profiled the homepage, that would make no
-difference at all. Having these scenarios instead of our black Friday ammo makes no
-difference when you just want to manually create a profile. It does affect when we
-create bills. So let's start a new build here. I'm actually going to give this a
-title call with custom scenarios. Um, this time, instead of doing that untitled
-scenario where it just tests those two URLs we gave it, now it actually does the
-basic visit scenario does the homepage and does the login page. In other words, as
-soon as we have this scenario's key, that black Friday Yammel, it no longer just goes
-and T no longer goes and tests these URLs here. These are actually meaningless.
+That last flag avoids an SSL problem with our local web server. When we hit enter...
+it goes to the homepage, clicks the "Log In" link and... it passes.
 
-Now as soon as we have the scenarios key, we are actually taking control and instead
-it's executing our scenarios in creating one build for each of these pages inside of
-there. What's better is that we have a lot more control note now over the constraints
-or the tests that make this build pass or fail. So for example, each of these is
-going to use the global HTTP requests should be limited to one per page. So both of
-these have that constraint because this is, it's going to run all these tests up here
-against all of those profiles. But the homepage also has two other things that they
-expect. Stats go do a hundred and it expects, for example, not expect it has this
-extra cert down here that the SQL queries on this page should be less than 30 and if
-you look over here, it does actually have that assertion. We can even click into open
-that profile and if you looked over here on the assertions part, you can see those
-two assertions showing up.
+## Scenarios in .blackfire.yaml
 
-So not only do we have a lot of control now over exactly how we want to test the
-pages, we can even fill out forms, but now we can do custom assertions on a page by
-page basis in addition to having these global ones up here. That's super powerful.
-I'm gonna remove this comment down here because now the reason the black player
-environment that assert it does work. So now that we're only, now that we know that
-these scenarios are going to be run only on our production environment, they're not
-going to be executed. For example, if we just profile a local page, we can maybe do
-some time based metrics, but because we are, because the production environment is
-just your production machine that will have less variability than multiple machines,
-but you need to be conservative with them. So let's done add down here and assert
-that main, that wall time is less than a hundred milliseconds. And I noticed that
-most metrics start with metrics dot. And we can go look at the timeline for all of
-those metrics. There are a couple of metrics that a wall time and a peak memory that
-start with Maine.
+This is cool... but we can do something *way* more interesting. Copy the entire
+scenario from this file, close it, and open up `.blackfire.yaml`. Add a new key
+called `scenarios` set to a `|` - that's a YAML way of saying that we will use
+multiple lines to set this.
 
-So as you can see over here, our homepage on production is normally coming about 50
-seconds. So a hundred milliseconds is a fairly conservative measure to look for. So
-let's start over here. I that and deploy, by the way, while that's deploying, one of
-the thing that we're not going to have time to talk about, but our, I mentioned our
-custom metrics. So if you search for Blackfire metrics, Mmm. In addition to the
-timeline, this page is actually going to give you all of the metrics that are fully
-possible in the system, which is super nice. But you can also make your own custom
-metrics. So if we look, custom metrics can be defined in a dot. Black Friday Yammel
-file. So right inside of our.by Friday Yammel file. In addition to tests and
-scenarios, we're allowed to have a metrics key. And this is really cool because you
-can create a metric like markdown to HTML and give it a name, give it a description.
+Below, indent, then say `#!blackfire-player` - that tells Blackfire that we're
+about to use the `blackfire-player` syntax... which is the *only* format supported
+here... but it's needed anyways. Below, paste the scenario. Make sure it's
+indented 4 spaces.
 
-And then you can use very specific logic down here to say when this metrics called.
-So in this case, the markdown to HTML metric happens whenever the two HTML method is
-called on some markdown class. And you'll immediately able to be able to start using
-that inside of your tests or inside of your asserts down here on your scenarios. And
-this can get very, very complex and you can look for multiple things. You can even,
-uh, group things with a Boolean logic or logic, um, classes, functions basically any
-way you can think of to, uh, can you do anything, even separating metrics by
-different arguments, uh, to get as close control as you want to. So if you wanna
-create your own custom metrics and it's very powerful API to do that. All right,
-let's go back. Okay, this finished deploying. So let's go back now and I'll close
-this up and creates another bill.
+The *cool* thing is that we can *still* execute the scenario locally: just replace
+`scenario.bkf` with `.blackfire.yaml`:
 
-So let's start build, I'll call this one with homepage wall time assert, start that
-new build and perfect it passes, and now you can see that there's an extra constraint
-on the homepage that the wall time needs to be less than a hundred milliseconds. If
-it's not and you have your notifications configured, you're immediately going to get
-a, um, an air. Now, next, now that we have this idea of creating builds and actually
-builds happening every six hours, we can do a couple of interesting things. The first
-thing we can do is actually start writing a search, a comparison assertions. We can
-actually add an assertion up here that says that a particular profile shouldn't, for
-example, be more than 20% slower than the previous, that same profile on the previous
-build. We can also instruct builds to happen every single time that we deploy. So we
-can immediately have a record here of the performance after that deployed. Let's talk
-about how to do those things next.
+```terminal-silent
+blackfire-player run .blackfire.yaml --ssl-no-verify
+```
+
+The player is smart enough to know that it can look under this `scenarios` key
+for our scenarios. But if you run this... error!
+
+> Unable to crawl a non-absolute URI /. Did you forget to set an endpoint
+
+Duh! Our `scenario.bkf` file had some `endpoint` config. You *can* copy this
+into your `.blackfire.yaml` file. *Or* you can define the endpoint by adding
+`--endpoint=https://localhost:8000`
+
+```terminal-silent
+blackfire-player run .blackfire.yaml --ssl-no-verify --endpoint=https://localhost:8000
+```
+
+Now... it works!
+
+## Building the Custom Scenario
+
+So... *why* did we move the scenario into this file? To find out, add and commit
+the changes:
+
+```terminal-silent
+git add .
+git commit -m "moving scenarios into blackfire config file"
+```
+
+And deploy the change:
+
+```terminal
+symfony deploy --bypass-checks
+```
+
+Once that finishes... let's go see what changed. First, if we just went to our
+site and manually created a profile - like for the homepage - the new
+`scenarios` config would have absolutely *no* effect. Scenarios don't do
+*anything* to an individual profile. Instead, it affects *builds*.
+
+Let's start a new build: I'll give this one a title: "With custom scenarios". Go!
+
+Nice! This time, instead of that "Untitled Scenario" that tested the two URLs we
+configured, it's using our "Basic visit" scenario! IT goes to the homepage, then
+clicks "Log In" to go to that page.
+
+Yep, as *soon* as we add this `scenarios` key to `.blackfire.yaml`, it
+*no longer* tests these URLs. In fact, these are now meaningless. Instead, we're
+now in the driver's seat: *we* control the scenario or scenarios that a build
+will execute.
+
+## Per Page Assertions/Tests
+
+Even *better*, we have a lot more control *now* over the assertions - or "tests"...
+Blackfire uses both words - that make a build pass or fail.
+
+For example, the "HTTP requests should be limited to one per page" test will be
+run against *all* pages in the scenarios - that's 2 pages for us right now.
+But the homepage *also* has its *own* `assert`: that the SQL queries on this page
+should be less than 30. If you look back at the build... we can see that assertion!
+We can even click into the profile, click on "Assertions", and see both there.
+
+So not *only* do we have a lot of control over *which* pages we want to test - even
+including filling out forms - but we can *also* do custom assertions on a
+page-by-page basis in addition to having global tests. I *love* that. And now I
+can remove the comment I put earlier above the `assert`: now that we're running
+this from inside an environment, this *does* work.
+
+Next, let's use our power to *carefully* add more time-based assertions on a
+page-by-page basis. We'll also learn how you can add your *own* metrics to,
+well, write performance assertions about pretty much *anything* you can dream up.
