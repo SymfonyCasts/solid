@@ -55,7 +55,7 @@ And the entire profile is just the `Probe::enable()` call itself!
 What happened!? Well... remember: the `$probe` object automatically calls
 `close()` on *itself* as soon as that variable is garbage collected... which
 happens at the end of the subscriber method. That means.... we profiled exactly
-*one* line of code: `$probe->enable()`.
+*one* line of code.
 
 The solution is to call `$probe->close()` manually... which - more importantly -
 will require us to store the `Probe` object in a way where PHP *won't* garbage collect
