@@ -31,4 +31,5 @@ chapters:
     - build-basics
     - build-scenarios
     - custom-metrics
-    - scenario-assertions #stub
+    - comparison-build-tests
+    - staging-environments

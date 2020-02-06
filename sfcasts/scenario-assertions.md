@@ -1,3 +1,0 @@
-# Scenario Assertions
-
-Coming soon...
