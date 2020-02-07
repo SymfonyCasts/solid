@@ -24,6 +24,7 @@ chapters:
     - metrics
     - assertions
     - blackfire-player
+    - blackfire-player-expects
     - deploy
     - sf-cloud-database
     - environments
