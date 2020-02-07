@@ -8,7 +8,11 @@ we *really* want to do that as *early* as possible so that Blackfire can
 
 In Symfony, we can do that with an event subscriber... which we will *generate*
 to be super lazy. First, in `.env`, make sure that you're back in the `dev`
-environment. Then, find your terminal and run:
+environment:
+
+[[[ code('76738815a3') ]]]
+
+Then, find your terminal and run:
 
 ```terminal
 php bin/console make:subscriber
@@ -16,29 +20,42 @@ php bin/console make:subscriber
 
 Call it `BlackfireAutoProfileSubscriber`... and we want to listen to
 `RequestEvent`: Go check out the code
-`src/EventSubscriber/BlackfireAutoProfileSubscriber.php`.
+`src/EventSubscriber/BlackfireAutoProfileSubscriber.php`:
+
+[[[ code('9f4b7716c7') ]]]
 
 So, when this `RequestEvent` happens - which Symfony dispatches *super* early
 when handling a request, we want to create & enable the probe. Copy all
-of the `$shouldProfile` code, remove it from the controller and paste it here.
+of the `$shouldProfile` code, remove it from the controller and paste it here:
+
+[[[ code('e602a0b448') ]]]
 
 ## Creating the Prove in the Subscriber
 
 Now add `$request = $event->getRequest()`. To make this *only* profile the GitHub
 organization AJAX call - whose URL is `/api/github-organization` - set
-`$shouldProfile` equal to `$request->getPathInfo() === '/api/github-organization'`.
+`$shouldProfile` equal to `$request->getPathInfo() === '/api/github-organization'`:
+
+[[[ code('9ed2004c8c') ]]]
+
 In a real app, I would add *more* code to make sure `$shouldProfile` is *only*
 true on the *very* specific requests we want to profile.
 
 Now I'll re-type the `t` on `Client` and select the correct `Client` class so
-that PhpStorm adds that `use` statement to the top of the class for me. Thanks
-PhpStorm!
+that PhpStorm adds that `use` statement to the top of the class for me:
+
+[[[ code('e0da2d33ea') ]]]
+
+Thanks PhpStorm!
 
 But before we try this, I want to code for one edge case: if *not*
-`$event->isMasterRequest()`, then `return`. It might not be important in your
-app, but Symfony has a "sub-request" system... and the short explanation is that
-we don't want to profile those: they are not *real* requests... and would make a
-big mess of things.
+`$event->isMasterRequest()`, then `return`:
+
+[[[ code('eb43743ef3') ]]]
+
+It might not be important in your app, but Symfony has a "sub-request" system...
+and the short explanation is that we don't want to profile those: they are not *real*
+requests... and would make a big mess of things.
 
 Ok, let's try this! I'll close a tab... then refresh the homepage... which
 causes the AJAX request to be made. You can see it's slow. Now reload the list
@@ -64,18 +81,29 @@ it too early.
 So here's the goal: call `$probe->close()` as *late* as possible during the request
 lifecycle. We can do this by listening to a *different* event: when
 `TerminateEvent::class` is dispatched - that's *very* late in Symfony - call
-the `onTerminateEvent()` method.
+the `onTerminateEvent()` method:
 
-I'll hit an Alt + Enter shortcut to create that method... then add the argument
-`TerminateEvent $event`.
+[[[ code('b2b39ec123') ]]]
+
+I'll hit an `Alt`+`Enter` shortcut to create that method... then add the argument
+`TerminateEvent $event`:
+
+[[[ code('0a4a4c05ab') ]]]
 
 To be able to call `$probe->close()`, we need to store the probe object on a property.
 Add `private $probe` with some documentation that says that this will either be
-a `Probe` instance from `Blackfire` or `null`. Update the code below to be
-`$this->probe = $blackfire->createProbe()`.
+a `Probe` instance from `Blackfire` or `null`:
+
+[[[ code('95184122e7') ]]]
+
+Update the code below to be `$this->probe = $blackfire->createProbe()`:
+
+[[[ code('41c4b3b819') ]]]
 
 Finally, inside `onTerminateEvent`, if `$this->probe` - I should *not* have put
-that exclamation point, that's a mistake - then `$this->probe->close()`.
+that exclamation point, that's a mistake - then `$this->probe->close()`:
+
+[[[ code('6d8f601e0c') ]]]
 
 If you assume that I did *not* include the exclamation point... then this makes
 sense! *If* we created the probe, then we will close it. Problem solved. And...
@@ -86,17 +114,22 @@ it from closing itself until we're ready.
 ## Increasing the Event Priority
 
 While we're here, let's make this a little bit cooler. Change `onRequestEvent`
-to be an array... and add `1000` as the second item. This syntax is... weird. But
-the result is good: it says that we want to listen to this event with a priority
-of 1000. That will make our code run even *earlier* so that even *more* code will
-get profiled.
+to be an array... and add `1000` as the second item:
+
+[[[ code('54b130e506') ]]]
+
+This syntax is... weird. But the result is good: it says that we want to listen
+to this event with a priority of 1000. That will make our code run even *earlier*
+so that even *more* code will get profiled.
 
 ## Configuration: Name your Profile
 
 Oh, and there's one other cool thing we can do: we can *configure* the profile.
 Add `$configuration = new Configuration()` from `Blackfire\Profile`. Thanks to
 this, we can control a number of things about the profile... the best being
-`->setTitle()`: `Automatic GitHub org Profile`. Pass this to `createProbe()`.
+`->setTitle()`: `Automatic GitHub org Profile`. Pass this to `createProbe()`:
+
+[[[ code('d308c1aa00') ]]]
 
 That's it! Let's see how things whole thing works. Back at the browser, I'll
 close the old profile... and refresh the homepage. Once the AJAX call finishes...
@@ -110,7 +143,9 @@ still not profiling *every* single line of code. For example, `Probe::enable()`
 seems to wrap everything. But all the important data is there.
 
 To avoid making a *million* of these profiles as we keep coding, I'll go back to
-the subscriber and avoid profiling entirely by setting `$shouldProfile = false`.
+the subscriber and avoid profiling entirely by setting `$shouldProfile = false`:
+
+[[[ code('38668d10d1') ]]]
 
 Next: you already write automated tests for your app to help *prove* that key
 features never have bugs. You... ah... do write tests right? Let's... say you

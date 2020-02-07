@@ -16,13 +16,19 @@ correct situation - let's trigger a new profile automatically from *inside*
 our code. We can do this using the PHP SDK.
 
 Spin over, go back to `MainController` and scroll down to
-`loadSightingsPartial()`... actually to the `gitHubOrganizationInfo()` method.
+`loadSightingsPartial()`... actually to the `gitHubOrganizationInfo()` method:
+
+[[[ code('3a2d9ed726') ]]]
+
 This is the controller that returns the content on the right side of the page.
 
-Start by creating a fake variable `$shouldProfile = true`. In a real app, you would
-replace this with logic to determine whether or not this is one of those requests
-that you think might have a performance problem: maybe you check to see if the
-user has *many* comments or something.
+Start by creating a fake variable `$shouldProfile = true`:
+
+[[[ code('44e2fee779') ]]]
+
+In a real app, you would replace this with logic to determine whether or not
+this is one of those requests that you think might have a performance problem:
+maybe you check to see if the user has *many* comments or something.
 
 ## Creating & Starting the Profile
 
@@ -30,7 +36,9 @@ Then, if `$shouldProfile`, it means that we *want* Blackfire to profile this req
 To do that, say `$blackfire = new Client()` - the one from `Blackfire`. This
 is an object that helps communicate with the Blackfire servers. Next, *create*
 a probe - basically create a new "profile" - with
-`$probe = $blackfire->createProbe()`.
+`$probe = $blackfire->createProbe()`:
+
+[[[ code('83848bc699') ]]]
 
 Earlier, when we used `BlackfireProbe::getMainInstance()`, we were, kind of *asking*
 for a "probe" if there *was* a profile happening. But this time, we're *creating*
