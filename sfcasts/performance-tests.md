@@ -5,7 +5,7 @@ Let's profile the Github API endpoint again. I'll cheat and go directly to
 `[Recording] GitHub Ajax HTTP requests` because we're going to look closer
 at the HTTP requests that our app makes to the GitHub API.
 
-Click to view the call graph: http://bit.ly/sf-bf-http-requests
+Click to view the call graph: https://bit.ly/sf-bf-http-requests
 
 Oh wow - this request was *super* slow - 1.83 seconds - a lot slower than we've
 seen before. We can see that `curl_multi_select()` is the problem: this is our
