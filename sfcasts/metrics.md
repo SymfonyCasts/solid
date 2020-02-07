@@ -43,9 +43,10 @@ all we care about is that we can change some code and get this test to pass.
 The logic for the API calls lives in `src/GitHub/GitHubApiHelper.php`: it has
 two public function and each makes one API request.
 
-How can we make this page only make *1* HTTP request? Well, if you looked closely,
-you'd find that you can get all the information you need by *only* making this
-*second* HTTP request. The details aren't important - so let's just jump in.
+How can we make this page only make *1* HTTP request? Well, if you looked closely..
+Ah! Too close! Ahh. You'd find that you can get all the information you need
+by *only* making this *second* HTTP request. The details aren't important - so let's
+just jump in.
 
 Add a new property called `$githubOrganizations` set to an empty array.
 As we loop over the repositories for a specific organization, we will *store*

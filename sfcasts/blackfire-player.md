@@ -1,9 +1,9 @@
 # Blackfire Player
 
 Pretend for a few minutes that the Blackfire profiler that we've been learning
-*so* much about... doesn't exist at all. Why? Because we're *now* going to talk
+*so* much about... doesn't exist... at all. Why? Because we're *now* going to talk
 about something that has the word "Blackfire" in it... but has absolutely
-*nothing* to do with the Blackfire profiling. At least, not yet.
+*nothing* to do with the Blackfire profiler. At least, not yet.
 
 ## Hello Blackfire Player
 
@@ -13,7 +13,7 @@ executed to *crawl* a site: clicking on links, filling out forms, and doing
 things with the result. It's basically a simple language for surfing the web
 and a tool that's able to *read* that language and... actually do it!
 
-To install it, copy the `curl` command, find your browser, and paste. If you're
+To install it, copy the `curl` command, find your terminal, and paste. If you're
 on Windows, you can just download the `blackfire-player.phar` file from that
 URL and put it into your project.
 
@@ -24,7 +24,8 @@ chmod +x blackfire-player.phar
 mv blackfire-player.phar /usr/local/bin/blackfire-player
 ```
 
-That's it! For Windows, just skip this step. Let's see if it works. Run:
+Paste and... that's it! For Windows users, skip this step. Let's see if it works.
+Run:
 
 ```terminal
 blackfire-player
@@ -36,7 +37,7 @@ Nice!
 For Windows, run `php blackfire-player.php` from inside your project.
 ***
 
-So here's the basic idea: we create a file that contains one or more *scenarios*.
+So here's the idea: we create a file that contains one or more *scenarios*.
 Inside each scenario, we write code that says: go visit this URL, expect a 200
 status code, then click on this link, and so on. It can get fancier, but that's
 the gist of it.
@@ -46,45 +47,46 @@ the gist of it.
 Let's create a our first Blackfire player file at the root of the project, though
 it could live anywhere. Call it, how about, `scenario.bkf`. That's *pure* creativity.
 
-At the top, I'll put a `name` - though that's not really important - then
-`endpoint` set to our server's URL - which is `https://localhost:8000`. You
-can override this when you *run* this file by passing a `--endpoint` option.
+At the top, I'll put a `name` - though it's not very important - then
+`endpoint` set to our server's URL. So `https://localhost:8000`. You
+can override this when you *execute* this file by passing a `--endpoint` option.
 
-Notice that this kind of *looks* like YAML, but it is *not*: there is no `:`
-between the key and value. This is a custom language Blackfire player language,
-which is friendly - but takes some getting used it.
+Notice that this *kind* of looks like YAML, but it's *not*: there is no `:`
+between the key and value. This is a custom Blackfire player language, which
+is friendly, but takes some getting used to.
 
-At the bottom, add our first scenario - call it "Basic Visit" - that will show
-up when we run this. Let's do two things: first, `visit url("/")`. We can *also*
-give this page a name - it helps debugging.
+At the bottom, add our first scenario - call it "Basic Visit". Inside, let's do
+two things: first, `visit url("/")`. We can *also* give this page a name - it
+helps debugging.
 
-Next... once we're on the homepage, we can click this "Log In" link. Do that
-with `click link()` and then use that exact text: `Log In`. Name this page too.
+And second... once we're on the homepage, let's "click" this "Log In" link. Do
+that with `click link()` and then use that exact text: `Log In`. Give this page a
+name too.
 
 ## Executing blackfire-player
 
-Let's start with *just* this. The idea is that we can use the `blackfire-player`
-to... actually *do* this stuff in the background. Let's try it! Run:
+That's enough to start. We *should* be able to use the `blackfire-player` tool
+to... actually *do* this stuff!. Let's try it:
 
 ```terminal
 blackfire-player run scenario.bkf
 ```
 
-And... it fails: curl error 60. If you Google'd this, you find this is an SSL
-problem - it's caused because or Symfony dev server uses a, sort of, self-signed
-certificate that the blackfire-player doesn't like. The simplest solution, which
-is ok since we're just testing locally - is to pass `--ssl-no-verify`
+And... it fails: curl error 60. If you Google'd this, you find out that this is
+an SSL problem - it's caused because or Symfony dev server uses a, sort of,
+self-signed certificate that blackfire-player doesn't like. The simplest solution,
+which is ok since we're just testing locally - is to pass `--ssl-no-verify`
 
 ```terminal-silent
 blackfire-player run scenario.bkf --ssl-no-verify
 ```
 
-And... hey! it worked! Scenarios one: steps two. It *truly* made a request to
-the homepage, then clicked on that link! By the way, at this time, the requests
-aren't using a *real* browser, and so, any JavaScript code you have won't run.
+And... hey! It worked! Scenarios 1, steps 2. It *truly* made a request to
+the homepage then clicked on that link! By the way, the requests aren't using a
+*real* browser. And so, any JavaScript code on your page *won't* run.
 That *might* change in the future - but I'm not sure.
 
-Anyway, to see more fun output, use the `-v` flag:
+Anyways, to see more fun output, use the `-v` flag:
 
 ```terminal-silent
 blackfire-player run scenario.bkf --ssl-no-verify -v
