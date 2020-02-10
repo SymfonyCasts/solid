@@ -36,10 +36,13 @@ HTTP request. It's... pretty awesome.
 
 ## Running the Functional Test
 
-Find your editor and open `tests/Сontroller/MainControllerTest.php`. I already
+Find your editor and open `tests/Controller/MainControllerTest.php`. I already
 set up a functional test that makes a request to `/api/github-organization`
-and checks some basic data on the response. Let's makes sure this passes. Run
-PHPUnit and point it directly at this class:
+and checks some basic data on the response:
+
+[[[ code('1bf80b8901') ]]]
+
+Let's makes sure this passes. Run PHPUnit and point it directly at this class:
 
 ```terminal
 php bin/phpunit tests/Controller/MainControlerTest.php
@@ -56,17 +59,25 @@ request. To do that, first add a trait from the SDK: `use TestCaseTrait`. Next,
 in the method, add `$blackfireConfig = new Configuration()` - the one from
 `Blackfire\Profile`: the *same* `Configuration` class we used earlier when we
 gave our custom-created profile a title. This time call `assert()` and pass it
-a *very* special string: `metrics.http.requests.count == 1`.
+a *very* special string: `metrics.http.requests.count == 1`:
+
+[[[ code('2d0373ca8e') ]]]
 
 I'll show you where that came from soon. Finally, below this, call
-`$this->assertBlackfire()` and pass this `$blackfireConfig` and a callback function.
+`$this->assertBlackfire()` and pass this `$blackfireConfig` and a callback function:
+
+[[[ code('652d0d2c80') ]]]
 
 So... this confused me at first. When we call `$this->assertBlackfire()` it will
 execute this callback. Inside, we will do whatever work we want - like making
 the request. Finally, when the callback finishes, Blackfire will execute
-this assertion against the code that we ran.
+this assertion against the code that we ran:
 
-To get this to work, we need to `use ($client)`.
+[[[ code('1efbf704e7') ]]]
+
+To get this to work, we need to `use ($client)`:
+
+[[[ code('70248e61cf') ]]]
 
 If this doesn't make sense yet... don't worry: we'll dive a bit deeper soon.
 But right now... try it! Run the test again:
@@ -88,7 +99,7 @@ Ok, but how did this *really* work? It's beautifully simple. When you run the te
 it *does* make a real Blackfire profile in the background. However, if you go to
 your Blackfire homepage, you won't see it.
 
-Why? Hold Command or Ctrl and click the `assertBlackfire()` method. I love it:
+Why? Hold `Cmd` or `Ctrl` and click the `assertBlackfire()` method. I love it:
 this method uses the SDK - *just* like we did! - to create a *real* profile. When
 it does that, it *also* adds a `skip_timeline` option, which simply tells Blackfire
 to hide this from our profile page... so it doesn't get cluttered up with all
