@@ -49,82 +49,89 @@ Look at the 3 successful constraints for the homepage: we see the other global
 test about "HTTP requests should be limited"... but we don't see the new one.
 What gives?
 
+So... when you create a build, you can specify a "previous" build that it should
+be compared to by using an internal "build id". Our project is too new to see it,
+but this happens automatically with the "periodic" builds: our comparison assertion
+*will* execute on periodic builds.
 
----> HERE
+But when we create a manual build... there's no way to specify a "previous" build...
+which is why the comparison stuff doesn't work. *Fortunately*, since I don't want
+to wait 12 hours to see if this is working, there is *another* way to trigger
+a build: through a webhook. Basically, each time you want to create a build,
+you make a request to a special URL and can - optionally - specify that "previous
+build id".
 
-one for HTTP
-request should be limited, but we do not see the new one at all. There's a reason for
-that. These diff constraints, percent and diff. They only run in two different
-situations. First when your periodic builds run. So every six hours you will see the
-diff stats and those it will actually diff the uh, uh, the current build compared to
-the build that six hours previously.
+## Automatic Build on Deploy
 
-The second way that you can get these diff things to work is that you can, this is
-not entirely true, but to simplify, you can trigger, you're going to have an outside
-system trigger a build on, uh, based on some consistent event. So for example, you
-could, um, one of the things that you can do is you can actually tell Blackfire to
-create a build by sending a webhook. In fact, you can see that's what the trigger is
-of these. When you do that, if you pass some special information that will actually
-link those builds together and it will have this diff in reality that happens in two
-main situations. If you set up your deploy system to create a web, a build every time
-you deploy, then you can actually see the diff between your deploys. The other thing
-is if you set up get hub integration so that there is a build, every time you create
-a pull request, it will actually show you the diff between your builds for that same
-pull request. That's confusing.
+This webhook-triggered-build is *especially* useful in one specific situation:
+creating a build every time you *deploy*. If you did that correctly, your
+comparison assertion will compare the latest deploy to the *previous* deploy...
+which is pretty awesome.
 
-The point is if you wanted to see this different action, we could just wait 12 hours
-for the two periodic builds to go and you'd actually see those diffs. Or we can tell
-Symfony cloud to create a build every time we deploy. We can just deploy two times
-right now and check out that dif. So that's what we're going to do. I'm going to go
-back to the Blackfire Symfony cloud documentation and down here I'm going to set
-under builds. I'm going to select my environments and it has a Symfony integration
-ad, but this basically is, is this configure Symfony cloud that every time we deploy
-it's just should send a web hook to Blackfire that says create a bill. And it's going
-to do that in such a way that those bills are linked together so that the diff
-happens.
+Because we're using SymfonyCloud, this is dead-simple to set up.
 
-All right, so let's spin over here. Then I will paste that we were in port hall
-events, so I'll hit enter all state, so I'll enter and for environments, this is
-actually a Symfony cloud environment. That's what that term means. I'm going to type
-master. I basically am only going to have this happen on the Blackfire master, the
-Symfony cloud master environment, and you'll see why in a second. And that's it. All
-right, check it out. Now let's run Symfony redeploy. Before I do, I just want to go
-over here and let's just refresh this page and see that we currently have five bills.
+Find the Blackfire SymfonyCloud documentation and, down here under "Builds",
+I'll select our environment. Basically, by running this one command, we can tell
+SymfonyCloud to send a webhook to create a Blackfire build *each* time we deploy.
 
-Symfony Rita, boy dashes, bypass checks. There should be a pretty quick operation and
-let's go see, refresh the page and yes, we have a bill. It's still running. Number
-six, look at trigger Symfony cloud and it passes. So then on its own is cool. We can
-trigger a build every single time that we deploy, but now let's go over here and
-redeploy again. I'll go back here and click back on builds. All right, now let's wait
-for that redeploy to finish. And now refresh this page. Yes, there is my bill, number
-seven for my redeploy and it's already finished and actually go back. You know what,
-that didn't do what I wanted it to do. Instead of doing a simple redeploy, I want to
-do a meaningless change to my bat black Friday Jamo file so I can make a real commit
-here. There's also a way to do this with allow empty on the commit. Now I'm going to
-do a real synchrony deploy here with dash dash bypass checks.
+Copy it, move over to your terminal and... paste:
 
-Now I want to move over and refresh. That's surprising and there's an eighth bill
-from that deploy and when we click into it, check this out. We actually, for each
-profile there is a show because what it's doing is that it's actually comparing this
-to the latest successful bill. They'll actually click that. It's comparing this to
-build number seven, the previous build for the previous commit. So instantly I can
-look at the comparison and of course we didn't make a significant change, so we would
-expect to see anything. I will check the login page comparison. Yup. And you can
-actually see there's actually quite a significant difference here. Yeah, let's not
-even do that. We can actually open the comparison if we wanted to. And the really
-important thing is that when we look at those constraints, check this out, we now
-have pages are not suddenly much slower because it's actually running that diff
-compared to before. And actually I want to check this out, open up this profile cause
-it's even cooler
+```terminal
+symfony integration:add --type=webhook --url='https://USER:PASS@blackfire.io/api/v2/builds/env/aaaabbee-abcd-abcd-abcd-c49b32bb8f17/symfonycloud'
+```
 
-and it is do our assertion, we have our two assertions here that are specific to our
-actual scenario and then we have our two global surgeons here, one of which is using
-the uh, the diff but also once again in this diff view, the recommendations get more
-interesting. It actually has some built in recommendations using the diff. So it
-actually has a built in recommendation that says that the difference between the
-count should be less than two. So you get some free kind of dip stuff in there as
-well. This is the dip stuff is probably my favorite way to do time based metrics
-because it just measures a big ugly things that might accidentally happen. So next,
-what about our staging server? Should it be profiles, staging server. Um, so we can
-catch performance problems before we go go to production. The answer is yes, and
-we're going to do that with a second environment and be able to do some cool stuff.
+Hit enter to report all events and enter again to report all states. For the
+environments - this is asking which *SymfonyCloud* environments should trigger
+builds. Answer with just `master` - I'll explain why soon.
+
+And... done! Let's redeploy our app. Oh, but before we do - refresh our builds
+page. Ok, we have 5 builds right now. Now run:
+
+```terminal
+symfony redeploy --bypass-checks
+```
+
+This should be pretty quick. Then... go refresh the page. Yes! A new build -
+number 6 - triggered by SymfonyCloud. It *passes*. Awesome! Let's redeploy again:
+
+```terminal
+symfony redeploy --bypass-checks
+```
+
+When it finishes... there's build 7! But to see the comparison stuff in action,
+I need to do a *real* deploy so that the next build is tied to a *new* git sha.
+I'll do a meaningless change, commit, then deploy:
+
+```terminal
+git commit -m "triggering deploy" --allow-empty
+symfony deploy --bypass-checks
+```
+
+## Seeing the Compared Builds
+
+Actually, I could have skipped changing *any* files and committed with
+`--allow-empty` to create an empty commit. When this finishes... no surprise!
+We have build 8!
+
+Oh, and this is super cool: each profile has a "Show Comparison" link to open
+the "comparison" view of that profile compared to the *same* profile on the build
+from the *last* deploy - which - if you click "latest successful build" - is
+build 7.
+
+Back on build 8, click the "Show 4 successful constraints" link. There it is!
+We can see our "Pages are not suddenly *much* slower" assertion! It's comparing
+the wall time of this profile to the one from the last build.
+
+Click to open up the profile... and make sure you're on the Assertions tab.
+I love this: 2 page-specific assertions from the scenario, and 2 global assertions,
+one using the `percent()` function.
+
+The "Recommendations" *also* got a bit better: Blackfire automatically has some
+built-in recommendations using `diff` - this *recommends* that the new profile
+should have less than 2 *additional* queries compared to the last build. It
+*looks* like it failed - but that's just because the *other* part of this
+recommendation - not making more than 10 total queries - failed.
+
+Next: what about running builds on your staging server so you can catch performance
+issues before going to production? Or what about executing Blackfire builds on
+each pull request? We can *totally* do that - with a *second* environment.
