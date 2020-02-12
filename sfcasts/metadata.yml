@@ -35,3 +35,4 @@ chapters:
     - comparison-build-tests
     - cloud-environments
     - staging-environments
+    - environment-vars
