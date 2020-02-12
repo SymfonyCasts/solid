@@ -1,53 +1,5 @@
 # Environments & Staging Machines
 
-Coming soon...
-
-What if you have a staging environment for your site or maybe a many staging
-environments where you can deploy different features? Should we also trigger builds
-for those? You might initially think that that's not that important, but because we
-do have these assertions, it would be nice to know if suddenly a new feature you're
-working on started causing your performance constraints to fail, it would be even
-cooler if your site, if your application uses get hub, if your get hub port requests
-have the Blackfire profile information attached right to it and we can totally do
-that.
-
-Getting your staging environment to create builds initially seems very simple. You
-would think, okay, I'll just go to my staging server and repeat, repeat the Blackfire
-set up for my production environment, but I don't want you to do that. I want your
-production environment to only be production and that's because I only want the
-builds here to be production bills. I want this to be a perfect representation of
-what production is. If we suddenly start having builds for our staging server, which
-maybe has different hardware on it, so they run slower or we introduce a performance
-bug, it's going to induce all kinds of failures here, noise here. And if we have a
-notification channels set up to tell us whenever we have a Blackfire build failure on
-production, we're going to start getting a lot of noise from that. So what we want to
-do instead is have a second environment and actually there's a few ways to do this.
-Well I have a second environment that we specifically for our staging machine and if
-you have multiple staging machines, we'll actually use that one environment for all
-of them. Exactly how you do this is going to vary on your infrastructure. Uh, but
-you'll see as we go along.
-
-No, forget about Blackfire for a second. Symfony cloud has a feature that's also
-called environments, but it has nothing to do with BlackLine environments. Basically
-what Symfony cloud allows you to do is deploy your different branches to different
-URLs. So right now we have just one branch master. So that means we have a one
-environment. So check this out. We didn't run Symfony and create and let's pretend
-we're working on a new feature. So what this is is going to do is this is to create a
-new local branch called some feature and then it's actually going to deploy that to
-Blackfire on a different URL. And the really cool thing about Symfony cloud is that
-that that the, this uh, deployment of this feature is going to be a clone of the
-master environment all the way down to even the database data.
-
-Well, fast forward this cool I'm going to finish is you can see it gives us the URL
-here. This is a different URL than we currently have on production. It's a totally
-different deployment. So I'll do the lazy thing here. I'll say Symfony open remote
-and it will pull up our feature branch deployed, which you can see as a clone of the
-production data. Now if you go and look at our production environments, you'll see
-that this did not create a new build. And that's because when we added the
-integration to Symfony cloud, we told it to only start a build when there is a new
-deploy to the master branch and I did that because I don't want these other branches
-to create deploys right inside here.
-
 All right, so now I'm gonna go over to the installing thing. I'm going to select a
 Symfony cloud and that will take us back over to the Symfony cloud documentation.
 Okay, now there's two bits of configuration that we originally set up. We use this
