@@ -1,53 +1,69 @@
 # Blackfire Environment Variables
 
-The last little feature that I want to talk about now that we have these two
-environments is that in reality, and this is true of Symfony cloud, sometimes the
-your production infrastructure is a lot bigger and more powerful than your staging
-infrastructure, which means that your builds on staging might run slower than your
-production bills and that's a problem if you have things like this, a certain main
-not wall time has less than a hundred milliseconds. That might be true in production,
-but it might not, but on staging it might run slower and so maybe on staging you only
-really care that it's faster than 200 milliseconds. If you want. Inside of here you
-can use it variables, so I'll add some parentheses here and I'll say times and you
-can say VAR and then inside of here I'm going to invent a new variable called speed
-co efficient and then give us a second argument, which is one, what does this thing
-is that when it does this assertion, it's doable. It should actually assert it
-against a hundred milliseconds times whatever the value of this speed coefficient
-variable is, which we haven't set yet and if that variable isn't available, then just
-default to one.
+Often, your production server will have different - hopefully *bigger* - hardware
+than your staging server... which means that your staging builds may run slower
+than on production. That's going to be a problem if you have some *time* based
+metrics: the wall time of a build may be less than 100ms on production... but
+*more* than that on staging. That means the staging build will always fail.
 
-So in the master environment on Blackfire, we won't set this variable, but I'll copy
-this and over in my non master environment down here, I can set a variable, must set
-this to two and it's safe. All right, let's swing back over. Adding speed coefficient
-variable for a wall time cert. As a reminder, we're on our some feature branch, so
-I'll say Symfony deploy bypass checks. All right. When that finishes, let's go over
-here and because we just deployed the feature. Yup. Cool. We have a new build for
-some feature and if we look inside of here, there's two cool things I want you to
-notice. The first thing is that under the homepage you can see that the speed
-coefficient, it kind of puts a little too here. It's saying that that = two, so
-really it's me checking to make sure it's less than 200 milliseconds, which is really
-cool.
+## Hello Build Variables
 
-The other thing I want you to notice is that if you go back to builds, we've now
-built the some feature branch twice. So when you click on the second one, it actually
-has the comparison to the latest successful bill. Now late a successful build is the
-original on that branch. So when you're looking at the comparison on a branch, the
-comparison is to that same branch, not to, you know, just the build right before,
-which would be master. So we can do all of our diff stuff and look at the comparisons
-and it's doing a really smart job of comparing them to things on that branch. Our
-friends. That's it for the black bar tutorial. I hope you had as much fun as I did.
-Uh, using Blackfire and a lightweight is a super fun way to find performance things.
-But boy, if you dive in, you can really get a reach, a rich feature set with this
-build system. I personally had been loving having Symfony casts, production, having
-these graphs and watching my memory usage, uh, and tweaking things over time. And
-we're just getting started with [inaudible],
+To help, each environment can define *variables*. Check it out: inside the metric
+expression, I'll add a set of parentheses around the `100ms` and then say *times*
+and call a `var()` function. Inside, I'll invent a new variable: `speed_coefficient`
+and *default* it - with the 2nd argument - to 1.
 
-our, um, [inaudible]
+*Now*, when this assertion is executed, it will assert that the wall time is less
+than 100ms *times* whatever this `speed_coefficient` is. What *is*
+`speed_coefficient`? It's *totally* something I just made up and it is *not* set
+anywhere. Where *do* we set it? Inside our Blackfire environment.
 
-set up here and I'm excited to see where it goes. As always, if you have any
-questions or we didn't explain something, we're here for you in the comments, so let
-us know. All right. I wish you a very, very
+Copy the variable name and go into the Non-Master environment. On the right,
+near the bottom, click the pencil icon to edit our variables. Add the variable
+set to... how about 2: that will allow the staging server to be *twice* as slow.
 
-fast day,
+Do we *also* need to got set this inside the "Master" environment? Nope: I'll just
+let it use the default value of 1.
 
-right friends. See you next time.
+Let's try it! Spin back over to your terminal, add the change... and commit:
+
+```terminal-silent
+git add .
+git commit -m "adding speed_coeffient variable for wall time assert"
+```
+
+As a reminder, we're on the `some_feature` branch. So when we run:
+
+```terminal
+symfony deploy --bypass-checks
+```
+
+## Seeing the Variable in Action
+
+We're deploying to *that* environment. When that finishes... move back over to
+the Blackfire environment, refresh and... hello new build! Look inside. There
+are two cool things. First, under the homepage, you can see the `speed_coefficient`
+in action - the little "2" tells us the value it's using. So, in reality, it's
+asserting that 50.8ms is less than *200* milliseconds.
+
+## Feature Branch Comparisons
+
+The *other* thing I want you to notice is that, if you go back to the builds page,
+we have built the `some_feature` branch twice. When you click on the second, newer
+build, it has the *comparison* stuff! It allows us to *compare* this build to the
+*previous* commit on the *same* branch. This allows you to see - commit-by-commit -
+*when* some feature started having performance problems.
+
+And... that's it for the Blackfire tutorial! I hope *loved* this nerdy trip into
+the depths of performance as much as I did. Blackfire can give you a *lot* of info
+immediately... or you can *really* dive in and make it work for you. Personally,
+I love having the builds and this performance history for SymfonyCasts.com. Oh,
+and a special thanks to [Jérôme Vieilledent](https://github.com/lolautruche) - I
+almost *definitely* just slaughtered that pronunciation - for his endless patience
+answering my hundreds of Blackfire questions.
+
+And as always, if *you* have any questions... or we didn't explain something you
+wanted to know about, we're here for you in the comments. And if you have some
+*serious* performance wins, we would *love* to hear about it.
+
+Alright friends - I wish you a *speedy* day. Seeya next time!
