@@ -60,7 +60,7 @@ Add a new property called `$githubOrganizations` set to an empty array:
 As we loop over the repositories for a specific organization, we will *store*
 that organization's info. Add a new variable called `$publicRepoCount` set to 0:
 
-[[[[ code('bfd1144726') ]]]]
+[[[ code('bfd1144726') ]]]
 
 the number of public repositories an organization has is one of the pieces of data
 we need.
