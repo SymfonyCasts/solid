@@ -1,9 +1,12 @@
 # Assertions / Profile "Tests"
 
-Adding specific assertions inside a test is really cool. But you can *also*
-add assertions *globally*. What I mean is, whenever you trigger a *real* Blackfire
-profile - like through your browser - you can set up *assertions* that you want
-to run against that profile.
+Adding specific assertions inside a test is really cool:
+
+[[[ code('621f575434') ]]]
+
+But you can *also* add assertions *globally*. What I mean is, whenever you trigger
+a *real* Blackfire profile - like through your browser - you can set up *assertions*
+that you want to run against that profile.
 
 ## Recommendations Versus Assertions
 
@@ -37,12 +40,18 @@ because they're fragile, we want to avoid those.
 
 Let's start with one we've already done. Say:
 `"HTTP requests should be limited to 1 per page":`. Below this, add `path` set
-to the regular expression `/.*`. This means that this assertion will be executed
-against *any* profile for *any* page. Only want the assertion to run against a
-single page or section? Use this option.
+to the regular expression `/.*`:
+
+[[[ code('7380b18a4c') ]]]
+
+This means that this assertion will be executed against *any* profile for *any*
+page. Only want the assertion to run against a single page or section? Use this
+option.
 
 Now add `assertions:` with one item below. Go steal the metrics expression from
-our test... and paste it here. Change this to be *less than* or equal to 1.
+our test... and paste it here. Change this to be *less than* or equal to 1:
+
+[[[ code('10d8b56e89') ]]]
 
 That's it! Let's try it out! Back in your browser... go back to our site, refresh,
 and create a new profile. I'll call it: `[Recording] Added first assertion`.

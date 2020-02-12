@@ -1,6 +1,9 @@
 # All about Metrics
 
 Where did this metrics string come from - this `metrics.http.requests.count`?
+
+[[[ code('4e37b19b3c') ]]]
+
 There are two things I want to say about this. First, Blackfire stores *tons* of
 raw data about your profile in little "categories" called metrics. More on that
 soon. And second, inside the `assert()` call, you're using a special
@@ -41,29 +44,45 @@ a test. And at this point, the actual way we *fix* that bug is not as important:
 all we care about is that we can change some code and get this test to pass.
 
 The logic for the API calls lives in `src/GitHub/GitHubApiHelper.php`: it has
-two public function and each makes one API request.
+two public function and each makes one API request:
+
+[[[ code('cf6b070569') ]]]
 
 How can we make this page only make *1* HTTP request? Well, if you looked closely..
 Ah! Too close! Ahh. You'd find that you can get all the information you need
 by *only* making this *second* HTTP request. The details aren't important - so let's
 just jump in.
 
-Add a new property called `$githubOrganizations` set to an empty array.
+Add a new property called `$githubOrganizations` set to an empty array:
+
+[[[ code('1ccbfdf344') ]]]
+
 As we loop over the repositories for a specific organization, we will *store*
 that organization's info. Add a new variable called `$publicRepoCount` set to 0:
+
+[[[[ code('bfd1144726') ]]]]
+
 the number of public repositories an organization has is one of the pieces of data
 we need.
 
 Then, inside the `foreach`: if `$repoData['private'] === false` - that's one of
-the keys on `$repoData` - say `++$publicRepoCount`. So, as we're looping over
-the repositories, we're counting how many are public.
+the keys on `$repoData` - say `++$publicRepoCount`:
+
+[[[ code('885bc9356f') ]]]
+
+So, as we're looping over the repositories, we're counting how many are public.
 
 Finally, at the bottom, if *not* `isset($this->githubOrganizations[$organization])`,
-then `$this->githubOrganizations[$organization] = new GitHubOrganization()`. This
-needs two arguments. The first is the organization name. We can probably use
+then `$this->githubOrganizations[$organization] = new GitHubOrganization()`:
+
+[[[ code('82bedb41de') ]]]
+
+This needs two arguments. The first is the organization name. We can probably use
 the `$organization` argument... or you can use `$data[0]` - to get the first
 repository - then `['owner']['login']`. For the second argument, pass
-`$publicRepoCount`.
+`$publicRepoCount`:
+
+[[[ code('1e42caf771') ]]]
 
 Now, *each* time we call this method, we *capture* the organization's information
 and store it on this property. So if we call this method *first* and *then* the
@@ -71,11 +90,19 @@ other method... we could *cheat* and return the `GitHubOrganization` object that
 stored on the property. It's property caching!
 
 Check it out: if `isset($this->githubOrganizations[$organization])` then return
-that immediately without doing any work.
+that immediately without doing any work:
+
+[[[ code('8cebde886e') ]]]
 
 So... *are* we calling these two methods in the "correct" order to get this to
-work? Check out the controller. Nope! Swap these two lines so the *first* call
-will set up the caching for the second.
+work? Check out the controller:
+
+[[[ code('7e8d416ac1') ]]]
+
+Nope! Swap these two lines so the *first* call will set up the caching
+for the second:
+
+[[[ code('805d20a615') ]]]
 
 Phew! Let's see if that helps. It was a complicated fix... but thanks
 to our test, we will know for *sure* if it worked. Go!
@@ -90,8 +117,11 @@ They pass! This *proves* that we reduced the HTTP calls from two to one.
 
 What I *love* about the metrics system is that there are *many* to choose from.
 What I *don't* love is that you need to manually look up everything that's available.
-*Fortunately*, if you make a typo - the error is great. Change `count` to `vount`
-and re-run the test:
+*Fortunately*, if you make a typo - the error is great. Change `count` to `vount`:
+
+[[[ code('0efb861d87') ]]]
+
+And re-run the test:
 
 ```terminal-silent
 php bin/phpunit tests/Controller/MainControlerTest.php
@@ -104,7 +134,9 @@ And when we follow the profile link... check out that error!
 > The following assertions are not valid... Property "vount" does not exist,
 > available ones are:
 
-... and it lists all the properties. That's *super* friendly. Fix the typo.
+... and it lists all the properties. That's *super* friendly. Fix the typo:
+
+[[[ code('6b5291e239') ]]]
 
 ## Organizing Blackfire Assertions into Separate Test Cases
 
@@ -114,17 +146,26 @@ to create the profile.
 
 Because of that, as a best practice, we usually like to isolate our performance
 tests from our normal tests. Check it out: copy the test method name, paste it
-below, and call it `testGetGitHubOrganizationBlackfireHttpRequests()`. And...
-copy the contents of the original method and paste here. Now... we only need to
-create the `$client`, create `$blackfireConfig` and, inside `assertBlackfire()`,
-*just* make the request.
+below, and call it `testGetGitHubOrganizationBlackfireHttpRequests()`:
+
+[[[ code('f4afb170ce') ]]]
+
+And... copy the contents of the original method and paste here. Now... we only need
+to create the `$client`, create `$blackfireConfig` and, inside `assertBlackfire()`,
+*just* make the request:
+
+[[[ code('e554b46137') ]]]
 
 Back in the original method, we can simplify... in fact we can go *all* the way
-back to the way it was before: create the client, make the request, assert something.
+back to the way it was before: create the client, make the request, assert something:
+
+[[[ code('05f8976359') ]]]
 
 *Why* is this useful? Because *now* we can *skip* the Blackfire tests if we're
 just trying to get something to work. How? Above the performance test, add
-`@group blackfire`.
+`@group blackfire`:
+
+[[[ code('27cbef04bf') ]]]
 
 Thanks to that, we can add `--exclude-group=blackfire` to *avoid* the Blackfire
 tests:
@@ -134,8 +175,12 @@ php bin/phpunit tests/Controller/MainControlerTest.php --exclude-group=blackfire
 ```
 
 Yep! Just one test, two assertions. Another nice detail is to add
-`@requires extension blackfire`. Now, if someone is *missing* the Blackfire
-extension, instead of the tests exploding, they'll be marked as skipped.
+`@requires extension blackfire`:
+
+[[[ code('7069bb26db') ]]]
+
+Now, if someone is *missing* the Blackfire extension, instead of the tests
+exploding, they'll be marked as skipped.
 
 ## Don't do Time-Based Assertions
 
