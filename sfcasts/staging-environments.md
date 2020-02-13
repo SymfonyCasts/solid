@@ -12,9 +12,9 @@ three, ran `integration:add` so that every deploy to `master` would trigger a
 Blackfire build in our environment.
 
 *Technically*, on the staging server, the Blackfire extension is already enabled
-*add* it's set up to use the Server Id and token from our production Blackfire
+*and* it's set up to use the Server Id and token from our *production* Blackfire
 environment. But, as we talked about in the last chapter, I don't want to mix
-my production builds with staging builds.
+my production builds with builds from staging servers.
 
 ## Creating a new Blackfire Environment
 
@@ -24,11 +24,12 @@ production environment URL. But don't worry, that URL won't *actually* be used.
 You'll see.
 
 Hit "Create environment"... then remove the build notifications and save. View
-the new environment - I'll get the credentials in a minute. But first, I'm going
-to *stop* the periodic builds. Why? Well in our setup, at any point, we may have
-zero or *many* different "staging" servers. There's not just *one* server to
-build... so this setting doesn't make sense. What *does* make sense is to *trigger*
-a new build each time we deploy to a staging server.
+the new environment - I'll get the credentials in a minute. Now, *stop* the
+periodic builds. Why? Well in our setup, at any point, we may have zero or
+*many* different "staging" servers. There's not just *one* server to build... so
+if we did a periodic build... which "staging" server would it use? It just doesn't
+make sense in our case. What *does* make sense is to *trigger* a new build each
+time we *deploy* to a staging server.
 
 ## Different Server Id and Token on Staging
 
@@ -44,31 +45,32 @@ config trick. First, list which variables we have set with:
 symfony vars
 ```
 
-We have the two that were set from the `var:set` command we ran earlier. Delete
-*both* of these completely:
+We have the two that were set by the `var:set` command we ran earlier. Delete
+*both* of them:
 
 ```terminal
 symfony var:delete BLACKFIRE_SERVER_ID BLACKFIRE_SERVER_TOKEN
 ```
 
-I'll explain *why* we're deleting these soon. Now, go back to the installation
-page... and refresh so this shows our new environment. For the `var:set` command,
-select the `Non-master` environment. Copy the command, move over and paste:
+We're going to *re-add* these in a minute... but with some different options. Now,
+go back to the installation page... and refresh... so this shows our new environment.
+For the `var:set` command, select the `Non-master` environment. Copy the command,
+move over and paste:
 
 ```terminal-silent
 symfony var:set BLACKFIRE_SERVER_ID=XXXXXXX BLACKFIRE_SERVER_TOKEN=XXXXXX
 ```
 
-If we stopped now, it would mean that *every* deploy would use the new Non-Master
-environment... which is note exactly what we want. But here's the trick: on the
-install page, change to the "Production" Blackfire environment, and copy *its*
-command. We're going to *override* these variables, but *just* for the
-SymfonyCloud `master` environment.
+If we stopped now, it would mean that *every* server would send its profiles to
+the new Non-Master environment... which is not exactly what we want. But here's
+the trick: on the install page, change to the "Production" Blackfire environment,
+and copy *its* command. We're going to *override* these variables, but *just* on
+the SymfonyCloud `master` environment.
 
 Paste the command, then add `--env=master --env-level` so that the variables are
 used as "overrides" for *only* that environment. Finish with `--inheritable=false`
 so that when we create *new* SymfonyCloud environments, they don't inherit these
-variables from `master`: we want them to use the *original* value.
+variables from `master`: we want them to use the *original* values.
 
 ```terminal-silent
 symfony var:set BLACKFIRE_SERVER_ID=XXXXXXX BLACKFIRE_SERVER_TOKEN=XXXXXX \
@@ -77,7 +79,7 @@ symfony var:set BLACKFIRE_SERVER_ID=XXXXXXX BLACKFIRE_SERVER_TOKEN=XXXXXX \
 
 This is a *long* way of saying that the `master` environment on SymfonyCloud will
 now use the server id and token for the "Sasquatch Sightings Production" Blackfire
-environment, and every *other* deploy will use the credentials for the
+environment. And every *other* deploy will use the credentials for the
 "Non-Master" environment. To be sure, run:
 
 ```terminal
@@ -90,7 +92,7 @@ Yep! 6900 is the server id for Production. Now try:
 symfony vars --env=some_feature
 ```
 
-Perfect - that uses the *other* Server id and token. We're good!
+Perfect: that uses the *other* Server id and token. We're good!
 
 ## Staging: Builds on Deploy
 
@@ -113,7 +115,7 @@ Phew! Let's redeploy both SymfonyCloud environments to see all of this in action
 symfony redeploy --bypass-checks
 ```
 
-Because we're currently checked out on the `some_feature` branch, this deploys
+Because we're currently checked out to the `some_feature` branch, this *deploys*
 *that* branch. When it finishes, run the same command but with `--env=master` to
 redeploy production:
 
@@ -121,8 +123,8 @@ redeploy production:
 symfony redeploy --bypass-checks --env=master
 ```
 
-We also could have *changed* to that branch - `git checkout master` - and *then*
-run `symfony redeploy`. That's the more traditional way.
+We also could have *switched* to that branch - `git checkout master` - and *then*
+ran `symfony redeploy`. That's the more traditional way.
 
 Done! Let's go see what that did! First check out the Blackfire production
 environment. Yes! The redeploy to `master` created *one* new build. Perfect.
@@ -130,11 +132,11 @@ Now check out the Non-master environment. Oh, this has *two* new builds: one
 for the `some_feature` deploy and another for the `master` deploy. We don't
 *really* want or care about that second one... but it's fine. What we *do* care
 about is that *now*, every time we deploy to a non-production server, we get a
-new build.
+new build here.
 
-If you use GitHub or Gitlab, you can take this one step further with two steps.
+If you use GitHub or Gitlab, you can take this one step further by doing 2 things.
 First, SymfonyCloud has a feature where it can automatically deploy the code
-you have on a pull request. And because that would trigger a new build, second,
+you have on a pull request. And because that would trigger a new build, *second*,
 you can configure Blackfire to *notify* GitHub or Gitlab of your build results
 so that they show up *on* the pull request itself. Pretty awesome.
 
