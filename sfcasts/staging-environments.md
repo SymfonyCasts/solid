@@ -2,14 +2,14 @@
 
 We now have *two* versions of our site deployed: our production deploy and a,
 sort of, "staging" deploy of a pretend feature we're working on. Blackfire is
-*all* set up on the *production* server, but not yet on the staging server. Let's
-fix that.
+*all* set up on the *production* server, but not on the staging server. Let's
+fix that!
 
-Back on the install page, select "SymfonyCloud" as our host to get to those docs.
+Back on the install page, select "SymfonyCloud" as our host to get to its docs.
 To set up Blackfire on production, we did 3 things. One, added the extension. Two,
 ran this `var:set` command to configure our Blackfire Server id and token. And
 three, ran `integration:add` so that every deploy to `master` would trigger a
-new Blackfire build in our environment.
+Blackfire build in our environment.
 
 *Technically*, on the staging server, the Blackfire extension is already enabled
 *add* it's set up to use the Server Id and token from our production Blackfire

@@ -39,7 +39,7 @@ symfony deploy --bypass-checks
 ## Custom Metrics
 
 While that's deploying, I want to show you a *super* powerful feature that we
-won't have time to talk about: custom metrics. Google for "Blackfire metrics".
+won't have time to experiment with: custom metrics. Google for "Blackfire metrics".
 In addition to the timeline, this page *also* lists *all* of the metrics that
 are available.
 

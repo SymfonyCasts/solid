@@ -21,7 +21,7 @@ you could say:
 
 That's it! There's also a function called `diff()`. If you said
 `diff(metrics.sql.queries.count) < 2` it means that the *difference* between
-the number of SQL queries on the new profile versus the old profile should be
+the number of SQL queries on the new profile minus the old profile should be
 less than 2.
 
 Let's see what this looks like! Find your terminal and commit these changes:
@@ -77,7 +77,7 @@ SymfonyCloud to send a webhook to create a Blackfire build *each* time we deploy
 
 Copy it, move over to your terminal and... paste:
 
-```terminal
+```terminal-silent
 symfony integration:add --type=webhook --url='https://USER:PASS@blackfire.io/api/v2/builds/env/aaaabbee-abcd-abcd-abcd-c49b32bb8f17/symfonycloud'
 ```
 
@@ -100,11 +100,11 @@ again:
 symfony redeploy --bypass-checks
 ```
 
-When it finishes... there's build 7! But to see the comparison stuff in action,
+When that finishes... there's build 7! But to see the comparison stuff in action,
 I need to do a *real* deploy so that the next build is tied to a *new* git sha.
 I'll do a meaningless change, commit, then deploy:
 
-```terminal
+```terminal-silent
 git commit -m "triggering deploy" --allow-empty
 symfony deploy --bypass-checks
 ```
