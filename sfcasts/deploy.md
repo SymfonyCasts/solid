@@ -23,8 +23,13 @@ symfony project:init
 ```
 
 This will create a few config files that tell SymfonyCloud *everything* it
-needs to know to deploy our site. The most important file is `.symfony.cloud.yaml`.
-Ah, this says we want PHP 7.1. Let's *upgrade* by changing that to 7.3.
+needs to know to deploy our site. The most important file is `.symfony.cloud.yaml`:
+
+[[[ code('9d88e127ab') ]]]
+
+Ah, this says we want PHP 7.1. Let's *upgrade* by changing that to 7.3:
+
+[[[ code('50d5cf8bd0') ]]]
 
 Back at the terminal, copy the *big* git command: this will add all the new files
 to git and commit them:
