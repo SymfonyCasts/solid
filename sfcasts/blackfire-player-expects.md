@@ -70,7 +70,7 @@ And... yes! It fails - with a nice error:
 
 Go back and change this to 10:
 
-[[[ code('a93e37f046') ]]]
+[[[ code('9c2788b557') ]]]
 
 The data is dynamic data... so we don't *really* know how many rows it will have.
 But since our fixtures add more than 10 sightings... and because there will probably
@@ -118,7 +118,7 @@ And actually, there is one *little* integration between `blackfire-player` and
 the profiler: you can add *performance* assertions to your scenario. To do that,
 instead of `expect`, say `assert` and then use any performance expression you want: the
 same strings that you can use inside a test. For example:
-`metrics.sql.queries.count <= 30`:
+`metrics.sql.queries.count < 30`:
 
 [[[ code('a8ebecf563') ]]]
 
