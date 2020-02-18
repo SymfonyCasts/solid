@@ -28,7 +28,10 @@ that. Ok, we need to add a little bit of config to 2 files. The first is
 `.symfony/services.yaml`. This is where you tell SymfonyCloud about all the
 "services" you need - like a database service, ElasticSearch, Redis, RabbitMQ, etc.
 
-Copy the config for `.symfony/services.yaml`... then open that file and paste.
+Copy the config for `.symfony/services.yaml`... then open that file and paste:
+
+[[[ code('ff823a448b') ]]]
+
 The database is actually MariaDB, which is why the version here is 10.2:
 MariaDB version 10.2.
 
@@ -39,7 +42,9 @@ Notice that we've used the key `mydatabase`. That can be *anything* you want: we
 Inside *that* file, we need a `relationships` key: this is what *binds* the
 web container to that database service. Let's see... we don't have a
 `relationships` key yet, so let's add it: `relationships` and, below, add our
-*first* relationship with a special string: `database` set to `mydatabase:mysql`.
+*first* relationship with a special string: `database` set to `mydatabase:mysql`:
+
+[[[ code('91d65a60a1') ]]]
 
 This syntax... is a little funny. The `mydatabase` part is referring to whatever
 key we used in `services.yaml` - and then we say `:mysql`... because that service
@@ -48,7 +53,11 @@ is a `mysql` type.
 The *really* important thing is that we called this relationship `database`. Thanks
 to that `SymfonyCloud` will expose an environment variable called `DATABASE_URL`
 which contains the *full* MySQL connection string: username, host, database name
-and all. It's literally `DATABASE_URL` and not `PIZZA_URL` because we called the
+and all:
+
+[[[ code('dc0f4fcefe') ]]]
+
+It's literally `DATABASE_URL` and not `PIZZA_URL` because we called the
 relationship `database` instead of `pizza`... which would have been less
 descriptive, but more delicious.
 
@@ -56,7 +65,7 @@ This is important because `DATABASE_URL` *happens* to be the environment variabl
 that our app will use to connect to the database. In other words, our app will
 *instantly* have database config.
 
-Back at the terminal, hit "Ctrl+C" to exit from logging. Let's add the two changes
+Back at the terminal, hit `Ctrl`+`C` to exit from logging. Let's add the two changes
 and commit them:
 
 ```terminal
@@ -95,7 +104,7 @@ But... to make this a bit more interesting for *us*, let's load the fixture data
 one time on production.
 
 This is a bit tricky because the fixture system  - which comes from
-DoctrineFixturesBundle - is a composer "dev" dependency... which means that
+DoctrineFixturesBundle - is a Composer "dev" dependency... which means that
 it's not even *installed* on production. That's good for performance. If it
 *were* installed, we could run:
 
@@ -103,10 +112,10 @@ it's not even *installed* on production. That's good for performance. If it
 symfony ssh
 ```
 
-to ssh into our container, and then execute the command to load the fixtures. But...
+To SSH into our container, and then execute the command to load the fixtures. But...
 that won't work.
 
-No problem! We can do something cooler. Exit out of ssh, and run:
+No problem! We can do something cooler. Exit out of SSH, and run:
 
 ```terminal
 symfony tunnel:open
