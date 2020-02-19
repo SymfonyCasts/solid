@@ -14,6 +14,10 @@ But.... *some* Blackfire account levels - offer a kick-butt feature called
 *environments*. If you have access to Blackfire environments - or if you're able
 to get a "plan" that offers environments, I highly recommend them.
 
+***TIP
+Blackfire environments require a Premium plan or higher.
+***
+
 An environment is basically an isolated Blackfire account. When you have an
 environment, you send your *profiles* to that environment. The first advantage
 is that you can *invite* multiple people to an environment, which means that
