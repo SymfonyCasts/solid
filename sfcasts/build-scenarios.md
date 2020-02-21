@@ -87,7 +87,7 @@ will execute.
 Even *better*, we have a lot more control *now* over the assertions - or "tests"...
 Blackfire uses both words - that make a build pass or fail.
 
-For example, the "HTTP requests should be limited to one per page" test will be
+For example, the "HTTP requests should be limited to one per page" will be
 run against *all* pages in the scenarios - that's 2 pages right now. But the
 homepage *also* has its *own* `assert`: that the SQL queries on this page should
 be less than 30. If you look back at the build... we can see that assertion!
