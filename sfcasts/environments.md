@@ -22,7 +22,7 @@ An environment is basically an isolated Blackfire account. When you have an
 environment, you send your *profiles* to that environment. The first advantage
 is that you can *invite* multiple people to an environment, which means that
 *anyone* can profile your production site and see other profiles made by people
-on your team. It also has *other* superpowers - ahem , builds- that *really* make
+on your team. It also has *other* superpowers - ahem, builds - that *really* make
 it shine.
 
 ## Understanding Organizations
@@ -92,8 +92,11 @@ host... which takes me to a dedicated page on this topic.
 
 Let's see... step one is, instead of installing Blackfire with something like
 `apt-get`, we'll add a line to `.symfony.cloud.yaml`. I already have an
-`extensions` key... so just add `blackfire`. Boom! Blackfire is installed.
-Add this file to git... and commit it:
+`extensions` key... so just add `blackfire`:
+
+[[[ code('af0db4c0f2') ]]]
+
+Boom! Blackfire is installed. Add this file to Git... and commit it:
 
 ```terminal-silent
 git add .
@@ -106,7 +109,7 @@ Select our "Sasquatch production" environment. Cool! This gives us a command
 to set two SymfonyCloud *variables*. Copy that, move over, and paste:
 
 ```terminal-silent
-symfony var:set BLACKFIRE_SERVER_ID=XXXXXXX BLACKFIRE_SERVER_TOKEN=XXXXXX
+symfony var:set BLACKFIRE_SERVER_ID=XXXXXX BLACKFIRE_SERVER_TOKEN=XXXXXX
 ```
 
 Ok... we're good! To make both changes take effect, deploy!
