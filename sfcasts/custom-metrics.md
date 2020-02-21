@@ -8,6 +8,18 @@ profiles might be slower than normal. But, it will have less variability than tr
 to compare a profile that you created on your local machine with a profile created
 on production: those are totally different machines and setups.
 
+***TIP
+I also recommend adding `samples 10` to each scenario. This will then use
+10 samples (like normal Blackfire profiles) and further reduce variability:
+
+```
+    visit url("/")
+        name "Homepage"
+        samples 10
+        ...
+```
+***
+
 ## Cautiously Adding Time-Based Assertions
 
 This means that you can... *maybe* add some time-based assertions... as long as
