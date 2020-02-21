@@ -12,7 +12,7 @@ this environment. We haven't invited any other users to this environment yet, bu
 if we did, they would *immediately* be able to access this area *and* trigger new
 profiles with *their* browser extension.
 
-If you go to back to https://backfire.io to see your dashboard, the new profile
+If you go to back to https://blackfire.io to see your dashboard, the new profile
 *also* shows up here. But that's purely for convenience. The profile *truly*
 belongs to the environment. You can even see that right here. But Blackfire
 places *all* profiles that *I* create on this page... to make life nicer.
