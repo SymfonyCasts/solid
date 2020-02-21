@@ -54,6 +54,10 @@ be compared to by using an internal "build id". Our project is too new to see it
 but this happens automatically with "periodic" builds: our comparison assertion
 *will* execute on periodic builds.
 
+***TIP
+Triggering builds via a webhook requires an Enterprise plan.
+***
+
 But when we create a manual build... there's no way to specify a "previous" build...
 which is why the comparison stuff doesn't work. *Fortunately*, since I don't want
 to wait 12 hours to see if this is working, there is *another* way to trigger
