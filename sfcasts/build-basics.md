@@ -30,9 +30,13 @@ First, we've *seen* this word "scenario" before! Earlier, we used the
 people... but can be used totally outside of the profiling tool. We created a
 `scenario.bkf` file where we defined a *scenario* and used the special
 `blackfire-player` language to tell it to go to the homepage, assert a few things,
-then click on the "Log In" link and check something else. At that time, this was
-a nice way to "crawl" a site and test some things on it. The "build" used the
-same "scenario" word. That's not an accident. More on that soon.
+then click on the "Log In" link and check something else:
+
+[[[ code('a351172e14') ]]]
+
+At that time, this was a nice way to "crawl" a site and test some things on it.
+The "build" used the same "scenario" word. That's not an accident. More on
+that soon.
 
 ## Build "URLs to Test"
 
@@ -56,6 +60,8 @@ Check it out "1 successful constraint" - which is that "HTTP Requests should
 be limited to 1 per page". Hey! That's the "test" that *we* set up inside
 `.blackfire.yaml`!
 
+[[[ code('45ce3ea1a3') ]]]
+
 The *real* beauty of `tests` is *not* that the "Assertions" tab will look red when
 you're looking inside a profile. The *real* beauty is that you can configure
 performance *constraints* that should pass *whenever* these builds happen. If a
@@ -75,7 +81,7 @@ it *reloading* both pages multiple times to get 10 samples. That's one of the
 options it added in the scenario.
 
 So with just a *tiny* bit of configuration, Blackfire is now creating a build
-every six hours. Each time, it profiles these two pages and, thanks to our one test,
+every 6 hours. Each time, it profiles these 2 pages and, thanks to our one test,
 if either page makes more than one HTTP request, the build will fail. By setting
 up a notification, we'll know about it.
 
