@@ -1,9 +1,12 @@
 # Builds with Custom Scenarios
 
-A few chapters ago, we created this `scenario.bkf` file. It's written in a special
-`blackfire-player` *language* where we write one or more "scenarios" that, sort
-of, "crawl" a webpage, asserting things, clicking on links and even submitting
-forms. This a simple scenario: the tool can do a lot more.
+A few chapters ago, we created this `scenario.bkf` file:
+
+[[[ code('7f280e7891') ]]]
+
+It's written in a special `blackfire-player` *language* where we write one or more
+"scenarios" that, sort of, "crawl" a web page, asserting things, clicking on
+links and even submitting forms. This a simple scenario: the tool can do a lot more.
 
 On the surface, apart from its name, this has *nothing* to do with the Blackfire
 profiler system: `blackfire-player` is just a tool that can read these scenarios
@@ -20,13 +23,21 @@ it goes to the homepage, clicks the "Log In" link and... it passes.
 
 This is cool... but we can do something *way* more interesting. Copy the entire
 scenario from this file, close it, and open `.blackfire.yaml`. Add a new key
-called `scenarios` set to a `|` - that's a YAML way of saying that we will use
-multiple lines to set this.
+called `scenarios` set to a `|`:
 
-Below, indent, then say `#!blackfire-player` - that tells Blackfire that we're
-about to use the `blackfire-player` syntax... which is the *only* format supported
-here... but it's needed anyways. Below, paste the scenario. Make sure it's
-indented 4 spaces.
+[[[ code('38685f15f5') ]]]
+
+That's a YAML way of saying that we will use multiple lines to set this.
+
+Below, indent, then say `#!blackfire-player`:
+
+[[[ code('493676085a') ]]] 
+
+That tells Blackfire that we're about to use the `blackfire-player` syntax...
+which is the *only* format supported here... but it's needed anyways. Below,
+paste the scenario. Make sure it's indented 4 spaces:
+
+[[[ code('b9ae201ea0') ]]]
 
 The *cool* thing is that we can *still* execute the scenario locally: just replace
 `scenario.bkf` with `.blackfire.yaml`. The player is smart enough to know that it
@@ -38,11 +49,14 @@ blackfire-player run .blackfire.yaml --ssl-no-verify
 
 But if you run this... error!
 
-> Unable to crawl a non-absolute URI /. Did you forget to set an endpoint
+> Unable to crawl a non-absolute URI /. Did you forget to set an endpoint?
 
-Duh! Our `scenario.bkf` file had an `endpoint` config. You *can* copy this
-into your `.blackfire.yaml` file. *Or* you can define the endpoint by adding
-`--endpoint=https://localhost:8000`
+Duh! Our `scenario.bkf` file had an `endpoint` config:
+
+[[[ code('202e2c4bd6') ]]]
+
+You *can* copy this into your `.blackfire.yaml` file. *Or* you can define
+the endpoint by adding `--endpoint=https://localhost:8000`:
 
 ```terminal-silent
 blackfire-player run .blackfire.yaml --ssl-no-verify --endpoint=https://localhost:8000
@@ -96,8 +110,11 @@ We can even click into the profile, click on "Assertions", and see both there.
 So not *only* do we have a lot of control over *which* pages we want to test - even
 including filling out forms - but we can *also* do custom assertions on a
 page-by-page basis in addition to having global tests. I *love* that. And now I
-can remove the comment I put earlier above `assert`: now that we're running
-this from inside an environment, this *does* work.
+can remove the comment I put earlier above `assert`:
+
+[[[ code('023be8dd15') ]]]
+
+Now that we're running this from inside an environment, this *does* work.
 
 Next, let's use our power to *carefully* add more time-based assertions on a
 page-by-page basis. We'll also learn how you can add your *own* metrics in order
