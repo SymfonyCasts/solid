@@ -17,7 +17,9 @@ you could say:
 *How* can we do that? It's dead simple. Add a new global metric - how about
 "Pages are not suddenly much slower" - and set this to run on every page:
 `path: /.*`. For the assertion, we can use a special function called percent:
-`percent(main.wall_time) < 30%`.
+`percent(main.wall_time) < 30%`:
+
+[[[ code('a136e55781') ]]]
 
 That's it! There's also a function called `diff()`. If you said
 `diff(metrics.sql.queries.count) < 2` it means that the *difference* between
@@ -27,6 +29,7 @@ less than 2.
 Let's see what this looks like! Find your terminal and commit these changes:
 
 ```terminal-silent
+git status
 git add .
 git commit -m "adding global wall time diff assert"
 ```
@@ -105,7 +108,7 @@ symfony redeploy --bypass-checks
 ```
 
 When that finishes... there's build 7! But to see the comparison stuff in action,
-I need to do a *real* deploy so that the next build is tied to a *new* git sha.
+I need to do a *real* deploy so that the next build is tied to a *new* Git sha.
 I'll do a meaningless change, commit, then deploy:
 
 ```terminal-silent
