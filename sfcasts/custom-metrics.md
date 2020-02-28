@@ -24,7 +24,9 @@ I also recommend adding `samples 10` to each scenario. This will then use
 
 This means that you can... *maybe* add some time-based assertions... as long as
 you're conservative. For example, on the homepage, let's `assert` that
-`main.wall_time < 100ms`.
+`main.wall_time < 100ms`:
+
+[[[ code('113a6550f5') ]]]
 
 By the way, *most* metrics start with `metrics.` and you can look on the timeline
 to see what's available. A *few* metrics - like wall time and peak memory - start
@@ -38,6 +40,7 @@ some random failures from time-to-time.
 Let's commit this:
 
 ```terminal-silent
+git status
 git add .
 git commit -m "adding homepage time assertions"
 ```
