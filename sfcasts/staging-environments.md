@@ -5,7 +5,7 @@ sort of, "staging" deploy of a pretend feature we're working on. Blackfire is
 *all* set up on the *production* server, but not on the staging server. Let's
 fix that!
 
-Back on the install page, select "SymfonyCloud" as our host to get to its docs.
+Back on the "Install" page, select "SymfonyCloud" as our host to get to its docs.
 To set up Blackfire on production, we did 3 things. One, added the extension. Two,
 ran this `var:set` command to configure our Blackfire Server id and token. And
 three, ran `integration:add` so that every deploy to `master` would trigger a
@@ -63,18 +63,18 @@ symfony var:set BLACKFIRE_SERVER_ID=XXXXXXX BLACKFIRE_SERVER_TOKEN=XXXXXX
 
 If we stopped now, it would mean that *every* server would send its profiles to
 the new Non-Master environment... which is not exactly what we want. But here's
-the trick: on the install page, change to the "Production" Blackfire environment,
+the trick: on the "Install" page, change to the "Production" Blackfire environment,
 and copy *its* command. We're going to *override* these variables, but *just* on
 the SymfonyCloud `master` environment.
 
 Paste the command, then add `--env=master --env-level` so that the variables are
 used as "overrides" for *only* that environment. Finish with `--inheritable=false`
 so that when we create *new* SymfonyCloud environments, they don't inherit these
-variables from `master`: we want them to use the *original* values.
+variables from `master`: we want them to use the *original* values:
 
 ```terminal-silent
 symfony var:set BLACKFIRE_SERVER_ID=XXXXXXX BLACKFIRE_SERVER_TOKEN=XXXXXX \
-		--env=master --env-level --inheritable=false
+    --env=master --env-level --inheritable=false
 ```
 
 This is a *long* way of saying that the `master` environment on SymfonyCloud will

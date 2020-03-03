@@ -4,15 +4,20 @@ Often, your production server will have different - hopefully *bigger* - hardwar
 than your staging server... which means that your staging builds may run slower
 than production. That's going to be a problem if you have *time* based
 metrics: the wall time of a build may be less than 100ms on production... but
-*more* than that on staging. That means the staging builds will always fail.
-Bummer!
+*more* than that on staging:
+
+[[[ code('9ce71f7a0e') ]]]
+
+That means the staging builds will always fail. Bummer!
 
 ## Hello Build Variables
 
 No worries. To help, each environment can define *variables*. Check it out: inside
 the metric expression, I'll add a set of parentheses around the `100ms` and then
 say *times* and call a `var()` function. I'll invent a new variable: `speed_coefficient`
-and give it a *default* value - via the 2nd argument - of 1.
+and give it a *default* value - via the 2nd argument - of 1:
+
+[[[ code('773ae40b53') ]]]
 
 *Now*, when this assertion is executed, it will assert that the wall time is less
 than 100ms *times* whatever this `speed_coefficient` variable is. What *is*
