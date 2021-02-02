@@ -93,6 +93,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "doctrine/sql-formatter": {
+        "version": "1.1.1"
+    },
     "easycorp/easy-log-handler": {
         "version": "1.0",
         "recipe": {
@@ -105,11 +108,23 @@
             "config/packages/dev/easy_log_handler.yaml"
         ]
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
+    },
     "fzaninotto/faker": {
         "version": "v1.8.0"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.2.1"
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.1.1"
     },
     "monolog/monolog": {
         "version": "1.25.1"
@@ -136,6 +151,9 @@
         "version": "1.0.1"
     },
     "psr/container": {
+        "version": "1.0.0"
+    },
+    "psr/event-dispatcher": {
         "version": "1.0.0"
     },
     "psr/log": {
@@ -205,6 +223,9 @@
     "symfony/dependency-injection": {
         "version": "v4.3.4"
     },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
+    },
     "symfony/doctrine-bridge": {
         "version": "v4.3.4"
     },
@@ -213,6 +234,9 @@
     },
     "symfony/dotenv": {
         "version": "v4.3.4"
+    },
+    "symfony/error-handler": {
+        "version": "v5.2.2"
     },
     "symfony/event-dispatcher": {
         "version": "v4.3.4"
@@ -329,11 +353,17 @@
             "tests/.gitignore"
         ]
     },
+    "symfony/polyfill-intl-grapheme": {
+        "version": "v1.22.0"
+    },
     "symfony/polyfill-intl-icu": {
         "version": "v1.12.0"
     },
     "symfony/polyfill-intl-idn": {
         "version": "v1.12.0"
+    },
+    "symfony/polyfill-intl-normalizer": {
+        "version": "v1.22.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.12.0"
@@ -343,6 +373,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.12.0"
+    },
+    "symfony/polyfill-php80": {
+        "version": "v1.22.0"
     },
     "symfony/profiler-pack": {
         "version": "v1.0.4"
@@ -403,6 +436,9 @@
     },
     "symfony/stopwatch": {
         "version": "v4.3.4"
+    },
+    "symfony/string": {
+        "version": "v5.2.2"
     },
     "symfony/test-pack": {
         "version": "v1.0.6"
