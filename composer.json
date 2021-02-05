@@ -1,6 +1,8 @@
 {
+    "name": "symfonycasts/solid",
+    "description": "An app to share Big foot sighting pictures",
+    "minimum-stability": "stable",
     "type": "project",
-    "license": "proprietary",
     "require": {
         "php": ">=7.2.5",
         "ext-ctype": "*",
