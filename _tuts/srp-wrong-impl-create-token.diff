@@ -1,0 +1,14 @@
+diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
+index 4249dde..bd5c51e 100644
+--- a/src/Manager/UserManager.php
++++ b/src/Manager/UserManager.php
+@@ -26,4 +26,9 @@ class UserManager
+         $this->entityManager->persist($user);
+         $this->entityManager->flush();
+     }
++
++    private function createToken(): string
++    {
++        return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
++    }
+ }

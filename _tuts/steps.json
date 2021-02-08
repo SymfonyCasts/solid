@@ -4,7 +4,17 @@
             "id": "start",
             "name": "start",
             "description": null
+        },
+        {
+            "id": "srp-wrong-impl-create-token",
+            "name": "SRP wrong impl create token",
+            "description": null
+        },
+        {
+            "id": "srp-wrong-impl-set-token-on-user",
+            "name": "SRP wrong impl set token on user",
+            "description": null
         }
     ],
-    "sha": "318ccff8412902addcc3ecbe297750a697a41e1f"
+    "sha": "3e70683b65ff23c59abe03aefd3f13fe29de5c1a"
 }
