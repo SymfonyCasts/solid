@@ -58,6 +58,11 @@ class User implements UserInterface
      */
     private $agreedToTermsAt;
 
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    private $confirmationToken;
+
     public function __construct()
     {
         $this->bigFootSightings = new ArrayCollection();
@@ -201,6 +206,18 @@ class User implements UserInterface
     public function setAgreedToTermsAt(\DateTimeInterface $agreedToTermsAt): self
     {
         $this->agreedToTermsAt = $agreedToTermsAt;
+
+        return $this;
+    }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
 
         return $this;
     }
