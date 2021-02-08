@@ -8,7 +8,6 @@
         {% endblock %}
     </head>
     <body>
-        
         <nav class="navbar navbar-expand navbar-dark bg-dark ">
             <a class="navbar-brand" href="{{ path('app_homepage') }}">
                 <img src="{{ asset('build/images/bigfoot.png') }}" width="25" height="30" class="d-inline-block align-top" alt="sasquatch">
@@ -33,7 +32,28 @@
               </ul>
             
         </nav>
-        
+
+        {# Flash messages #}
+        {% if app.session.flashBag.peek('success')|length > 0 %}
+            <div class="alert alert-block alert-success">
+                {% for flash in app.session.flashBag.get('success') %}
+                    <p class="text-center">
+                        {{ flash|trans|raw }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if app.session.flashBag.peek('error')|length > 0 %}
+            <div class="alert alert-block alert-danger">
+                {% for flash in app.session.flashBag.get('error') %}
+                    <p class="text-center">
+                        {{ flash|trans|raw }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <div class="container">
             <div class="row">
                 <div class="col mb-5 top-nav">
