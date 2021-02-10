@@ -39,7 +39,12 @@
             "id": "srp-wrong-impl-send-email",
             "name": "srp-wrong-impl-send-email",
             "description": null
+        },
+        {
+            "id": "srp-rename-register-to-create",
+            "name": "srp-rename-register-to-create",
+            "description": null
         }
     ],
-    "sha": "908afa94a729f48e05fdd33453b8c1b5235a802c"
+    "sha": "4b159d340c55c089b3d55457fcd290eac14a1d3d"
 }

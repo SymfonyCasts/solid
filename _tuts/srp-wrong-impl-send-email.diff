@@ -1,5 +1,5 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index 437ebed..cfdf136 100644
+index 8e5d21c..ef42723 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
 @@ -54,6 +54,8 @@ class UserManager

@@ -1,5 +1,5 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index aaad7c7..15aeeef 100644
+index 2359ee6..844bbd2 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
 @@ -4,18 +4,26 @@ namespace App\Manager;
