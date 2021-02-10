@@ -1,0 +1,38 @@
+diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
+index 4790c7b..aaad7c7 100644
+--- a/src/Manager/UserManager.php
++++ b/src/Manager/UserManager.php
+@@ -4,15 +4,19 @@ namespace App\Manager;
+ 
+ use App\Entity\User;
+ use Doctrine\ORM\EntityManagerInterface;
++use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
++use Symfony\Component\Routing\RouterInterface;
+ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+ 
+ class UserManager
+ {
++    private $router;
+     private $passwordEncoder;
+     private $entityManager;
+ 
+-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
++    public function __construct(RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
+     {
++        $this->router = $router;
+         $this->passwordEncoder = $passwordEncoder;
+         $this->entityManager = $entityManager;
+     }
+@@ -21,7 +25,11 @@ class UserManager
+     {
+         $token = $this->createToken();
+         $user->setConfirmationToken($token);
+-        
++
++        $confirmationLink = $this->router->generate('check_confirmation_link', [
++            'token' => $user->getConfirmationToken()
++        ], UrlGeneratorInterface::ABSOLUTE_URL);
++
+         $user->setPassword(
+             $this->passwordEncoder->encodePassword($user, $plainPassword)
+         );

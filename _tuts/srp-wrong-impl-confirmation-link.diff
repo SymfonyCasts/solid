@@ -1,0 +1,38 @@
+diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
+index a790cd5..cacf1a8 100644
+--- a/src/Controller/RegistrationController.php
++++ b/src/Controller/RegistrationController.php
+@@ -5,6 +5,8 @@ namespace App\Controller;
+ use App\Entity\User;
+ use App\Form\RegistrationFormType;
+ use App\Manager\UserManager;
++use App\Repository\UserRepository;
++use Doctrine\ORM\EntityManagerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\Routing\Annotation\Route;
+@@ -38,4 +40,24 @@ class RegistrationController extends AbstractController
+             'form' => $form->createView(),
+         ]);
+     }
++
++    /**
++     * @Route("/confirm/{token}", name="check_confirmation_link", methods={"GET"})
++     */
++    public function confirmAction(string $token, UserRepository $userRepository, EntityManagerInterface $entityManager)
++    {
++        $user = $userRepository->findOneBy(['confirmationToken' => $token]);
++
++        if (!$user) {
++            throw $this->createNotFoundException(sprintf('The user with confirmation token "%s" does not exist', $token));
++        }
++
++        $user->setConfirmationToken(null);
++
++        $entityManager->flush();
++
++        $this->addFlash('success', 'The email was successfully confirmed');
++
++        return $this->redirectToRoute('app_homepage');
++    }
+ }

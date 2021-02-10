@@ -14,7 +14,17 @@
             "id": "srp-wrong-impl-set-token-on-user",
             "name": "SRP wrong impl set token on user",
             "description": null
+        },
+        {
+            "id": "srp-wrong-imp-inject-router",
+            "name": "SRP wrong imp inject router",
+            "description": null
+        },
+        {
+            "id": "srp-wrong-impl-confirmation-link",
+            "name": "srp-wrong-impl-confirmation-link",
+            "description": null
         }
     ],
-    "sha": "3e70683b65ff23c59abe03aefd3f13fe29de5c1a"
+    "sha": "216bb896c688aa5d9f67c7a022be25cf9cfb6a30"
 }
