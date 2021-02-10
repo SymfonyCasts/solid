@@ -215,7 +215,7 @@ class User implements UserInterface
         return $this->confirmationToken;
     }
 
-    public function setConfirmationToken(string $confirmationToken): self
+    public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
 
