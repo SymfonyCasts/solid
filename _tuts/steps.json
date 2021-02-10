@@ -44,7 +44,47 @@
             "id": "srp-rename-register-to-create",
             "name": "srp-rename-register-to-create",
             "description": null
+        },
+        {
+            "id": "srp-create-method-return-user",
+            "name": "srp-create-method-return-user",
+            "description": null
+        },
+        {
+            "id": "srp-class-confirmation-email-sender",
+            "name": "srp-class-confirmation-email-sender",
+            "description": null
+        },
+        {
+            "id": "srp-email-sender-constructor",
+            "name": "srp-email-sender-constructor",
+            "description": null
+        },
+        {
+            "id": "srp-email-sender-impl-send",
+            "name": "srp-email-sender-impl-send",
+            "description": null
+        },
+        {
+            "id": "srp-user-manager-cleanup",
+            "name": "srp-user-manager-cleanup",
+            "description": null
+        },
+        {
+            "id": "srp-copy-resend-controller",
+            "name": "srp-copy-resend-controller",
+            "description": null
+        },
+        {
+            "id": "srp-resend-action-arguments",
+            "name": "srp-resend-action-arguments",
+            "description": null
+        },
+        {
+            "id": "srp-fix-signup-action",
+            "name": "srp-fix-signup-action",
+            "description": null
         }
     ],
-    "sha": "4b159d340c55c089b3d55457fcd290eac14a1d3d"
+    "sha": "80e6f867e3b16442f77663eec361b1e94f3cb174"
 }

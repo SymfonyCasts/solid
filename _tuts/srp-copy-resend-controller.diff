@@ -1,0 +1,35 @@
+diff --git a/src/Controller/ResendConfirmationController.php b/src/Controller/ResendConfirmationController.php
+new file mode 100644
+index 0000000..b4551c2
+--- /dev/null
++++ b/src/Controller/ResendConfirmationController.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\Controller;
++
++use App\Repository\UserRepository;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Request;
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Component\Routing\Annotation\Route;
++
++class ResendConfirmationController extends AbstractController
++{
++    /**
++     * @Route("/resend-confirmation", methods={"POST"})
++     */
++    public function resend(Request $request, UserRepository $userRepository)
++    {
++        $email = $request->request->get('email');
++
++        $user = $userRepository->findOneBy(['email' => $email]);
++        if (!$user) {
++            throw $this->createNotFoundException('User not found');
++        }
++
++        // TODO: send confirmation email
++
++        return new Response(null, 204);
++    }
++}

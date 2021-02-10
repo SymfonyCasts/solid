@@ -1,0 +1,14 @@
+diff --git a/src/Service/ConfirmationEmailSender.php b/src/Service/ConfirmationEmailSender.php
+new file mode 100644
+index 0000000..10ea643
+--- /dev/null
++++ b/src/Service/ConfirmationEmailSender.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace App\Service;
++
++class ConfirmationEmailSender
++{
++
++}

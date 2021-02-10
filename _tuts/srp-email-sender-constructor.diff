@@ -1,0 +1,22 @@
+diff --git a/src/Service/ConfirmationEmailSender.php b/src/Service/ConfirmationEmailSender.php
+index 10ea643..dcb0e43 100644
+--- a/src/Service/ConfirmationEmailSender.php
++++ b/src/Service/ConfirmationEmailSender.php
+@@ -2,7 +2,17 @@
+ 
+ namespace App\Service;
+ 
++use Symfony\Component\Mailer\MailerInterface;
++use Symfony\Component\Routing\RouterInterface;
++
+ class ConfirmationEmailSender
+ {
++    private $mailer;
++    private $router;
+ 
++    public function __construct(MailerInterface $mailer, RouterInterface $router)
++    {
++        $this->mailer = $mailer;
++        $this->router = $router;
++    }
+ }

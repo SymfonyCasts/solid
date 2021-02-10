@@ -1,0 +1,22 @@
+diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
+index cfdf136..e9bfee0 100644
+--- a/src/Manager/UserManager.php
++++ b/src/Manager/UserManager.php
+@@ -30,7 +30,7 @@ class UserManager
+         $this->entityManager = $entityManager;
+     }
+ 
+-    public function create(User $user, string $plainPassword)
++    public function create(User $user, string $plainPassword): User
+     {
+         $token = $this->createToken();
+         $user->setConfirmationToken($token);
+@@ -56,6 +56,8 @@ class UserManager
+         $this->entityManager->flush();
+ 
+         $this->mailer->send($confirmationEmail);
++
++        return $user;
+     }
+ 
+     private function createToken(): string

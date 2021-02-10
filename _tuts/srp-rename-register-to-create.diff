@@ -1,0 +1,26 @@
+diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
+index 291d693..cacf1a8 100644
+--- a/src/Controller/RegistrationController.php
++++ b/src/Controller/RegistrationController.php
+@@ -29,7 +29,7 @@ class RegistrationController extends AbstractController
+ 
+             $plainPassword = $form->get('plainPassword')->getData();
+ 
+-            $userManager->register($user, $plainPassword);
++            $userManager->create($user, $plainPassword);
+ 
+             $this->addFlash('success', 'User created successfully!');
+ 
+diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
+index ef42723..cfdf136 100644
+--- a/src/Manager/UserManager.php
++++ b/src/Manager/UserManager.php
+@@ -30,7 +30,7 @@ class UserManager
+         $this->entityManager = $entityManager;
+     }
+ 
+-    public function register(User $user, string $plainPassword)
++    public function create(User $user, string $plainPassword)
+     {
+         $token = $this->createToken();
+         $user->setConfirmationToken($token);

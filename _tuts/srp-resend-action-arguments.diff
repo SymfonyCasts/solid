@@ -1,0 +1,30 @@
+diff --git a/src/Controller/ResendConfirmationController.php b/src/Controller/ResendConfirmationController.php
+index b4551c2..3a74ddf 100644
+--- a/src/Controller/ResendConfirmationController.php
++++ b/src/Controller/ResendConfirmationController.php
+@@ -3,6 +3,7 @@
+ namespace App\Controller;
+ 
+ use App\Repository\UserRepository;
++use App\Service\ConfirmationEmailSender;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+@@ -13,7 +14,7 @@ class ResendConfirmationController extends AbstractController
+     /**
+      * @Route("/resend-confirmation", methods={"POST"})
+      */
+-    public function resend(Request $request, UserRepository $userRepository)
++    public function resend(Request $request, UserRepository $userRepository, ConfirmationEmailSender $confirmationEmailSender)
+     {
+         $email = $request->request->get('email');
+ 
+@@ -22,7 +23,7 @@ class ResendConfirmationController extends AbstractController
+             throw $this->createNotFoundException('User not found');
+         }
+ 
+-        // TODO: send confirmation email
++        $confirmationEmailSender->send($user);
+ 
+         return new Response(null, 204);
+     }

@@ -1,0 +1,32 @@
+diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
+index cacf1a8..639b47a 100644
+--- a/src/Controller/RegistrationController.php
++++ b/src/Controller/RegistrationController.php
+@@ -6,6 +6,7 @@ use App\Entity\User;
+ use App\Form\RegistrationFormType;
+ use App\Manager\UserManager;
+ use App\Repository\UserRepository;
++use App\Service\ConfirmationEmailSender;
+ use Doctrine\ORM\EntityManagerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Request;
+@@ -16,7 +17,7 @@ class RegistrationController extends AbstractController
+     /**
+      * @Route("/signup", name="signup")
+      */
+-    public function signup(Request $request, UserManager $userManager)
++    public function signup(Request $request, UserManager $userManager, ConfirmationEmailSender $confirmationEmailSender)
+     {
+         $form = $this->createForm(RegistrationFormType::class);
+ 
+@@ -29,7 +30,9 @@ class RegistrationController extends AbstractController
+ 
+             $plainPassword = $form->get('plainPassword')->getData();
+ 
+-            $userManager->create($user, $plainPassword);
++            $user = $userManager->create($user, $plainPassword);
++
++            $confirmationEmailSender->send($user);
+ 
+             $this->addFlash('success', 'User created successfully!');
+ 
