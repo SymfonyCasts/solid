@@ -24,7 +24,22 @@
             "id": "srp-wrong-impl-confirmation-link",
             "name": "srp-wrong-impl-confirmation-link",
             "description": null
+        },
+        {
+            "id": "srp-wrong-impl-inject-mailer",
+            "name": "srp-wrong-impl-inject-mailer",
+            "description": null
+        },
+        {
+            "id": "srp-wrong-impl-template-email",
+            "name": "srp-wrong-impl-template-email",
+            "description": null
+        },
+        {
+            "id": "srp-wrong-impl-send-email",
+            "name": "srp-wrong-impl-send-email",
+            "description": null
         }
     ],
-    "sha": "216bb896c688aa5d9f67c7a022be25cf9cfb6a30"
+    "sha": "908afa94a729f48e05fdd33453b8c1b5235a802c"
 }
