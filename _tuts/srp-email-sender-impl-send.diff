@@ -1,17 +1,19 @@
 diff --git a/src/Service/ConfirmationEmailSender.php b/src/Service/ConfirmationEmailSender.php
-index dcb0e43..ee548d6 100644
+index dcb0e43..e3ca81a 100644
 --- a/src/Service/ConfirmationEmailSender.php
 +++ b/src/Service/ConfirmationEmailSender.php
-@@ -2,6 +2,8 @@
+@@ -2,7 +2,10 @@
  
  namespace App\Service;
  
 +use App\Entity\User;
 +use Symfony\Bridge\Twig\Mime\TemplatedEmail;
  use Symfony\Component\Mailer\MailerInterface;
++use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  use Symfony\Component\Routing\RouterInterface;
  
-@@ -15,4 +17,22 @@ class ConfirmationEmailSender
+ class ConfirmationEmailSender
+@@ -15,4 +18,22 @@ class ConfirmationEmailSender
          $this->mailer = $mailer;
          $this->router = $router;
      }
@@ -20,7 +22,7 @@ index dcb0e43..ee548d6 100644
 +    {
 +        $confirmationLink = $this->router->generate('check_confirmation_link', [
 +            'token' => $user->getConfirmationToken()
-+        ]);
++        ], UrlGeneratorInterface::ABSOLUTE_URL);
 +
 +        $confirmationEmail = (new TemplatedEmail())
 +            ->from('staff@example.com')
