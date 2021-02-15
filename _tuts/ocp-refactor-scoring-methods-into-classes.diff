@@ -1,0 +1,91 @@
+diff --git a/src/Scoring/CoordinatesFactor.php b/src/Scoring/CoordinatesFactor.php
+new file mode 100644
+index 0000000..4e95cfc
+--- /dev/null
++++ b/src/Scoring/CoordinatesFactor.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Scoring;
++
++use App\Entity\BigFootSighting;
++
++class CoordinatesFactor implements ScoringFactorInterface
++{
++    public function score(BigFootSighting $sighting): int
++    {
++        $score = 0;
++        $lat = (float)$sighting->getLatitude();
++        $lng = (float)$sighting->getLongitude();
++
++        // California edge to edge coordinates
++        if (true
++            && $lat >= 32.5121 && $lat <= 42.0126
++            && $lng >= -114.1315 && $lat <= -124.6509
++        ) {
++            $score += 30;
++        }
++
++        return $score;
++    }
++}
+diff --git a/src/Scoring/DescriptionFactor.php b/src/Scoring/DescriptionFactor.php
+new file mode 100644
+index 0000000..480d333
+--- /dev/null
++++ b/src/Scoring/DescriptionFactor.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Scoring;
++
++use App\Entity\BigFootSighting;
++
++class DescriptionFactor implements ScoringFactorInterface
++{
++    public function score(BigFootSighting $sighting): int
++    {
++        $score = 0;
++        $description = strtolower($sighting->getDescription());
++
++        if (strpos($description, 'hairy') !== false) {
++            $score += 10;
++        }
++
++        if (strpos($description, 'chased me') !== false) {
++            $score += 20;
++        }
++
++        return $score;
++    }
++}
+diff --git a/src/Scoring/TitleFactor.php b/src/Scoring/TitleFactor.php
+new file mode 100644
+index 0000000..0d07ef0
+--- /dev/null
++++ b/src/Scoring/TitleFactor.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Scoring;
++
++use App\Entity\BigFootSighting;
++
++class TitleFactor implements ScoringFactorInterface
++{
++    public function score(BigFootSighting $sighting): int
++    {
++        $score = 0;
++        $title = strtolower($sighting->getTitle());
++
++        if (strpos($title, 'hairy') !== false) {
++            $score += 10;
++        }
++
++        if (strpos($title, 'chased me') !== false) {
++            $score += 20;
++        }
++
++        return $score;
++    }
++}

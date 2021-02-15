@@ -84,7 +84,37 @@
             "id": "srp-fix-signup-action",
             "name": "srp-fix-signup-action",
             "description": null
+        },
+        {
+            "id": "ocp-scoring-factor-interface",
+            "name": "ocp-scoring-factor-interface",
+            "description": null
+        },
+        {
+            "id": "ocp-refactor-scoring-methods-into-classes",
+            "name": "ocp-refactor-scoring-methods-into-classes",
+            "description": null
+        },
+        {
+            "id": "ocp-clean-up-scorer-class",
+            "name": "ocp-clean-up-scorer-class",
+            "description": null
+        },
+        {
+            "id": "ocp-adjust-scorer-impl",
+            "name": "ocp-adjust-scorer-impl",
+            "description": null
+        },
+        {
+            "id": "ocp-configure-scorer-service",
+            "name": "ocp-configure-scorer-service",
+            "description": null
+        },
+        {
+            "id": "ocp-tag-service-automatically",
+            "name": "ocp-tag-service-automatically",
+            "description": null
         }
     ],
-    "sha": "06dd81d6d9d78719eec24d0ee2e4e0956ba3c355"
+    "sha": "707b9e50b559932ac75289867d3695039042734c"
 }

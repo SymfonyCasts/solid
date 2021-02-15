@@ -1,0 +1,12 @@
+diff --git a/config/services.yaml b/config/services.yaml
+index c7296dd..0e95f31 100644
+--- a/config/services.yaml
++++ b/config/services.yaml
+@@ -29,3 +29,7 @@ services:
+ 
+     # add more service definitions when explicit configuration is needed
+     # please note that last definitions always *replace* previous ones
++
++    App\Service\SightingScorer:
++        arguments:
++            $scoringFactors: [ '@App\Scoring\TitleFactor', '@App\Scoring\DescriptionFactor', '@App\Scoring\CoordinatesFactor' ]

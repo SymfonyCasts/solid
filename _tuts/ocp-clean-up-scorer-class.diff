@@ -1,0 +1,84 @@
+diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
+index 0df7c1b..c11bd7d 100644
+--- a/src/Service/SightingScorer.php
++++ b/src/Service/SightingScorer.php
+@@ -3,68 +3,26 @@
+ namespace App\Service;
+ 
+ use App\Entity\BigFootSighting;
++use App\Scoring\ScoringFactorInterface;
+ 
+ class SightingScorer
+ {
+-    public function score(BigFootSighting $sighting): int
+-    {
+-        $score = 0;
+-        $score += $this->evaluateCoordinates($sighting);
+-        $score += $this->evaluateTitle($sighting);
+-        $score += $this->evaluateDescription($sighting);
+-
+-        return $score;
+-    }
+-
+-    private function evaluateCoordinates(BigFootSighting $sighting): int
+-    {
+-        $score = 0;
+-        $lat = (float)$sighting->getLatitude();
+-        $lng = (float)$sighting->getLongitude();
+-
+-        // California edge to edge coordinates
+-        if (true
+-            && $lat >= 32.5121 && $lat <= 42.0126
+-            && $lng >= -114.1315 && $lat <= -124.6509
+-        ) {
+-            $score += 30;
+-        }
+-
+-        return $score;
+-    }
++    /**
++     * @var ScoringFactorInterface[]
++     */
++    private $scoringFactors;
+ 
+-    private function evaluateTitle(BigFootSighting $sighting): int
++    public function __construct(array $scoringFactors)
+     {
+-        $score = 0;
+-        $title = strtolower($sighting->getTitle());
+-
+-        if (strpos($title, 'hairy') !== false) {
+-            $score += 10;
+-        }
+-
+-        if (strpos($title, 'chased me') !== false) {
+-            $score += 20;
+-        }
+-
+-        return $score;
++        $this->scoringFactors = $scoringFactors;
+     }
+ 
+-    private function evaluateDescription(BigFootSighting $sighting): int
++    public function score(BigFootSighting $sighting): int
+     {
+         $score = 0;
+-        $title = strtolower($sighting->getTitle());
+-
+-        if (strpos($title, 'hairy') !== false) {
+-            $score += 10;
+-        }
+-
+-        if (strpos($title, 'chased me') !== false) {
+-            $score += 20;
+-        }
+-
+-        if (strpos($title, 'using an Iphone') !== false) {
+-            $score -= 50;
+-        }
++        $score += $this->evaluateCoordinates($sighting);
++        $score += $this->evaluateTitle($sighting);
++        $score += $this->evaluateDescription($sighting);
+ 
+         return $score;
+     }

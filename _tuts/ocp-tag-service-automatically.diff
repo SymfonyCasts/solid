@@ -1,0 +1,50 @@
+diff --git a/config/services.yaml b/config/services.yaml
+index 0e95f31..20df63a 100644
+--- a/config/services.yaml
++++ b/config/services.yaml
+@@ -32,4 +32,4 @@ services:
+ 
+     App\Service\SightingScorer:
+         arguments:
+-            $scoringFactors: [ '@App\Scoring\TitleFactor', '@App\Scoring\DescriptionFactor', '@App\Scoring\CoordinatesFactor' ]
++            $scoringFactors: !tagged_iterator scoring.factor # Inject all services tagged with "scoring.factor"
+diff --git a/src/Kernel.php b/src/Kernel.php
+index 655e796..8f81ebb 100644
+--- a/src/Kernel.php
++++ b/src/Kernel.php
+@@ -2,7 +2,9 @@
+ 
+ namespace App;
+ 
++use App\Scoring\ScoringFactorInterface;
+ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
++use Symfony\Component\DependencyInjection\ContainerBuilder;
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+@@ -35,4 +37,12 @@ class Kernel extends BaseKernel
+             (require $path)($routes->withPath($path), $this);
+         }
+     }
++
++    protected function build(ContainerBuilder $container)
++    {
++        parent::build($container);
++
++        $container->registerForAutoconfiguration(ScoringFactorInterface::class)
++            ->addTag('scoring.factor');
++    }
+ }
+diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
+index 9d1e8dd..1a69353 100644
+--- a/src/Service/SightingScorer.php
++++ b/src/Service/SightingScorer.php
+@@ -12,7 +12,7 @@ class SightingScorer
+      */
+     private $scoringFactors;
+ 
+-    public function __construct(array $scoringFactors)
++    public function __construct(iterable $scoringFactors)
+     {
+         $this->scoringFactors = $scoringFactors;
+     }
