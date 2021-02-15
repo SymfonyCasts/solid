@@ -29,11 +29,6 @@ class BigFootSighting
     private $description;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $confidenceIndex;
-
-    /**
      * @ORM\Column(type="decimal", precision=9, scale=6)
      */
     private $latitude;
@@ -100,18 +95,6 @@ class BigFootSighting
         return $this;
     }
 
-    public function getConfidenceIndex(): ?int
-    {
-        return $this->confidenceIndex;
-    }
-
-    public function setConfidenceIndex(int $confidenceIndex): self
-    {
-        $this->confidenceIndex = $confidenceIndex;
-
-        return $this;
-    }
-
     public function getLatitude(): ?string
     {
         return $this->latitude;
@@ -159,7 +142,6 @@ class BigFootSighting
 
         return $this;
     }
-
 
     /**
      * @return Collection|Comment[]
