@@ -86,6 +86,11 @@
             "description": null
         },
         {
+            "id": "remove-this-step",
+            "name": "remove-this-step",
+            "description": null
+        },
+        {
             "id": "ocp-scoring-factor-interface",
             "name": "ocp-scoring-factor-interface",
             "description": null
@@ -114,7 +119,37 @@
             "id": "ocp-tag-service-automatically",
             "name": "ocp-tag-service-automatically",
             "description": null
+        },
+        {
+            "id": "lsp-create-photo-factor",
+            "name": "lsp-create-photo-factor",
+            "description": null
+        },
+        {
+            "id": "lsp-add-images-field",
+            "name": "lsp-add-images-field",
+            "description": null
+        },
+        {
+            "id": "lsp-add-migration-images-field",
+            "name": "lsp-add-migration-images-field",
+            "description": null
+        },
+        {
+            "id": "lsp-add-images-to-form-type",
+            "name": "lsp-add-images-to-form-type",
+            "description": null
+        },
+        {
+            "id": "lsp-wrong-fix-photo-factor",
+            "name": "lsp-wrong-fix-photo-factor",
+            "description": null
+        },
+        {
+            "id": "lsp-right-fix-photo-factor",
+            "name": "lsp-right-fix-photo-factor",
+            "description": null
         }
     ],
-    "sha": "707b9e50b559932ac75289867d3695039042734c"
+    "sha": "904769aa63e3881750d24e16c03ee7f1f59d472f"
 }

@@ -1,0 +1,28 @@
+diff --git a/src/Scoring/PhotoFactor.php b/src/Scoring/PhotoFactor.php
+new file mode 100644
+index 0000000..bd93f98
+--- /dev/null
++++ b/src/Scoring/PhotoFactor.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace App\Scoring;
++
++use App\Entity\BigFootSighting;
++
++class PhotoFactor implements ScoringFactorInterface
++{
++    public function score(BigFootSighting $sighting): int
++    {
++        if (empty($sighting->getImages())) {
++            throw new \RuntimeException('Invalid BigFootSighting, it should have at least one photo');
++        }
++
++        $score = 0;
++        foreach ($sighting->getImages() as $image) {
++            $score += rand(1, 100); // analyze image
++        }
++
++        return $score;
++    }
++}
