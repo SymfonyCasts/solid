@@ -111,11 +111,11 @@
     "egulias/email-validator": {
         "version": "2.1.25"
     },
+    "fakerphp/faker": {
+        "version": "v1.13.0"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
-    },
-    "fzaninotto/faker": {
-        "version": "v1.8.0"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"

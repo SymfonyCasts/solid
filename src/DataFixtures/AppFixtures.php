@@ -63,7 +63,7 @@ class AppFixtures extends Fixture
             $sighting->setOwner($this->users[array_rand($this->users)]);
             $sighting->setTitle($this->faker->realText(80));
             $sighting->setDescription($this->faker->paragraph);
-            $sighting->setConfidenceIndex(rand(1, 10));
+            $sighting->setScore(rand(1, 10));
             $sighting->setLatitude($this->faker->latitude);
             $sighting->setLongitude($this->faker->longitude);
             $sighting->setCreatedAt($this->faker->dateTimeBetween('-6 months', 'now'));
