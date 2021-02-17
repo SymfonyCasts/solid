@@ -1,0 +1,21 @@
+diff --git a/src/Model/DebuggableBigFootSightingScore.php b/src/Model/DebuggableBigFootSightingScore.php
+index 1550d65..e6c849d 100644
+--- a/src/Model/DebuggableBigFootSightingScore.php
++++ b/src/Model/DebuggableBigFootSightingScore.php
+@@ -4,5 +4,16 @@ namespace App\Model;
+ 
+ class DebuggableBigFootSightingScore extends BigFootSightingScore
+ {
++    private $calculationTime;
+ 
++    public function __construct(int $score, float $calculationTime)
++    {
++        parent::__construct($score);
++        $this->calculationTime = $calculationTime;
++    }
++
++    public function getCalculationTime(): float
++    {
++        return $this->calculationTime;
++    }
+ }
