@@ -1,5 +1,5 @@
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index 1a69353..3d4d666 100644
+index 7dd68be..748f82f 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -3,6 +3,7 @@
@@ -7,10 +7,10 @@ index 1a69353..3d4d666 100644
  
  use App\Entity\BigFootSighting;
 +use App\Scoring\PhotoFactor;
+ use App\Model\BigFootSightingScore;
  use App\Scoring\ScoringFactorInterface;
  
- class SightingScorer
-@@ -22,6 +23,11 @@ class SightingScorer
+@@ -23,6 +24,11 @@ class SightingScorer
          $score = 0;
          /** @var ScoringFactorInterface $scoringFactor */
          foreach ($this->scoringFactors as $scoringFactor) {

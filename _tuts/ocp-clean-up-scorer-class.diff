@@ -1,24 +1,32 @@
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index 0df7c1b..c11bd7d 100644
+index 812f191..b99dda5 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
-@@ -3,68 +3,26 @@
- namespace App\Service;
+@@ -4,9 +4,20 @@ namespace App\Service;
  
  use App\Entity\BigFootSighting;
+ use App\Model\BigFootSightingScore;
 +use App\Scoring\ScoringFactorInterface;
  
  class SightingScorer
  {
--    public function score(BigFootSighting $sighting): int
--    {
--        $score = 0;
--        $score += $this->evaluateCoordinates($sighting);
--        $score += $this->evaluateTitle($sighting);
--        $score += $this->evaluateDescription($sighting);
--
--        return $score;
--    }
++    /**
++     * @var ScoringFactorInterface[]
++     */
++    private $scoringFactors;
++
++    public function __construct(array $scoringFactors)
++    {
++        $this->scoringFactors = $scoringFactors;
++    }
++
+     public function score(BigFootSighting $sighting): BigFootSightingScore
+     {
+         $score = 0;
+@@ -16,57 +27,4 @@ class SightingScorer
+ 
+         return new BigFootSightingScore($score);
+     }
 -
 -    private function evaluateCoordinates(BigFootSighting $sighting): int
 -    {
@@ -36,14 +44,9 @@ index 0df7c1b..c11bd7d 100644
 -
 -        return $score;
 -    }
-+    /**
-+     * @var ScoringFactorInterface[]
-+     */
-+    private $scoringFactors;
- 
+-
 -    private function evaluateTitle(BigFootSighting $sighting): int
-+    public function __construct(array $scoringFactors)
-     {
+-    {
 -        $score = 0;
 -        $title = strtolower($sighting->getTitle());
 -
@@ -56,13 +59,11 @@ index 0df7c1b..c11bd7d 100644
 -        }
 -
 -        return $score;
-+        $this->scoringFactors = $scoringFactors;
-     }
- 
+-    }
+-
 -    private function evaluateDescription(BigFootSighting $sighting): int
-+    public function score(BigFootSighting $sighting): int
-     {
-         $score = 0;
+-    {
+-        $score = 0;
 -        $title = strtolower($sighting->getTitle());
 -
 -        if (strpos($title, 'hairy') !== false) {
@@ -76,9 +77,7 @@ index 0df7c1b..c11bd7d 100644
 -        if (strpos($title, 'using an Iphone') !== false) {
 -            $score -= 50;
 -        }
-+        $score += $this->evaluateCoordinates($sighting);
-+        $score += $this->evaluateTitle($sighting);
-+        $score += $this->evaluateDescription($sighting);
- 
-         return $score;
-     }
+-
+-        return $score;
+-    }
+ }

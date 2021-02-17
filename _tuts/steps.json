@@ -149,7 +149,17 @@
             "id": "lsp-right-fix-photo-factor",
             "name": "lsp-right-fix-photo-factor",
             "description": null
+        },
+        {
+            "id": "lsp-create-debuggablesightingscorer",
+            "name": "lsp-create-DebuggableSightingScorer",
+            "description": null
+        },
+        {
+            "id": "lsp-swap-debuggable-in-upload-action",
+            "name": "lsp-swap-debuggable-in-upload-action",
+            "description": null
         }
     ],
-    "sha": "904769aa63e3881750d24e16c03ee7f1f59d472f"
+    "sha": "2663339130e8efecab98649d43eac966bd15833d"
 }

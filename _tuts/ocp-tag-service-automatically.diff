@@ -36,10 +36,10 @@ index 655e796..8f81ebb 100644
 +    }
  }
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index 9d1e8dd..1a69353 100644
+index a638208..7dd68be 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
-@@ -12,7 +12,7 @@ class SightingScorer
+@@ -13,7 +13,7 @@ class SightingScorer
       */
      private $scoringFactors;
  

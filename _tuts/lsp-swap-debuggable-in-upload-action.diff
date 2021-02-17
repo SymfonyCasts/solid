@@ -1,0 +1,21 @@
+diff --git a/src/Controller/BigFootSightingController.php b/src/Controller/BigFootSightingController.php
+index e2e967a..c0b714a 100644
+--- a/src/Controller/BigFootSightingController.php
++++ b/src/Controller/BigFootSightingController.php
+@@ -4,6 +4,7 @@ namespace App\Controller;
+ 
+ use App\Entity\BigFootSighting;
+ use App\Form\BigfootSightingType;
++use App\Service\DebuggableSightingScorer;
+ use App\Service\SightingScorer;
+ use Doctrine\ORM\EntityManagerInterface;
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+@@ -17,7 +18,7 @@ class BigFootSightingController extends AbstractController
+      * @Route("/sighting/upload")
+      * @IsGranted("ROLE_USER")
+      */
+-    public function upload(Request $request, SightingScorer $sightingScoreCalculator, EntityManagerInterface $entityManager)
++    public function upload(Request $request, DebuggableSightingScorer $sightingScoreCalculator, EntityManagerInterface $entityManager)
+     {
+         $form = $this->createForm(BigFootSightingType::class);
+         $form->handleRequest($request);

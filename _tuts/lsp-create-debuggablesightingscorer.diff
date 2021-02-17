@@ -1,0 +1,14 @@
+diff --git a/src/Service/DebuggableSightingScorer.php b/src/Service/DebuggableSightingScorer.php
+new file mode 100644
+index 0000000..0a8653b
+--- /dev/null
++++ b/src/Service/DebuggableSightingScorer.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace App\Service;
++
++class DebuggableSightingScorer extends SightingScorer
++{
++
++}

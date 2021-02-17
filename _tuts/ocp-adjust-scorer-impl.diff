@@ -1,9 +1,9 @@
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index c11bd7d..9d1e8dd 100644
+index b99dda5..a638208 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
-@@ -20,9 +20,10 @@ class SightingScorer
-     public function score(BigFootSighting $sighting): int
+@@ -21,9 +21,10 @@ class SightingScorer
+     public function score(BigFootSighting $sighting): BigFootSightingScore
      {
          $score = 0;
 -        $score += $this->evaluateCoordinates($sighting);
@@ -14,5 +14,5 @@ index c11bd7d..9d1e8dd 100644
 +            $score += $scoringFactor->score($sighting);
 +        }
  
-         return $score;
+         return new BigFootSightingScore($score);
      }
