@@ -179,7 +179,12 @@
             "id": "lsp-debug-example-narrow-down-return-type",
             "name": "LSP Debug Example: narrow down return type",
             "description": null
+        },
+        {
+            "id": "lsp-debug-example-calculate-process-time",
+            "name": "LSP Debug Example: calculate process time",
+            "description": null
         }
     ],
-    "sha": "38e63a119bc531ea5353ec35ab41e3ca52c503ae"
+    "sha": "f02ba8956ad86fc88bbe211886818fa142817d01"
 }
