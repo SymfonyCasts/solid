@@ -3,17 +3,18 @@
 namespace App\Service;
 
 use App\Entity\BigFootSighting;
+use App\Model\BigFootSightingScore;
 
 class SightingScorer
 {
-    public function score(BigFootSighting $sighting): int
+    public function score(BigFootSighting $sighting): BigFootSightingScore
     {
         $score = 0;
         $score += $this->evaluateCoordinates($sighting);
         $score += $this->evaluateTitle($sighting);
         $score += $this->evaluateDescription($sighting);
 
-        return $score;
+        return new BigFootSightingScore($score);
     }
 
     private function evaluateCoordinates(BigFootSighting $sighting): int
