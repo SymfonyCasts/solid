@@ -1,0 +1,19 @@
+diff --git a/src/Service/DebuggableSightingScorer.php b/src/Service/DebuggableSightingScorer.php
+index 0a8653b..8edfd65 100644
+--- a/src/Service/DebuggableSightingScorer.php
++++ b/src/Service/DebuggableSightingScorer.php
+@@ -2,7 +2,13 @@
+ 
+ namespace App\Service;
+ 
++use App\Entity\BigFootSighting;
++use App\Model\BigFootSightingScore;
++
+ class DebuggableSightingScorer extends SightingScorer
+ {
+-
++    public function score(BigFootSighting $sighting): BigFootSightingScore
++    {
++        return parent::score($sighting);
++    }
+ }

@@ -159,7 +159,27 @@
             "id": "lsp-swap-debuggable-in-upload-action",
             "name": "lsp-swap-debuggable-in-upload-action",
             "description": null
+        },
+        {
+            "id": "lsp-debug-example-override-score-method",
+            "name": "LSP Debug Example: override score method",
+            "description": null
+        },
+        {
+            "id": "lsp-debug-example-subclass-bigfootsightingscore",
+            "name": "LSP Debug Example: subclass BigfootSightingScore",
+            "description": null
+        },
+        {
+            "id": "lsp-debug-example-store-calculation-time",
+            "name": "LSP Debug Example: store calculation time",
+            "description": null
+        },
+        {
+            "id": "lsp-debug-example-narrow-down-return-type",
+            "name": "LSP Debug Example: narrow down return type",
+            "description": null
         }
     ],
-    "sha": "2663339130e8efecab98649d43eac966bd15833d"
+    "sha": "bbcb9c25f05f5a0404d408853eebc49075df5c80"
 }

@@ -1,0 +1,14 @@
+diff --git a/src/Model/DebuggableBigfootSightingScore.php b/src/Model/DebuggableBigfootSightingScore.php
+new file mode 100644
+index 0000000..1550d65
+--- /dev/null
++++ b/src/Model/DebuggableBigfootSightingScore.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace App\Model;
++
++class DebuggableBigFootSightingScore extends BigFootSightingScore
++{
++
++}

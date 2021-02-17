@@ -1,0 +1,34 @@
+diff --git a/src/Model/DebuggableBigfootSightingScore.php b/src/Model/DebuggableBigfootSightingScore.php
+deleted file mode 100644
+index 1550d65..0000000
+--- a/src/Model/DebuggableBigfootSightingScore.php
++++ /dev/null
+@@ -1,8 +0,0 @@
+-<?php
+-
+-namespace App\Model;
+-
+-class DebuggableBigFootSightingScore extends BigFootSightingScore
+-{
+-
+-}
+diff --git a/src/Service/DebuggableSightingScorer.php b/src/Service/DebuggableSightingScorer.php
+index 8edfd65..3420c51 100644
+--- a/src/Service/DebuggableSightingScorer.php
++++ b/src/Service/DebuggableSightingScorer.php
+@@ -4,11 +4,13 @@ namespace App\Service;
+ 
+ use App\Entity\BigFootSighting;
+ use App\Model\BigFootSightingScore;
++use App\Model\DebuggableBigfootSightingScore;
+ 
+ class DebuggableSightingScorer extends SightingScorer
+ {
+-    public function score(BigFootSighting $sighting): BigFootSightingScore
++    public function score(BigFootSighting $sighting): DebuggableBigFootSightingScore
+     {
+-        return parent::score($sighting);
++        $bfsScore = parent::score($sighting);
++        return new DebuggableBigFootSightingScore($bfsScore->getScore(), 0);
+     }
+ }
