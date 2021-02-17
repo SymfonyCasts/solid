@@ -1,3 +1,37 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
 body {
-    background-color: lightgray;
+    background-color: rgb(21, 32, 43);
+    color: #fff;
+}
+
+.top-nav {
+    border-bottom: 1px solid #48535E;
+}
+
+.footer-nav {
+    border-top: 1px solid #48535E;
+}
+
+.big-foot-img {
+    height: 200px;
+    width: auto;
+}
+
+.repo-list-container {
+    background-color: #17a2b8;
+}
+
+.table-content {
+    font-size: .8rem;
+}
+
+.sighting-log-container {
+    border-bottom: 2px dashed #48535E;
+}
+
+.comment-container {
+    background-color: #343a40;
+    border-radius: 5px;
 }
