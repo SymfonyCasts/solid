@@ -189,7 +189,12 @@
             "id": "lsp-debug-example-calculate-process-time",
             "name": "LSP Debug Example: calculate process time",
             "description": null
+        },
+        {
+            "id": "lsp-debug-example-paste-debug-command",
+            "name": "LSP Debug Example: paste debug command",
+            "description": null
         }
     ],
-    "sha": "fd290c608d3a647e6dcb11e1ca6d29dd46b745eb"
+    "sha": "64bc25bc91d0423e62fb60a1e02179f5a040dcc9"
 }
