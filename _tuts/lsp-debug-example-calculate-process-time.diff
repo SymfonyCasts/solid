@@ -1,5 +1,5 @@
 diff --git a/src/Service/DebuggableSightingScorer.php b/src/Service/DebuggableSightingScorer.php
-index 3420c51..7f7249a 100644
+index 4670d43..bafc67a 100644
 --- a/src/Service/DebuggableSightingScorer.php
 +++ b/src/Service/DebuggableSightingScorer.php
 @@ -10,7 +10,10 @@ class DebuggableSightingScorer extends SightingScorer

@@ -161,6 +161,11 @@
             "description": null
         },
         {
+            "id": "lsp-debug-example-configure-debuggable-scorer",
+            "name": "LSP DEBUG EXAMPLE: configure debuggable scorer",
+            "description": null
+        },
+        {
             "id": "lsp-debug-example-override-score-method",
             "name": "LSP Debug Example: override score method",
             "description": null
@@ -186,5 +191,5 @@
             "description": null
         }
     ],
-    "sha": "f02ba8956ad86fc88bbe211886818fa142817d01"
+    "sha": "fe531f53fc82a192193473c88ef858d6424e5aaf"
 }

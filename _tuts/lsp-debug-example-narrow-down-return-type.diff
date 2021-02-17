@@ -1,12 +1,12 @@
 diff --git a/src/Service/DebuggableSightingScorer.php b/src/Service/DebuggableSightingScorer.php
-index 8edfd65..3420c51 100644
+index 8edfd65..4670d43 100644
 --- a/src/Service/DebuggableSightingScorer.php
 +++ b/src/Service/DebuggableSightingScorer.php
 @@ -4,11 +4,13 @@ namespace App\Service;
  
  use App\Entity\BigFootSighting;
  use App\Model\BigFootSightingScore;
-+use App\Model\DebuggableBigfootSightingScore;
++use App\Model\DebuggableBigFootSightingScore;
  
  class DebuggableSightingScorer extends SightingScorer
  {
