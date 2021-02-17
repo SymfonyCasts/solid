@@ -6,7 +6,7 @@
         </a>
     </td>
     <td class="text-nowrap">
-        <time class="table-content" datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|time_diff }}</time>
+        <time class="table-content" datetime="{{ sighting.createdAt|date('Y-m-d H:i') }}">{{ sighting.createdAt|ago }}</time>
     </td>
     <td>
         <a class="text-white table-content text-center" href="{{ path('app_sighting_show', {id: sighting.id}) }}">{{ sighting.comments|length }}</a>
