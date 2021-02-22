@@ -36,7 +36,7 @@ index 655e796..8f81ebb 100644
 +    }
  }
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index a638208..7dd68be 100644
+index 29a321c..a413b8d 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -13,7 +13,7 @@ class SightingScorer
