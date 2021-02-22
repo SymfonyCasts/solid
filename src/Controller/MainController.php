@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\BigFootSighting;
 use App\Repository\BigFootSightingRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +16,8 @@ class MainController extends AbstractController
         $sightings = $bigFootSightingRepository->findLatest(25);
 
         return $this->render('main/homepage.html.twig', [
-            'sightings' => $sightings
+            'sightings' => $sightings,
+            'mostActiveSightings' => $sightings
         ]);
     }
 
