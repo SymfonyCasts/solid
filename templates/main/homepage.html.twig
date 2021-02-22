@@ -16,13 +16,13 @@
                 <th>Comments</th>
             </tr>
         </thead>
-        <tbody class="js-sightings-list" data-url="{{ path('app_sightings_partial_list') }}">
+        <tbody class="js-sightings-list">
             {{ include('main/_sightings.html.twig') }}
         </tbody>
     </table>
 </div>
 <div class="col-4">
-    <div class="js-github-organization" data-url="{{ path('app_github_organization_info') }}"></div>
+    <div class="js-github-organization"></div>
 </div>
 
 {% endblock %}
