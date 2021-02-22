@@ -1,12 +1,15 @@
 diff --git a/config/services.yaml b/config/services.yaml
-index 0e95f31..20df63a 100644
+index 8156e9b..20df63a 100644
 --- a/config/services.yaml
 +++ b/config/services.yaml
-@@ -32,4 +32,4 @@ services:
+@@ -32,7 +32,4 @@ services:
  
      App\Service\SightingScorer:
          arguments:
--            $scoringFactors: [ '@App\Scoring\TitleFactor', '@App\Scoring\DescriptionFactor', '@App\Scoring\CoordinatesFactor' ]
+-            $scoringFactors:
+-                - '@App\Scoring\TitleFactor'
+-                - '@App\Scoring\DescriptionFactor'
+-                - '@App\Scoring\CoordinatesFactor'
 +            $scoringFactors: !tagged_iterator scoring.factor # Inject all services tagged with "scoring.factor"
 diff --git a/src/Kernel.php b/src/Kernel.php
 index 655e796..8f81ebb 100644
