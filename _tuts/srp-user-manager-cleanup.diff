@@ -1,8 +1,8 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index e9bfee0..17e27a2 100644
+index 93e29e0..17e27a2 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
-@@ -4,28 +4,15 @@ namespace App\Manager;
+@@ -4,25 +4,17 @@ namespace App\Manager;
  
  use App\Entity\User;
  use Doctrine\ORM\EntityManagerInterface;
@@ -14,25 +14,22 @@ index e9bfee0..17e27a2 100644
  
  class UserManager
  {
--    private $mailer;
--    private $router;
      private $passwordEncoder;
      private $entityManager;
+-    private $router;
+-    private $mailer;
  
--    public function __construct(
--        MailerInterface $mailer,
--        RouterInterface $router,
--        UserPasswordEncoderInterface $passwordEncoder,
--        EntityManagerInterface $entityManager
--    )
+-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, RouterInterface $router, MailerInterface $mailer)
 +    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
      {
--        $this->mailer = $mailer;
--        $this->router = $router;
          $this->passwordEncoder = $passwordEncoder;
          $this->entityManager = $entityManager;
+-        $this->router = $router;
+-        $this->mailer = $mailer;
      }
-@@ -35,19 +22,6 @@ class UserManager
+ 
+     public function create(User $user, string $plainPassword): User
+@@ -30,19 +22,6 @@ class UserManager
          $token = $this->createToken();
          $user->setConfirmationToken($token);
  
@@ -52,7 +49,7 @@ index e9bfee0..17e27a2 100644
          $user->setPassword(
              $this->passwordEncoder->encodePassword($user, $plainPassword)
          );
-@@ -55,8 +29,6 @@ class UserManager
+@@ -50,8 +29,6 @@ class UserManager
          $this->entityManager->persist($user);
          $this->entityManager->flush();
  

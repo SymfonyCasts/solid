@@ -12,11 +12,11 @@ index 291d693..cacf1a8 100644
              $this->addFlash('success', 'User created successfully!');
  
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index ef42723..cfdf136 100644
+index 25646f6..8d1183b 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
-@@ -30,7 +30,7 @@ class UserManager
-         $this->entityManager = $entityManager;
+@@ -25,7 +25,7 @@ class UserManager
+         $this->mailer = $mailer;
      }
  
 -    public function register(User $user, string $plainPassword)

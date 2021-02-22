@@ -1,8 +1,8 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index 2359ee6..844bbd2 100644
+index dbcc3a7..57a2ad0 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
-@@ -4,18 +4,26 @@ namespace App\Manager;
+@@ -4,6 +4,7 @@ namespace App\Manager;
  
  use App\Entity\User;
  use Doctrine\ORM\EntityManagerInterface;
@@ -10,23 +10,19 @@ index 2359ee6..844bbd2 100644
  use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  use Symfony\Component\Routing\RouterInterface;
  use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
- 
- class UserManager
- {
-+    private $mailer;
-     private $router;
+@@ -13,12 +14,14 @@ class UserManager
      private $passwordEncoder;
      private $entityManager;
+     private $router;
++    private $mailer;
  
--    public function __construct(RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
-+    public function __construct(
-+        MailerInterface $mailer,
-+        RouterInterface $router,
-+        UserPasswordEncoderInterface $passwordEncoder,
-+        EntityManagerInterface $entityManager
-+    )
+-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, RouterInterface $router)
++    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, RouterInterface $router, MailerInterface $mailer)
      {
-+        $this->mailer = $mailer;
-         $this->router = $router;
          $this->passwordEncoder = $passwordEncoder;
          $this->entityManager = $entityManager;
+         $this->router = $router;
++        $this->mailer = $mailer;
+     }
+ 
+     public function register(User $user, string $plainPassword)
