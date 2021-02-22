@@ -1,8 +1,8 @@
 diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
-index a790cd5..f5c57f0 100644
+index 326d7e0..0ccf9c4 100644
 --- a/src/Controller/RegistrationController.php
 +++ b/src/Controller/RegistrationController.php
-@@ -27,7 +27,7 @@ class RegistrationController extends AbstractController
+@@ -29,7 +29,7 @@ class RegistrationController extends AbstractController
  
              $plainPassword = $form->get('plainPassword')->getData();
  
