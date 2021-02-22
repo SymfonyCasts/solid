@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BigFootSightingController extends AbstractController
 {
     /**
-     * @Route("/sighting/upload")
+     * @Route("/sighting/upload", name="app_sighting_upload")
      * @IsGranted("ROLE_USER")
      */
     public function upload(Request $request, SightingScorer $sightingScoreCalculator, EntityManagerInterface $entityManager)
