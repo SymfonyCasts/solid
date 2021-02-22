@@ -1,5 +1,41 @@
+diff --git a/src/Scoring/DescriptionFactor.php b/src/Scoring/DescriptionFactor.php
+index 480d333..1ca9958 100644
+--- a/src/Scoring/DescriptionFactor.php
++++ b/src/Scoring/DescriptionFactor.php
+@@ -11,11 +11,11 @@ class DescriptionFactor implements ScoringFactorInterface
+         $score = 0;
+         $description = strtolower($sighting->getDescription());
+ 
+-        if (strpos($description, 'hairy') !== false) {
++        if (stripos($description, 'hairy') !== false) {
+             $score += 10;
+         }
+ 
+-        if (strpos($description, 'chased me') !== false) {
++        if (stripos($description, 'chased me') !== false) {
+             $score += 20;
+         }
+ 
+diff --git a/src/Scoring/TitleFactor.php b/src/Scoring/TitleFactor.php
+index 0d07ef0..ec1ac94 100644
+--- a/src/Scoring/TitleFactor.php
++++ b/src/Scoring/TitleFactor.php
+@@ -11,11 +11,11 @@ class TitleFactor implements ScoringFactorInterface
+         $score = 0;
+         $title = strtolower($sighting->getTitle());
+ 
+-        if (strpos($title, 'hairy') !== false) {
++        if (stripos($title, 'hairy') !== false) {
+             $score += 10;
+         }
+ 
+-        if (strpos($title, 'chased me') !== false) {
++        if (stripos($title, 'chased me') !== false) {
+             $score += 20;
+         }
+ 
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index 812f191..b99dda5 100644
+index b4efaff..b99dda5 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -4,9 +4,20 @@ namespace App\Service;
@@ -50,11 +86,11 @@ index 812f191..b99dda5 100644
 -        $score = 0;
 -        $title = strtolower($sighting->getTitle());
 -
--        if (strpos($title, 'hairy') !== false) {
+-        if (stripos($title, 'hairy') !== false) {
 -            $score += 10;
 -        }
 -
--        if (strpos($title, 'chased me') !== false) {
+-        if (stripos($title, 'chased me') !== false) {
 -            $score += 20;
 -        }
 -
@@ -66,15 +102,15 @@ index 812f191..b99dda5 100644
 -        $score = 0;
 -        $title = strtolower($sighting->getTitle());
 -
--        if (strpos($title, 'hairy') !== false) {
+-        if (stripos($title, 'hairy') !== false) {
 -            $score += 10;
 -        }
 -
--        if (strpos($title, 'chased me') !== false) {
+-        if (stripos($title, 'chased me') !== false) {
 -            $score += 20;
 -        }
 -
--        if (strpos($title, 'using an Iphone') !== false) {
+-        if (stripos($title, 'using an Iphone') !== false) {
 -            $score -= 50;
 -        }
 -
