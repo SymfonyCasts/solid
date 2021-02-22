@@ -1,3 +1,35 @@
+diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
+index 93e29e0..2bbdea6 100644
+--- a/src/Manager/UserManager.php
++++ b/src/Manager/UserManager.php
+@@ -30,6 +30,13 @@ class UserManager
+         $token = $this->createToken();
+         $user->setConfirmationToken($token);
+ 
++        $user->setPassword(
++            $this->passwordEncoder->encodePassword($user, $plainPassword)
++        );
++
++        $this->entityManager->persist($user);
++        $this->entityManager->flush();
++
+         $confirmationLink = $this->router->generate('check_confirmation_link', [
+             'token' => $user->getConfirmationToken()
+         ], UrlGeneratorInterface::ABSOLUTE_URL);
+@@ -43,13 +50,6 @@ class UserManager
+                 'confirmationLink' => $confirmationLink
+             ]);
+ 
+-        $user->setPassword(
+-            $this->passwordEncoder->encodePassword($user, $plainPassword)
+-        );
+-
+-        $this->entityManager->persist($user);
+-        $this->entityManager->flush();
+-
+         $this->mailer->send($confirmationEmail);
+ 
+         return $user;
 diff --git a/src/Service/ConfirmationEmailSender.php b/src/Service/ConfirmationEmailSender.php
 index dcb0e43..e3ca81a 100644
 --- a/src/Service/ConfirmationEmailSender.php
