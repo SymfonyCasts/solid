@@ -44,4 +44,14 @@ class BigFootSightingController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/sighting/{id}", name="app_sighting_show")
+     */
+    public function showSighting(BigFootSighting $bigFootSighting)
+    {
+        return $this->render('main/sighting_show.html.twig', [
+            'sighting' => $bigFootSighting
+        ]);
+    }
 }

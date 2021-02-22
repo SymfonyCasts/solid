@@ -22,16 +22,6 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/sighting/{id}", name="app_sighting_show")
-     */
-    public function showSighting(BigFootSighting $bigFootSighting)
-    {
-        return $this->render('main/sighting_show.html.twig', [
-            'sighting' => $bigFootSighting
-        ]);
-    }
-
-    /**
      * @Route("/about", name="app_about")
      */
     public function about()
