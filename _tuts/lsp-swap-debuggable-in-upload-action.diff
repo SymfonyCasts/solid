@@ -1,5 +1,5 @@
 diff --git a/src/Controller/BigFootSightingController.php b/src/Controller/BigFootSightingController.php
-index b50e9f7..70ba528 100644
+index 51515f2..b7e9a9e 100644
 --- a/src/Controller/BigFootSightingController.php
 +++ b/src/Controller/BigFootSightingController.php
 @@ -4,6 +4,7 @@ namespace App\Controller;
