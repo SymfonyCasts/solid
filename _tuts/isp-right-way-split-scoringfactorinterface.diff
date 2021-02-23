@@ -1,0 +1,28 @@
+diff --git a/src/Scoring/ScoreAdjusterInterface.php b/src/Scoring/ScoreAdjusterInterface.php
+new file mode 100644
+index 0000000..13d6830
+--- /dev/null
++++ b/src/Scoring/ScoreAdjusterInterface.php
+@@ -0,0 +1,10 @@
++<?php
++
++namespace App\Scoring;
++
++use App\Entity\BigFootSighting;
++
++interface ScoreAdjusterInterface
++{
++    public function adjustScore(int $finalScore, BigFootSighting $sighting): int;
++}
+diff --git a/src/Scoring/ScoringFactorInterface.php b/src/Scoring/ScoringFactorInterface.php
+index 3b8a318..273c5a0 100644
+--- a/src/Scoring/ScoringFactorInterface.php
++++ b/src/Scoring/ScoringFactorInterface.php
+@@ -6,7 +6,5 @@ use App\Entity\BigFootSighting;
+ 
+ interface ScoringFactorInterface
+ {
+-    public function adjustScore(int $finalScore, BigFootSighting $sighting): int;
+-
+     public function score(BigFootSighting $sighting): int;
+ }

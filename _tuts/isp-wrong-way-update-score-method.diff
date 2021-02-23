@@ -1,0 +1,15 @@
+diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
+index a413b8d..7087353 100644
+--- a/src/Service/SightingScorer.php
++++ b/src/Service/SightingScorer.php
+@@ -25,6 +25,10 @@ class SightingScorer
+             $score += $scoringFactor->score($sighting);
+         }
+ 
++        foreach ($this->scoringFactors as $scoringFactor) {
++            $score = $scoringFactor->adjustScore($score, $sighting);
++        }
++
+         return new BigFootSightingScore($score);
+     }
+ }

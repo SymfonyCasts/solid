@@ -1,0 +1,14 @@
+diff --git a/src/Scoring/MaxScoreAdjuster.php b/src/Scoring/MaxScoreAdjuster.php
+index 5480f36..646abf3 100644
+--- a/src/Scoring/MaxScoreAdjuster.php
++++ b/src/Scoring/MaxScoreAdjuster.php
+@@ -10,4 +10,9 @@ class MaxScoreAdjuster implements  ScoringFactorInterface
+     {
+         return $finalScore > 100 ? 100 : $finalScore;
+     }
++
++    public function score(BigFootSighting $sighting): int
++    {
++        return 0;
++    }
+ }

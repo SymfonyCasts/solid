@@ -194,7 +194,77 @@
             "id": "lsp-debug-example-paste-debug-command",
             "name": "LSP Debug Example: paste debug command",
             "description": null
+        },
+        {
+            "id": "isp-wrong-way-add-adjust-score",
+            "name": "ISP Wrong Way: add adjust score",
+            "description": null
+        },
+        {
+            "id": "isp-wrong-way-dummy-impl-photo-factor",
+            "name": "ISP Wrong Way: dummy impl photo factor",
+            "description": null
+        },
+        {
+            "id": "isp-wrong-way-real-impl-photo-factor",
+            "name": "ISP Wrong Way: real impl photo factor",
+            "description": null
+        },
+        {
+            "id": "isp-wrong-way-dummy-impl-other-derivatives",
+            "name": "ISP Wrong Way: dummy impl other derivatives",
+            "description": null
+        },
+        {
+            "id": "isp-wrong-way-update-score-method",
+            "name": "ISP Wrong Way: update score method",
+            "description": null
+        },
+        {
+            "id": "isp-wrong-way-create-max-score-adjuster",
+            "name": "ISP Wrong Way: create max score adjuster",
+            "description": null
+        },
+        {
+            "id": "isp-wrong-way-maxscore-impl-adjustscore",
+            "name": "ISP Wrong Way: MaxScore impl adjustScore",
+            "description": null
+        },
+        {
+            "id": "isp-wrong-way-maxscore-impl-score",
+            "name": "ISP Wrong Way: MaxScore impl score",
+            "description": null
+        },
+        {
+            "id": "isp-right-way-split-scoringfactorinterface",
+            "name": "ISP Right Way: split ScoringFactorInterface",
+            "description": null
+        },
+        {
+            "id": "isp-right-way-remove-score-dummy-impl",
+            "name": "ISP Right Way: remove score dummy impl",
+            "description": null
+        },
+        {
+            "id": "isp-right-way-fix-maxscoreadjuster",
+            "name": "ISP Right Way: fix MaxScoreAdjuster",
+            "description": null
+        },
+        {
+            "id": "isp-right-way-photo-factor-impl-both",
+            "name": "ISP Right Way: photo factor impl both",
+            "description": null
+        },
+        {
+            "id": "isp-right-way-tag-score-adjuster-interface",
+            "name": "ISP Right Way: tag score adjuster interface",
+            "description": null
+        },
+        {
+            "id": "isp-right-way-configure-scorer-service",
+            "name": "ISP Right Way: configure scorer service",
+            "description": null
         }
     ],
-    "sha": "14f65fa0381647ec20847e0e90defea357983987"
+    "sha": "c9cff7b60ba125e7b973cd94e7399da37ec6dc90"
 }

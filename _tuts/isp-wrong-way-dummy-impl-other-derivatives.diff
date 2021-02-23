@@ -1,0 +1,42 @@
+diff --git a/src/Scoring/CoordinatesFactor.php b/src/Scoring/CoordinatesFactor.php
+index 4e95cfc..86866cb 100644
+--- a/src/Scoring/CoordinatesFactor.php
++++ b/src/Scoring/CoordinatesFactor.php
+@@ -22,4 +22,9 @@ class CoordinatesFactor implements ScoringFactorInterface
+ 
+         return $score;
+     }
++
++    public function adjustScore(int $finalScore, BigFootSighting $sighting): int
++    {
++        return $finalScore;
++    }
+ }
+diff --git a/src/Scoring/DescriptionFactor.php b/src/Scoring/DescriptionFactor.php
+index 1ca9958..97c00bc 100644
+--- a/src/Scoring/DescriptionFactor.php
++++ b/src/Scoring/DescriptionFactor.php
+@@ -21,4 +21,9 @@ class DescriptionFactor implements ScoringFactorInterface
+ 
+         return $score;
+     }
++
++    public function adjustScore(int $finalScore, BigFootSighting $sighting): int
++    {
++        return $finalScore;
++    }
+ }
+diff --git a/src/Scoring/TitleFactor.php b/src/Scoring/TitleFactor.php
+index ec1ac94..23fae2e 100644
+--- a/src/Scoring/TitleFactor.php
++++ b/src/Scoring/TitleFactor.php
+@@ -21,4 +21,9 @@ class TitleFactor implements ScoringFactorInterface
+ 
+         return $score;
+     }
++
++    public function adjustScore(int $finalScore, BigFootSighting $sighting): int
++    {
++        return $finalScore;
++    }
+ }

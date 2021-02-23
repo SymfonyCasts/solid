@@ -1,0 +1,34 @@
+diff --git a/src/Scoring/MaxScoreAdjuster.php b/src/Scoring/MaxScoreAdjuster.php
+index 646abf3..a07c030 100644
+--- a/src/Scoring/MaxScoreAdjuster.php
++++ b/src/Scoring/MaxScoreAdjuster.php
+@@ -4,15 +4,10 @@ namespace App\Scoring;
+ 
+ use App\Entity\BigFootSighting;
+ 
+-class MaxScoreAdjuster implements  ScoringFactorInterface
++class MaxScoreAdjuster implements ScoreAdjustInterface
+ {
+     public function adjustScore(int $finalScore, BigFootSighting $sighting): int
+     {
+         return $finalScore > 100 ? 100 : $finalScore;
+     }
+-
+-    public function score(BigFootSighting $sighting): int
+-    {
+-        return 0;
+-    }
+ }
+diff --git a/src/Scoring/PhotoFactor.php b/src/Scoring/PhotoFactor.php
+index d3ec048..3294600 100644
+--- a/src/Scoring/PhotoFactor.php
++++ b/src/Scoring/PhotoFactor.php
+@@ -4,7 +4,7 @@ namespace App\Scoring;
+ 
+ use App\Entity\BigFootSighting;
+ 
+-class PhotoFactor implements ScoringFactorInterface
++class PhotoFactor implements ScoringFactorInterface, ScoreAdjustInterface
+ {
+     public function score(BigFootSighting $sighting): int
+     {
