@@ -1,5 +1,5 @@
 diff --git a/src/Scoring/MaxScoreAdjuster.php b/src/Scoring/MaxScoreAdjuster.php
-index 646abf3..a07c030 100644
+index 646abf3..789a355 100644
 --- a/src/Scoring/MaxScoreAdjuster.php
 +++ b/src/Scoring/MaxScoreAdjuster.php
 @@ -4,15 +4,10 @@ namespace App\Scoring;
@@ -7,7 +7,7 @@ index 646abf3..a07c030 100644
  use App\Entity\BigFootSighting;
  
 -class MaxScoreAdjuster implements  ScoringFactorInterface
-+class MaxScoreAdjuster implements ScoreAdjustInterface
++class MaxScoreAdjuster implements ScoreAdjusterInterface
  {
      public function adjustScore(int $finalScore, BigFootSighting $sighting): int
      {
@@ -20,7 +20,7 @@ index 646abf3..a07c030 100644
 -    }
  }
 diff --git a/src/Scoring/PhotoFactor.php b/src/Scoring/PhotoFactor.php
-index d3ec048..3294600 100644
+index d3ec048..a20c291 100644
 --- a/src/Scoring/PhotoFactor.php
 +++ b/src/Scoring/PhotoFactor.php
 @@ -4,7 +4,7 @@ namespace App\Scoring;
@@ -28,7 +28,7 @@ index d3ec048..3294600 100644
  use App\Entity\BigFootSighting;
  
 -class PhotoFactor implements ScoringFactorInterface
-+class PhotoFactor implements ScoringFactorInterface, ScoreAdjustInterface
++class PhotoFactor implements ScoringFactorInterface, ScoreAdjusterInterface
  {
      public function score(BigFootSighting $sighting): int
      {

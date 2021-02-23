@@ -1,12 +1,12 @@
 diff --git a/src/Kernel.php b/src/Kernel.php
-index 8f81ebb..c02ac19 100644
+index 8f81ebb..c915ec7 100644
 --- a/src/Kernel.php
 +++ b/src/Kernel.php
 @@ -2,6 +2,7 @@
  
  namespace App;
  
-+use App\Scoring\ScoreAdjustInterface;
++use App\Scoring\ScoreAdjusterInterface;
  use App\Scoring\ScoringFactorInterface;
  use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
  use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,7 +15,7 @@ index 8f81ebb..c02ac19 100644
          $container->registerForAutoconfiguration(ScoringFactorInterface::class)
              ->addTag('scoring.factor');
 +
-+        $container->registerForAutoconfiguration(ScoreAdjustInterface::class)
++        $container->registerForAutoconfiguration(ScoreAdjusterInterface::class)
 +            ->addTag('scoring.adjuster');
      }
  }

@@ -264,7 +264,17 @@
             "id": "isp-right-way-configure-scorer-service",
             "name": "ISP Right Way: configure scorer service",
             "description": null
+        },
+        {
+            "id": "isp-right-way-sightingscorer-add-second-argument",
+            "name": "ISP Right Way: SightingScorer add second argument",
+            "description": null
+        },
+        {
+            "id": "isp-right-way-sightingscorer-use-collection",
+            "name": "ISP Right Way: sightingscorer use collection",
+            "description": null
         }
     ],
-    "sha": "c9cff7b60ba125e7b973cd94e7399da37ec6dc90"
+    "sha": "89f8780ac44b1861aa1f68fb54227c65c16b0255"
 }

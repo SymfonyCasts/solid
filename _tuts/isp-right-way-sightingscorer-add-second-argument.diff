@@ -1,0 +1,29 @@
+diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
+index 7087353..f8ac91d 100644
+--- a/src/Service/SightingScorer.php
++++ b/src/Service/SightingScorer.php
+@@ -4,6 +4,7 @@ namespace App\Service;
+ 
+ use App\Entity\BigFootSighting;
+ use App\Model\BigFootSightingScore;
++use App\Scoring\ScoreAdjusterInterface;
+ use App\Scoring\ScoringFactorInterface;
+ 
+ class SightingScorer
+@@ -13,9 +14,15 @@ class SightingScorer
+      */
+     private $scoringFactors;
+ 
+-    public function __construct(iterable $scoringFactors)
++    /**
++     * @var ScoreAdjusterInterface[]
++     */
++    private $scoreAdjusters;
++
++    public function __construct(iterable $scoringFactors, iterable $scoreAdjusters)
+     {
+         $this->scoringFactors = $scoringFactors;
++        $this->scoreAdjusters = $scoreAdjusters;
+     }
+ 
+     public function score(BigFootSighting $sighting): BigFootSightingScore
