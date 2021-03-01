@@ -274,7 +274,47 @@
             "id": "isp-right-way-sightingscorer-use-collection",
             "name": "ISP Right Way: sightingscorer use collection",
             "description": null
+        },
+        {
+            "id": "dip-copy-commentspammanager",
+            "name": "DIP: copy CommentSpamManager",
+            "description": null
+        },
+        {
+            "id": "dip-add-spamdetector",
+            "name": "DIP: add SpamDetector",
+            "description": null
+        },
+        {
+            "id": "dip-spamdetector-move-array-list-and-method",
+            "name": "DIP: SpamDetector move array list and method",
+            "description": null
+        },
+        {
+            "id": "dip-spamdetect-implement-method",
+            "name": "DIP: SpamDetect implement method",
+            "description": null
+        },
+        {
+            "id": "dip-inject-spamdetector",
+            "name": "DIP: inject SpamDetector",
+            "description": null
+        },
+        {
+            "id": "dip-simplify-validate-method",
+            "name": "DIP: simplify validate method",
+            "description": null
+        },
+        {
+            "id": "dip-add-spamdetectorinterface",
+            "name": "DIP: add SpamDetectorInterface",
+            "description": null
+        },
+        {
+            "id": "dip-implement-spamdetectorinterface",
+            "name": "DIP: implement SpamDetectorInterface",
+            "description": null
         }
     ],
-    "sha": "89f8780ac44b1861aa1f68fb54227c65c16b0255"
+    "sha": "984e9800f4f1ab534bff77ab72cf597dcdba5a2b"
 }

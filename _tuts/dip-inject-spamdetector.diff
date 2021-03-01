@@ -1,0 +1,22 @@
+diff --git a/src/Manager/CommentSpamManager.php b/src/Manager/CommentSpamManager.php
+index 1559003..80aa231 100644
+--- a/src/Manager/CommentSpamManager.php
++++ b/src/Manager/CommentSpamManager.php
+@@ -3,9 +3,17 @@
+ namespace App\Manager;
+ 
+ use App\Entity\Comment;
++use App\Service\SpamDetector;
+ 
+ class CommentSpamManager
+ {
++    private $spamDetector;
++
++    public function __construct(SpamDetector $spamDetector)
++    {
++        $this->spamDetector = $spamDetector;
++    }
++
+     public function validate(Comment $comment)
+     {
+         $content = $comment->getContent();

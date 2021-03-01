@@ -1,0 +1,18 @@
+diff --git a/src/Service/SpamDetector.php b/src/Service/SpamDetector.php
+index d6298a4..5194fc8 100644
+--- a/src/Service/SpamDetector.php
++++ b/src/Service/SpamDetector.php
+@@ -6,7 +6,13 @@ class SpamDetector
+ {
+     public function countSpamWords(string $content): int
+     {
++        $badWordsOnComment = [];
+ 
++        $regex = implode('|', $this->spamWords());
++
++        preg_match("/$regex/", $content, $badWordsOnComment);
++
++        return count($badWordsOnComment);
+     }
+ 
+     private function spamWords(): array

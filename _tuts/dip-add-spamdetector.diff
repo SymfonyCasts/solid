@@ -1,0 +1,14 @@
+diff --git a/src/Service/SpamDetector.php b/src/Service/SpamDetector.php
+new file mode 100644
+index 0000000..4253ee3
+--- /dev/null
++++ b/src/Service/SpamDetector.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace App\Service;
++
++class SpamDetector
++{
++
++}

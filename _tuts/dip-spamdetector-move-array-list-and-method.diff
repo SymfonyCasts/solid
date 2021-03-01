@@ -1,0 +1,24 @@
+diff --git a/src/Service/SpamDetector.php b/src/Service/SpamDetector.php
+index 4253ee3..d6298a4 100644
+--- a/src/Service/SpamDetector.php
++++ b/src/Service/SpamDetector.php
+@@ -4,5 +4,19 @@ namespace App\Service;
+ 
+ class SpamDetector
+ {
++    public function countSpamWords(string $content): int
++    {
+ 
++    }
++
++    private function spamWords(): array
++    {
++        return [
++            'follow me',
++            'twitter',
++            'facebook',
++            'earn money',
++            'SymfonyCasts',
++        ];
++    }
+ }
