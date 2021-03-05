@@ -31,7 +31,7 @@ index 0000000..56fce01
 +}
 diff --git a/src/Scoring/DescriptionFactor.php b/src/Scoring/DescriptionFactor.php
 new file mode 100644
-index 0000000..480d333
+index 0000000..1ca9958
 --- /dev/null
 +++ b/src/Scoring/DescriptionFactor.php
 @@ -0,0 +1,24 @@
@@ -48,11 +48,11 @@ index 0000000..480d333
 +        $score = 0;
 +        $description = strtolower($sighting->getDescription());
 +
-+        if (strpos($description, 'hairy') !== false) {
++        if (stripos($description, 'hairy') !== false) {
 +            $score += 10;
 +        }
 +
-+        if (strpos($description, 'chased me') !== false) {
++        if (stripos($description, 'chased me') !== false) {
 +            $score += 20;
 +        }
 +
@@ -61,7 +61,7 @@ index 0000000..480d333
 +}
 diff --git a/src/Scoring/TitleFactor.php b/src/Scoring/TitleFactor.php
 new file mode 100644
-index 0000000..0d07ef0
+index 0000000..ec1ac94
 --- /dev/null
 +++ b/src/Scoring/TitleFactor.php
 @@ -0,0 +1,24 @@
@@ -78,11 +78,11 @@ index 0000000..0d07ef0
 +        $score = 0;
 +        $title = strtolower($sighting->getTitle());
 +
-+        if (strpos($title, 'hairy') !== false) {
++        if (stripos($title, 'hairy') !== false) {
 +            $score += 10;
 +        }
 +
-+        if (strpos($title, 'chased me') !== false) {
++        if (stripos($title, 'chased me') !== false) {
 +            $score += 20;
 +        }
 +
