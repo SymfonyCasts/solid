@@ -39,11 +39,11 @@ class SightingScorer
         $score = 0;
         $title = strtolower($sighting->getTitle());
 
-        if (strpos($title, 'hairy') !== false) {
+        if (stripos($title, 'hairy') !== false) {
             $score += 10;
         }
 
-        if (strpos($title, 'chased me') !== false) {
+        if (stripos($title, 'chased me') !== false) {
             $score += 20;
         }
 
@@ -55,15 +55,15 @@ class SightingScorer
         $score = 0;
         $title = strtolower($sighting->getTitle());
 
-        if (strpos($title, 'hairy') !== false) {
+        if (stripos($title, 'hairy') !== false) {
             $score += 10;
         }
 
-        if (strpos($title, 'chased me') !== false) {
+        if (stripos($title, 'chased me') !== false) {
             $score += 20;
         }
 
-        if (strpos($title, 'using an Iphone') !== false) {
+        if (stripos($title, 'using an Iphone') !== false) {
             $score -= 50;
         }
 
