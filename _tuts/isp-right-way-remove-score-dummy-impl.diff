@@ -1,5 +1,5 @@
 diff --git a/src/Scoring/CoordinatesFactor.php b/src/Scoring/CoordinatesFactor.php
-index 86866cb..4e95cfc 100644
+index e495b17..56fce01 100644
 --- a/src/Scoring/CoordinatesFactor.php
 +++ b/src/Scoring/CoordinatesFactor.php
 @@ -22,9 +22,4 @@ class CoordinatesFactor implements ScoringFactorInterface

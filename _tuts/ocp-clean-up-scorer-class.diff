@@ -35,7 +35,7 @@ index 0d07ef0..ec1ac94 100644
          }
  
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index b4efaff..b99dda5 100644
+index 74255bf..b99dda5 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -4,9 +4,20 @@ namespace App\Service;
@@ -73,7 +73,7 @@ index b4efaff..b99dda5 100644
 -        // California edge to edge coordinates
 -        if (true
 -            && $lat >= 32.5121 && $lat <= 42.0126
--            && $lng >= -114.1315 && $lat <= -124.6509
+-            && $lng >= -114.1315 && $lng <= -124.6509
 -        ) {
 -            $score += 30;
 -        }
