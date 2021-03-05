@@ -4,7 +4,7 @@
     "minimum-stability": "stable",
     "type": "project",
     "require": {
-        "php": ">=7.2.5",
+        "php": "^7.4 || ^8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "^1.11",
@@ -37,7 +37,7 @@
         },
         "sort-packages": true,
         "platform": {
-            "php": "7.2.5"
+            "php": "7.4.0"
         }
     },
     "autoload": {
