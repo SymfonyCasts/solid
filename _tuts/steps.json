@@ -91,11 +91,6 @@
             "description": null
         },
         {
-            "id": "remove-this-step",
-            "name": "remove-this-step",
-            "description": null
-        },
-        {
             "id": "ocp-scoring-factor-interface",
             "name": "ocp-scoring-factor-interface",
             "description": null
@@ -128,21 +123,6 @@
         {
             "id": "ocp-add-photo-factor",
             "name": "OCP: add photo factor",
-            "description": null
-        },
-        {
-            "id": "delete-me-3",
-            "name": "delete me 3",
-            "description": null
-        },
-        {
-            "id": "delete-me-4",
-            "name": "delete me 4",
-            "description": null
-        },
-        {
-            "id": "delete-me-5",
-            "name": "delete me 5",
             "description": null
         },
         {
