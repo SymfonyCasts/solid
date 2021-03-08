@@ -60,6 +60,13 @@ class BigFootSighting
      */
     private $score = 0;
 
+    /**
+     * Stores an array of file paths
+     *
+     * @ORM\Column(type="json")
+     */
+    private $images = [];
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -184,5 +191,15 @@ class BigFootSighting
         $this->score = $score;
 
         return $this;
+    }
+
+    public function getImages(): array
+    {
+        return $this->images;
+    }
+
+    public function setImages(array $images)
+    {
+        $this->images = $images;
     }
 }
