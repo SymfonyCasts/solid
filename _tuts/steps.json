@@ -131,8 +131,8 @@
             "description": null
         },
         {
-            "id": "lsp-add-field-images",
-            "name": "LSP: add field images",
+            "id": "delete-me-3",
+            "name": "delete me 3",
             "description": null
         },
         {
@@ -321,5 +321,5 @@
             "description": null
         }
     ],
-    "sha": "382309716b3759e0816c58f40ffbebe266077efc"
+    "sha": "0b1243079b9d7cea0add53b782393f4fd618d741"
 }
