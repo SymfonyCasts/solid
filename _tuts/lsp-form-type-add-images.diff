@@ -10,15 +10,3 @@ index 3985a5f..d2948d3 100644
  use Symfony\Component\Form\Extension\Core\Type\TextareaType;
  use Symfony\Component\Form\FormBuilderInterface;
  use Symfony\Component\OptionsResolver\OptionsResolver;
-diff --git a/templates/main/sighting_new.html.twig b/templates/main/sighting_new.html.twig
-index 243df5e..b2c53f9 100644
---- a/templates/main/sighting_new.html.twig
-+++ b/templates/main/sighting_new.html.twig
-@@ -12,6 +12,7 @@
-         {{ form_row(form.description) }}
-         {{ form_row(form.longitude) }}
-         {{ form_row(form.latitude) }}
-+        {{ form_row(form.images) }}
- 
-         <div class="form-group row">
-             <div class="offset-sm-2 col-sm-10">

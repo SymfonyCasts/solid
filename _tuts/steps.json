@@ -136,8 +136,8 @@
             "description": null
         },
         {
-            "id": "lsp-add-migration-file",
-            "name": "LSP: add migration file",
+            "id": "delete-me-4",
+            "name": "delete me 4",
             "description": null
         },
         {
@@ -321,5 +321,5 @@
             "description": null
         }
     ],
-    "sha": "0b1243079b9d7cea0add53b782393f4fd618d741"
+    "sha": "fd7fc44f756eee0ba557d32a7a14195eb6c9aeb3"
 }
