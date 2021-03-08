@@ -14,15 +14,3 @@ index 0000000..13d6830
 +{
 +    public function adjustScore(int $finalScore, BigFootSighting $sighting): int;
 +}
-diff --git a/src/Scoring/ScoringFactorInterface.php b/src/Scoring/ScoringFactorInterface.php
-index 3b8a318..273c5a0 100644
---- a/src/Scoring/ScoringFactorInterface.php
-+++ b/src/Scoring/ScoringFactorInterface.php
-@@ -6,7 +6,5 @@ use App\Entity\BigFootSighting;
- 
- interface ScoringFactorInterface
- {
--    public function adjustScore(int $finalScore, BigFootSighting $sighting): int;
--
-     public function score(BigFootSighting $sighting): int;
- }

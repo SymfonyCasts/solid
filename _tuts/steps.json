@@ -131,8 +131,18 @@
             "description": null
         },
         {
+            "id": "lsp-add-phpdoc-on-interface",
+            "name": "LSP: add phpdoc on interface",
+            "description": null
+        },
+        {
             "id": "lsp-add-debuggablesightingscorer",
             "name": "LSP: add DebuggableSightingScorer",
+            "description": null
+        },
+        {
+            "id": "delete-me",
+            "name": "delete me",
             "description": null
         },
         {
@@ -296,5 +306,5 @@
             "description": null
         }
     ],
-    "sha": "7233af762402c84439cb0c236377b34653a23f52"
+    "sha": "acffc54f905628709fd6473e0e42aee793f13532"
 }

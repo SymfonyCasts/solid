@@ -1,12 +1,13 @@
 diff --git a/src/Scoring/ScoringFactorInterface.php b/src/Scoring/ScoringFactorInterface.php
-index 273c5a0..3b8a318 100644
+index a49a3e1..d4ca43d 100644
 --- a/src/Scoring/ScoringFactorInterface.php
 +++ b/src/Scoring/ScoringFactorInterface.php
-@@ -6,5 +6,7 @@ use App\Entity\BigFootSighting;
+@@ -6,6 +6,8 @@ use App\Entity\BigFootSighting;
  
  interface ScoringFactorInterface
  {
 +    public function adjustScore(int $finalScore, BigFootSighting $sighting): int;
 +
-     public function score(BigFootSighting $sighting): int;
- }
+     /**
+      * Return the score that should be added to the overall score.
+      * This method should not throw an exception for any normal reason.
