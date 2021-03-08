@@ -6,11 +6,6 @@
             "description": null
         },
         {
-            "id": "remove-this-step-2",
-            "name": "remove this step 2",
-            "description": null
-        },
-        {
             "id": "srp-wrong-impl-create-token",
             "name": "SRP Wrong Impl: create token",
             "description": null
