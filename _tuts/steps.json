@@ -6,83 +6,88 @@
             "description": null
         },
         {
+            "id": "remove-this-step-2",
+            "name": "remove this step 2",
+            "description": null
+        },
+        {
             "id": "srp-wrong-impl-create-token",
-            "name": "SRP wrong impl create token",
+            "name": "SRP Wrong Impl: create token",
             "description": null
         },
         {
-            "id": "srp-wrong-impl-set-token-on-user",
-            "name": "SRP wrong impl set token on user",
+            "id": "srp-wrong-impl-set-token-onuser",
+            "name": "SRP Wrong Impl: set token onUser",
             "description": null
         },
         {
-            "id": "srp-wrong-imp-inject-router",
-            "name": "SRP wrong imp inject router",
+            "id": "srp-wrong-impl-injectrouter",
+            "name": "SRP Wrong Impl: injectRouter",
             "description": null
         },
         {
-            "id": "srp-wrong-impl-confirmation-link",
-            "name": "srp-wrong-impl-confirmation-link",
+            "id": "srp-wrong-impl-add-confirmation-link",
+            "name": "SRP Wrong Impl: add confirmation link",
             "description": null
         },
         {
-            "id": "srp-wrong-impl-inject-mailer",
-            "name": "srp-wrong-impl-inject-mailer",
+            "id": "srp-wrong-impl-inject-mailer-service",
+            "name": "SRP Wrong Impl: inject mailer service",
             "description": null
         },
         {
-            "id": "srp-wrong-impl-template-email",
-            "name": "srp-wrong-impl-template-email",
+            "id": "srp-wrong-impl-add-template-email",
+            "name": "SRP Wrong Impl: add template email",
             "description": null
         },
         {
-            "id": "srp-wrong-impl-send-email",
-            "name": "srp-wrong-impl-send-email",
+            "id": "srp-wrong-impl-send-an-email",
+            "name": "SRP Wrong Impl: send an email",
             "description": null
         },
         {
-            "id": "srp-rename-register-to-create",
-            "name": "srp-rename-register-to-create",
+            "id": "srp-right-impl-rename-register-to-create",
+            "name": "SRP Right Impl: rename register to create",
             "description": null
         },
         {
-            "id": "srp-create-method-return-user",
-            "name": "srp-create-method-return-user",
+            "id": "srp-right-impl-return-user-method",
+            "name": "SRP Right Impl: return user method",
             "description": null
         },
         {
-            "id": "srp-class-confirmation-email-sender",
-            "name": "srp-class-confirmation-email-sender",
+            "id": "srp-right-impl-class-confirmation-email-sender",
+            "name": "SRP Right Impl: class confirmation email sender",
             "description": null
         },
         {
-            "id": "srp-email-sender-constructor",
-            "name": "srp-email-sender-constructor",
+            "id": "srp-right-impl-email-sender-constructor",
+            "name": "SRP Right Impl: email sender constructor",
             "description": null
         },
         {
-            "id": "srp-email-sender-impl-send",
-            "name": "srp-email-sender-impl-send",
+            "id": "srp-right-impl-email-sender-implement-send",
+            "name": "SRP Right Impl: email sender implement send",
             "description": null
         },
         {
-            "id": "srp-user-manager-cleanup",
-            "name": "srp-user-manager-cleanup",
+            "id": "srp-right-impl-user-manager-cleanup",
+            "name": "SRP Right Impl: user manager cleanup",
             "description": null
         },
         {
-            "id": "srp-copy-resend-controller",
-            "name": "srp-copy-resend-controller",
+            "id": "srp-right-impl-copy-resend-controller",
+            "name": "SRP Right Impl: copy resend controller",
             "description": null
         },
         {
-            "id": "srp-resend-action-arguments",
-            "name": "srp-resend-action-arguments",
+            "id": "srp-right-impl-resend-action-arguments",
+            "name": "SRP Right Impl: resend action arguments",
             "description": null
         },
         {
-            "id": "srp-fix-signup-action",
-            "name": "srp-fix-signup-action",
+            "id": "srp-right-impl-fix-signup-action",
+            "name": "SRP Right Impl: fix signup action",
             "description": null
         },
         {
@@ -96,68 +101,68 @@
             "description": null
         },
         {
-            "id": "ocp-refactor-scoring-methods-into-classes",
-            "name": "ocp-refactor-scoring-methods-into-classes",
+            "id": "ocp-add-scoring-factor-interface",
+            "name": "OCP: add scoring factor interface",
             "description": null
         },
         {
-            "id": "ocp-clean-up-scorer-class",
-            "name": "ocp-clean-up-scorer-class",
+            "id": "ocp-scorer-class-clean-up",
+            "name": "OCP: scorer class clean up",
             "description": null
         },
         {
-            "id": "ocp-adjust-scorer-impl",
-            "name": "ocp-adjust-scorer-impl",
+            "id": "ocp-adjust-scorer-implementation",
+            "name": "OCP: adjust scorer implementation",
             "description": null
         },
         {
-            "id": "ocp-configure-scorer-service",
-            "name": "ocp-configure-scorer-service",
+            "id": "ocp-scorer-service-configuration",
+            "name": "OCP: scorer service configuration",
             "description": null
         },
         {
-            "id": "ocp-tag-service-automatically",
-            "name": "ocp-tag-service-automatically",
+            "id": "ocp-add-tag-service",
+            "name": "OCP: add tag service",
             "description": null
         },
         {
-            "id": "lsp-create-photo-factor",
-            "name": "lsp-create-photo-factor",
+            "id": "ocp-add-photo-factor",
+            "name": "OCP: add photo factor",
             "description": null
         },
         {
-            "id": "lsp-add-images-field",
-            "name": "lsp-add-images-field",
+            "id": "lsp-add-field-images",
+            "name": "LSP: add field images",
             "description": null
         },
         {
-            "id": "lsp-add-migration-images-field",
-            "name": "lsp-add-migration-images-field",
+            "id": "lsp-add-migration-file",
+            "name": "LSP: add migration file",
             "description": null
         },
         {
-            "id": "lsp-add-images-to-form-type",
-            "name": "lsp-add-images-to-form-type",
+            "id": "lsp-form-type-add-images",
+            "name": "LSP: form type add images",
             "description": null
         },
         {
-            "id": "lsp-wrong-fix-photo-factor",
-            "name": "lsp-wrong-fix-photo-factor",
+            "id": "lsp-photo-factor-wrong-fix",
+            "name": "LSP: photo factor wrong fix",
             "description": null
         },
         {
-            "id": "lsp-right-fix-photo-factor",
-            "name": "lsp-right-fix-photo-factor",
+            "id": "lsp-photo-factor-right-fix",
+            "name": "LSP: photo factor right fix",
             "description": null
         },
         {
-            "id": "lsp-create-debuggablesightingscorer",
-            "name": "lsp-create-DebuggableSightingScorer",
+            "id": "lsp-add-debuggablesightingscorer",
+            "name": "LSP: add DebuggableSightingScorer",
             "description": null
         },
         {
-            "id": "lsp-swap-debuggable-in-upload-action",
-            "name": "lsp-swap-debuggable-in-upload-action",
+            "id": "lsp-use-debuggablesightingscorer-in-upload-action",
+            "name": "LSP: use DebuggableSightingScorer in upload action",
             "description": null
         },
         {
@@ -316,5 +321,5 @@
             "description": null
         }
     ],
-    "sha": "3839f2121f65cc2676955b8c1916d774fb1b8a06"
+    "sha": "e58587ce0fddbf02ea26ffec82d51109c5060e3c"
 }
