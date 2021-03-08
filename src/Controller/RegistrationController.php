@@ -29,7 +29,7 @@ class RegistrationController extends AbstractController
 
             $plainPassword = $form->get('plainPassword')->getData();
 
-            $userManager->create($user, $plainPassword);
+            $userManager->register($user, $plainPassword);
 
             $this->addFlash('success', 'User created successfully!');
 
