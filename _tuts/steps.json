@@ -141,6 +141,11 @@
             "description": null
         },
         {
+            "id": "delete-me",
+            "name": "delete me",
+            "description": null
+        },
+        {
             "id": "lsp-use-debuggablesightingscorer-in-upload-action",
             "name": "LSP: use DebuggableSightingScorer in upload action",
             "description": null
@@ -301,5 +306,5 @@
             "description": null
         }
     ],
-    "sha": "acffc54f905628709fd6473e0e42aee793f13532"
+    "sha": "c5303e5b0144d92b5394179a5af23def9a689ca8"
 }

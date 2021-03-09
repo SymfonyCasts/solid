@@ -1,9 +1,9 @@
 diff --git a/config/services.yaml b/config/services.yaml
-index 20df63a..2750ab8 100644
+index c48bd39..439f1aa 100644
 --- a/config/services.yaml
 +++ b/config/services.yaml
-@@ -33,3 +33,7 @@ services:
-     App\Service\SightingScorer:
+@@ -34,3 +34,7 @@ services:
+         class: App\Service\DebuggableSightingScorer
          arguments:
              $scoringFactors: !tagged_iterator scoring.factor # Inject all services tagged with "scoring.factor"
 +

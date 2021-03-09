@@ -1,21 +1,11 @@
-diff --git a/src/Controller/BigFootSightingController.php b/src/Controller/BigFootSightingController.php
-index 51515f2..b7e9a9e 100644
---- a/src/Controller/BigFootSightingController.php
-+++ b/src/Controller/BigFootSightingController.php
-@@ -4,6 +4,7 @@ namespace App\Controller;
+diff --git a/config/services.yaml b/config/services.yaml
+index 20df63a..c48bd39 100644
+--- a/config/services.yaml
++++ b/config/services.yaml
+@@ -31,5 +31,6 @@ services:
+     # please note that last definitions always *replace* previous ones
  
- use App\Entity\BigFootSighting;
- use App\Form\BigfootSightingType;
-+use App\Service\DebuggableSightingScorer;
- use App\Service\SightingScorer;
- use Doctrine\ORM\EntityManagerInterface;
- use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-@@ -17,7 +18,7 @@ class BigFootSightingController extends AbstractController
-      * @Route("/sighting/upload", name="app_sighting_upload")
-      * @IsGranted("ROLE_USER")
-      */
--    public function upload(Request $request, SightingScorer $sightingScoreCalculator, EntityManagerInterface $entityManager)
-+    public function upload(Request $request, DebuggableSightingScorer $sightingScoreCalculator, EntityManagerInterface $entityManager)
-     {
-         $form = $this->createForm(BigFootSightingType::class);
-         $form->handleRequest($request);
+     App\Service\SightingScorer:
++        class: App\Service\DebuggableSightingScorer
+         arguments:
+             $scoringFactors: !tagged_iterator scoring.factor # Inject all services tagged with "scoring.factor"
