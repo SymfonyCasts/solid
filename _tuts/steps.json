@@ -196,6 +196,11 @@
             "description": null
         },
         {
+            "id": "lsp-debug-example-configure-alias-for-service",
+            "name": "LSP Debug Example: configure alias for service",
+            "description": null
+        },
+        {
             "id": "isp-wrong-way-add-adjust-score",
             "name": "ISP Wrong Way: add adjust score",
             "description": null
@@ -316,5 +321,5 @@
             "description": null
         }
     ],
-    "sha": "637deb4ec0cb16e5e7f6ee2e55a0665036edf361"
+    "sha": "7410c93564408d9569cc91974555aa29b748e6dd"
 }
