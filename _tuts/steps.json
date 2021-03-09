@@ -161,6 +161,16 @@
             "description": null
         },
         {
+            "id": "lsp-debug-example-change-return-type",
+            "name": "LSP Debug Example: change return type",
+            "description": null
+        },
+        {
+            "id": "lsp-debug-example-undo-change-return-type",
+            "name": "LSP Debug Example: undo change return type",
+            "description": null
+        },
+        {
             "id": "lsp-debug-example-subclass-bigfootsightingscore",
             "name": "LSP Debug Example: subclass BigfootSightingScore",
             "description": null
@@ -306,5 +316,5 @@
             "description": null
         }
     ],
-    "sha": "c5303e5b0144d92b5394179a5af23def9a689ca8"
+    "sha": "a5da82a724c48bc87f36bb7b7f799a493134ae61"
 }
