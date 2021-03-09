@@ -1,15 +1,13 @@
 diff --git a/src/Scoring/MaxScoreAdjuster.php b/src/Scoring/MaxScoreAdjuster.php
 new file mode 100644
-index 0000000..263ae97
+index 0000000..6cdaf8b
 --- /dev/null
 +++ b/src/Scoring/MaxScoreAdjuster.php
-@@ -0,0 +1,9 @@
+@@ -0,0 +1,7 @@
 +<?php
 +
 +namespace App\Scoring;
 +
-+use App\Entity\BigFootSighting;
-+
-+class MaxScoreAdjuster implements  ScoringFactorInterface
++class MaxScoreAdjuster implements ScoringFactorInterface
 +{
 +}
