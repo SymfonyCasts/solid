@@ -17,7 +17,7 @@ class BigFootSightingController extends AbstractController
      * @Route("/sighting/upload", name="app_sighting_upload")
      * @IsGranted("ROLE_USER")
      */
-    public function upload(Request $request, SightingScorer $sightingScoreCalculator, EntityManagerInterface $entityManager)
+    public function upload(Request $request, SightingScorer $sightingScorer, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(BigFootSightingType::class);
         $form->handleRequest($request);
@@ -27,7 +27,7 @@ class BigFootSightingController extends AbstractController
             $sighting = $form->getData();
             $sighting->setOwner($this->getUser());
 
-            $bfsScore = $sightingScoreCalculator->score($sighting);
+            $bfsScore = $sightingScorer->score($sighting);
             $sighting->setScore($bfsScore->getScore());
 
             $entityManager->persist($sighting);
