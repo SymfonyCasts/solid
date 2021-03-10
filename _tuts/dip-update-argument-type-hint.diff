@@ -1,0 +1,20 @@
+diff --git a/src/Manager/CommentSpamManager.php b/src/Manager/CommentSpamManager.php
+index 0540957..050aa9c 100644
+--- a/src/Manager/CommentSpamManager.php
++++ b/src/Manager/CommentSpamManager.php
+@@ -3,13 +3,13 @@
+ namespace App\Manager;
+ 
+ use App\Entity\Comment;
+-use App\Service\RegexSpamWordCounter;
++use App\Service\SpamWordCounterInterface;
+ 
+ class CommentSpamManager
+ {
+     private $spamWordCounter;
+ 
+-    public function __construct(RegexSpamWordCounter $spamWordCounter)
++    public function __construct(SpamWordCounterInterface $spamWordCounter)
+     {
+         $this->spamWordCounter = $spamWordCounter;
+     }

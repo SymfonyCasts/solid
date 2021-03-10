@@ -1,14 +1,14 @@
-diff --git a/src/Service/SpamDetectorInterface.php b/src/Service/SpamDetectorInterface.php
+diff --git a/src/Service/SpamWordCounterInterface.php b/src/Service/SpamWordCounterInterface.php
 new file mode 100644
-index 0000000..e9eb450
+index 0000000..7f0d0bc
 --- /dev/null
-+++ b/src/Service/SpamDetectorInterface.php
++++ b/src/Service/SpamWordCounterInterface.php
 @@ -0,0 +1,8 @@
 +<?php
 +
 +namespace App\Service;
 +
-+interface SpamDetectorInterface
++interface SpamWordCounterInterface
 +{
 +    public function countSpamWords(string $content): int;
 +}

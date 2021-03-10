@@ -319,7 +319,12 @@
             "id": "dip-implement-spamdetectorinterface",
             "name": "DIP: implement SpamDetectorInterface",
             "description": null
+        },
+        {
+            "id": "dip-update-argument-type-hint",
+            "name": "DIP: update argument type-hint",
+            "description": null
         }
     ],
-    "sha": "885324ffb2e7ad36479e1419545617048fcf5276"
+    "sha": "b0387985d08cb412c8f00f61361fa5e677ce1816"
 }
