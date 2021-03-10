@@ -1,8 +1,8 @@
 diff --git a/src/Scoring/MaxScoreAdjuster.php b/src/Scoring/MaxScoreAdjuster.php
-index 988db1d..13e1caf 100644
+index 6d99be7..f818c81 100644
 --- a/src/Scoring/MaxScoreAdjuster.php
 +++ b/src/Scoring/MaxScoreAdjuster.php
-@@ -8,4 +8,9 @@ class MaxScoreAdjuster implements ScoringFactorInterface
+@@ -10,4 +10,9 @@ class MaxScoreAdjuster implements ScoringFactorInterface
      {
          return $finalScore > 100 ? 100 : $finalScore;
      }

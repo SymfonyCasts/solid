@@ -1,14 +1,12 @@
 diff --git a/src/Scoring/MaxScoreAdjuster.php b/src/Scoring/MaxScoreAdjuster.php
-index 13e1caf..789a355 100644
+index f818c81..789a355 100644
 --- a/src/Scoring/MaxScoreAdjuster.php
 +++ b/src/Scoring/MaxScoreAdjuster.php
-@@ -2,15 +2,12 @@
+@@ -4,15 +4,10 @@ namespace App\Scoring;
  
- namespace App\Scoring;
+ use App\Entity\BigFootSighting;
  
 -class MaxScoreAdjuster implements ScoringFactorInterface
-+use App\Entity\BigFootSighting;
-+
 +class MaxScoreAdjuster implements ScoreAdjusterInterface
  {
      public function adjustScore(int $finalScore, BigFootSighting $sighting): int
