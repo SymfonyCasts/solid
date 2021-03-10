@@ -1,8 +1,8 @@
-diff --git a/src/Service/SpamDetector.php b/src/Service/SpamDetector.php
-index d6298a4..5194fc8 100644
---- a/src/Service/SpamDetector.php
-+++ b/src/Service/SpamDetector.php
-@@ -6,7 +6,13 @@ class SpamDetector
+diff --git a/src/Service/RegexSpamWordCounter.php b/src/Service/RegexSpamWordCounter.php
+index ffc05ed..77e9077 100644
+--- a/src/Service/RegexSpamWordCounter.php
++++ b/src/Service/RegexSpamWordCounter.php
+@@ -6,7 +6,13 @@ class RegexSpamWordCounter
  {
      public function countSpamWords(string $content): int
      {

@@ -1,13 +1,13 @@
-diff --git a/src/Service/SpamDetector.php b/src/Service/SpamDetector.php
-index 5194fc8..feef231 100644
---- a/src/Service/SpamDetector.php
-+++ b/src/Service/SpamDetector.php
+diff --git a/src/Service/RegexSpamWordCounter.php b/src/Service/RegexSpamWordCounter.php
+index 77e9077..83cb531 100644
+--- a/src/Service/RegexSpamWordCounter.php
++++ b/src/Service/RegexSpamWordCounter.php
 @@ -2,7 +2,7 @@
  
  namespace App\Service;
  
--class SpamDetector
-+class SpamDetector implements SpamDetectorInterface
+-class RegexSpamWordCounter
++class RegexSpamWordCounter implements SpamDetectorInterface
  {
      public function countSpamWords(string $content): int
      {
