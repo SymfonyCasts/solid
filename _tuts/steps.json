@@ -286,23 +286,23 @@
             "description": null
         },
         {
-            "id": "dip-add-spamdetector",
-            "name": "DIP: add SpamDetector",
+            "id": "dip-add-regexspamwordcounter",
+            "name": "DIP: add RegexSpamWordCounter",
             "description": null
         },
         {
-            "id": "dip-spamdetector-move-array-list-and-method",
-            "name": "DIP: SpamDetector move array list and method",
+            "id": "dip-regexspamwordcounter-move-array-list-and-method",
+            "name": "DIP: RegexSpamWordCounter move array list and method",
             "description": null
         },
         {
-            "id": "dip-spamdetect-implement-method",
-            "name": "DIP: SpamDetect implement method",
+            "id": "dip-regexspamwordcounter-implement-method",
+            "name": "DIP: RegexSpamWordCounter implement method",
             "description": null
         },
         {
-            "id": "dip-inject-spamdetector",
-            "name": "DIP: inject SpamDetector",
+            "id": "dip-inject-regexspamwordcounter",
+            "name": "DIP: inject RegexSpamWordCounter",
             "description": null
         },
         {
@@ -311,13 +311,13 @@
             "description": null
         },
         {
-            "id": "dip-add-spamdetectorinterface",
-            "name": "DIP: add SpamDetectorInterface",
+            "id": "dip-add-spamwordcounterinterface",
+            "name": "DIP: add SpamWordCounterInterface",
             "description": null
         },
         {
-            "id": "dip-implement-spamdetectorinterface",
-            "name": "DIP: implement SpamDetectorInterface",
+            "id": "dip-implement-spamwordcounterinterface",
+            "name": "DIP: implement SpamWordCounterInterface",
             "description": null
         },
         {
@@ -326,5 +326,5 @@
             "description": null
         }
     ],
-    "sha": "b0387985d08cb412c8f00f61361fa5e677ce1816"
+    "sha": "25ebd3cd7c56be21dfba28253e5c02f69f982ce7"
 }
