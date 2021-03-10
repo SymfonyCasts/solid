@@ -1,5 +1,5 @@
 diff --git a/src/Manager/CommentSpamManager.php b/src/Manager/CommentSpamManager.php
-index 1559003..0db9084 100644
+index 1559003..56d0034 100644
 --- a/src/Manager/CommentSpamManager.php
 +++ b/src/Manager/CommentSpamManager.php
 @@ -3,9 +3,17 @@
@@ -10,11 +10,11 @@ index 1559003..0db9084 100644
  
  class CommentSpamManager
  {
-+    private $spamDetector;
++    private $spamWordCounter;
 +
-+    public function __construct(RegexSpamWordCounter $spamDetector)
++    public function __construct(RegexSpamWordCounter $spamWordCounter)
 +    {
-+        $this->spamDetector = $spamDetector;
++        $this->spamWordCounter = $spamWordCounter;
 +    }
 +
      public function validate(Comment $comment)
