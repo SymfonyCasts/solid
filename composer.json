@@ -8,7 +8,12 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "^1.11",
+        "doctrine/annotations": "^1.0",
+        "doctrine/doctrine-bundle": "^2",
+        "doctrine/doctrine-migrations-bundle": "^2",
+        "doctrine/orm": "^2",
         "knplabs/knp-time-bundle": "^1.15",
+        "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.4",
         "symfony/console": "5.2.*",
         "symfony/dotenv": "5.2.*",
@@ -17,9 +22,10 @@
         "symfony/framework-bundle": "5.2.*",
         "symfony/http-client": "5.2.*",
         "symfony/mailer": "5.2.*",
-        "symfony/orm-pack": "^1.0",
+        "symfony/property-access": "5.2.*",
+        "symfony/property-info": "5.2.*",
         "symfony/security-bundle": "5.2.*",
-        "symfony/serializer-pack": "^1.0",
+        "symfony/serializer": "5.2.*",
         "symfony/twig-bundle": "5.2.*",
         "symfony/validator": "5.2.*",
         "symfony/webpack-encore-bundle": "^1.6",
@@ -28,8 +34,12 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.2",
         "fakerphp/faker": "^1.13",
-        "symfony/debug-pack": "^1.0",
-        "symfony/maker-bundle": "^1.13"
+        "symfony/debug-bundle": "^5.2",
+        "symfony/maker-bundle": "^1.13",
+        "symfony/monolog-bundle": "^3.0",
+        "symfony/stopwatch": "^5.2",
+        "symfony/var-dumper": "^5.2",
+        "symfony/web-profiler-bundle": "^5.2"
     },
     "config": {
         "preferred-install": {
