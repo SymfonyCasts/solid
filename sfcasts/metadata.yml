@@ -1,2 +1,7 @@
 chapters:
     - solid
+    - srp
+    - ocp
+    - liskov
+    - isp
+    - dip
