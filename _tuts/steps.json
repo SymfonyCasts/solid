@@ -21,8 +21,8 @@
             "description": null
         },
         {
-            "id": "srp-wrong-impl-add-confirmation-link",
-            "name": "SRP Wrong Impl: add confirmation link",
+            "id": "delete-me-1",
+            "name": "delete me 1",
             "description": null
         },
         {
@@ -326,5 +326,5 @@
             "description": null
         }
     ],
-    "sha": "0ecee06284b32ae7715ed33aa6327abb1231d7d0"
+    "sha": "52c50e4e9fd5e9934800661afaa0db7515c3869c"
 }

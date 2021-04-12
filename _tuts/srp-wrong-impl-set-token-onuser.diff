@@ -1,10 +1,10 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index d51ec2f..5a3f912 100644
+index 91832b5..cb48c10 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
 @@ -19,6 +19,9 @@ class UserManager
  
-     public function register(User $user, string $plainPassword)
+     public function register(User $user, string $plainPassword): void
      {
 +        $token = $this->createToken();
 +        $user->setConfirmationToken($token);

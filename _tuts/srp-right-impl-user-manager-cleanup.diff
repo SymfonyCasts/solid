@@ -1,5 +1,5 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index 2bbdea6..17e27a2 100644
+index 0ed7c18..428a418 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
 @@ -4,25 +4,17 @@ namespace App\Manager;
@@ -14,10 +14,10 @@ index 2bbdea6..17e27a2 100644
  
  class UserManager
  {
-     private $passwordEncoder;
-     private $entityManager;
--    private $router;
--    private $mailer;
+     private UserPasswordEncoderInterface $passwordEncoder;
+     private EntityManagerInterface $entityManager;
+-    private RouterInterface $router;
+-    private MailerInterface $mailer;
  
 -    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, RouterInterface $router, MailerInterface $mailer)
 +    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
@@ -41,7 +41,7 @@ index 2bbdea6..17e27a2 100644
 -            ->from('staff@example.com')
 -            ->to($user->getEmail())
 -            ->subject('Confirm your account')
--            ->htmlTemplate('emails/registration.html.twig')
+-            ->htmlTemplate('emails/registration_confirmation.html.twig')
 -            ->context([
 -                'confirmationLink' => $confirmationLink
 -            ]);

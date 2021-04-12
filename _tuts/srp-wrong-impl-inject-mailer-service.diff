@@ -1,5 +1,5 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index dbcc3a7..57a2ad0 100644
+index 4646f3e..a05afda 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
 @@ -4,6 +4,7 @@ namespace App\Manager;
@@ -11,10 +11,10 @@ index dbcc3a7..57a2ad0 100644
  use Symfony\Component\Routing\RouterInterface;
  use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 @@ -13,12 +14,14 @@ class UserManager
-     private $passwordEncoder;
-     private $entityManager;
-     private $router;
-+    private $mailer;
+     private UserPasswordEncoderInterface $passwordEncoder;
+     private EntityManagerInterface $entityManager;
+     private RouterInterface $router;
++    private MailerInterface $mailer;
  
 -    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, RouterInterface $router)
 +    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, RouterInterface $router, MailerInterface $mailer)
@@ -25,4 +25,4 @@ index dbcc3a7..57a2ad0 100644
 +        $this->mailer = $mailer;
      }
  
-     public function register(User $user, string $plainPassword)
+     public function register(User $user, string $plainPassword): void

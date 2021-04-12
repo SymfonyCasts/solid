@@ -1,12 +1,12 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index 8d1183b..93e29e0 100644
+index 691255c..0bdc19a 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
 @@ -25,7 +25,7 @@ class UserManager
          $this->mailer = $mailer;
      }
  
--    public function create(User $user, string $plainPassword)
+-    public function create(User $user, string $plainPassword): void
 +    public function create(User $user, string $plainPassword): User
      {
          $token = $this->createToken();
