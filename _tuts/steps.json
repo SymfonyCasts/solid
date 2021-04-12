@@ -21,11 +21,6 @@
             "description": null
         },
         {
-            "id": "delete-me-1",
-            "name": "delete me 1",
-            "description": null
-        },
-        {
             "id": "srp-wrong-impl-inject-mailer-service",
             "name": "SRP Wrong Impl: inject mailer service",
             "description": null
@@ -43,11 +38,6 @@
         {
             "id": "srp-right-impl-rename-register-to-create",
             "name": "SRP Right Impl: rename register to create",
-            "description": null
-        },
-        {
-            "id": "delete-me-2",
-            "name": "delete me 2",
             "description": null
         },
         {
@@ -83,11 +73,6 @@
         {
             "id": "srp-right-impl-resend-action-arguments",
             "name": "SRP Right Impl: resend action arguments",
-            "description": null
-        },
-        {
-            "id": "delete-me-3",
-            "name": "delete me 3",
             "description": null
         },
         {
@@ -143,11 +128,6 @@
         {
             "id": "lsp-add-debuggablesightingscorer",
             "name": "LSP: add DebuggableSightingScorer",
-            "description": null
-        },
-        {
-            "id": "delete-me",
-            "name": "delete me",
             "description": null
         },
         {
