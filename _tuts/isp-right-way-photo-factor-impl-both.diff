@@ -1,5 +1,5 @@
 diff --git a/src/Scoring/PhotoFactor.php b/src/Scoring/PhotoFactor.php
-index d3ec048..a20c291 100644
+index 873263e..084634b 100644
 --- a/src/Scoring/PhotoFactor.php
 +++ b/src/Scoring/PhotoFactor.php
 @@ -4,7 +4,7 @@ namespace App\Scoring;

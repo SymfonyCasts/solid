@@ -1,18 +1,18 @@
 diff --git a/src/Service/DebuggableSightingScorer.php b/src/Service/DebuggableSightingScorer.php
-index 4670d43..c5b8858 100644
+index 626b4ed..c5b8858 100644
 --- a/src/Service/DebuggableSightingScorer.php
 +++ b/src/Service/DebuggableSightingScorer.php
-@@ -10,7 +10,12 @@ class DebuggableSightingScorer extends SightingScorer
+@@ -10,11 +10,12 @@ class DebuggableSightingScorer extends SightingScorer
  {
      public function score(BigFootSighting $sighting): DebuggableBigFootSightingScore
      {
 +        $startTime = microtime(true);
          $bfsScore = parent::score($sighting);
--        return new DebuggableBigFootSightingScore($bfsScore->getScore(), 0);
-+
-+        return new DebuggableBigFootSightingScore(
-+            $bfsScore->getScore(),
+ 
+         return new DebuggableBigFootSightingScore(
+             $bfsScore->getScore(),
+-            100
 +            microtime(true) - $startTime
-+        );
+         );
      }
  }

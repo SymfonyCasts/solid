@@ -1,6 +1,6 @@
 diff --git a/src/Scoring/PhotoFactor.php b/src/Scoring/PhotoFactor.php
 new file mode 100644
-index 0000000..bd93f98
+index 0000000..fc7df1a
 --- /dev/null
 +++ b/src/Scoring/PhotoFactor.php
 @@ -0,0 +1,22 @@
@@ -14,13 +14,13 @@ index 0000000..bd93f98
 +{
 +    public function score(BigFootSighting $sighting): int
 +    {
-+        if (empty($sighting->getImages())) {
-+            throw new \RuntimeException('Invalid BigFootSighting, it should have at least one photo');
++        if (count($sighting->getImages()) === 0) {
++            throw new \InvalidArgumentException('Invalid BigFootSighting, it should have at least one photo');
 +        }
 +
 +        $score = 0;
 +        foreach ($sighting->getImages() as $image) {
-+            $score += rand(1, 100); // analyze image
++            $score += rand(1, 100); // todo analyze image
 +        }
 +
 +        return $score;

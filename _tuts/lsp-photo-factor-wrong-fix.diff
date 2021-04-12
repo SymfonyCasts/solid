@@ -1,5 +1,5 @@
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index e027728..eba348c 100644
+index e027728..42c8804 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -3,6 +3,7 @@
@@ -15,7 +15,7 @@ index e027728..eba348c 100644
          $score = 0;
          foreach ($this->scoringFactors as $scoringFactor) {
 +            // LSP violation and also OCP violation
-+            if ($scoringFactor instanceof PhotoFactor && empty($sighting->getImages())) {
++            if ($scoringFactor instanceof PhotoFactor && count($sighting->getImages()) === 0) {
 +                continue;
 +            }
 +

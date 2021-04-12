@@ -1,18 +1,18 @@
 diff --git a/src/Scoring/PhotoFactor.php b/src/Scoring/PhotoFactor.php
-index bd93f98..ffc3374 100644
+index fc7df1a..0715986 100644
 --- a/src/Scoring/PhotoFactor.php
 +++ b/src/Scoring/PhotoFactor.php
 @@ -9,7 +9,7 @@ class PhotoFactor implements ScoringFactorInterface
      public function score(BigFootSighting $sighting): int
      {
-         if (empty($sighting->getImages())) {
--            throw new \RuntimeException('Invalid BigFootSighting, it should have at least one photo');
+         if (count($sighting->getImages()) === 0) {
+-            throw new \InvalidArgumentException('Invalid BigFootSighting, it should have at least one photo');
 +            return 0;
          }
  
          $score = 0;
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index eba348c..e027728 100644
+index 42c8804..e027728 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -3,7 +3,6 @@
@@ -28,7 +28,7 @@ index eba348c..e027728 100644
          $score = 0;
          foreach ($this->scoringFactors as $scoringFactor) {
 -            // LSP violation and also OCP violation
--            if ($scoringFactor instanceof PhotoFactor && empty($sighting->getImages())) {
+-            if ($scoringFactor instanceof PhotoFactor && count($sighting->getImages()) === 0) {
 -                continue;
 -            }
 -

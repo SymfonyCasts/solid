@@ -1,8 +1,8 @@
 diff --git a/src/Service/DebuggableSightingScorer.php b/src/Service/DebuggableSightingScorer.php
-index 8edfd65..4670d43 100644
+index 8edfd65..626b4ed 100644
 --- a/src/Service/DebuggableSightingScorer.php
 +++ b/src/Service/DebuggableSightingScorer.php
-@@ -4,11 +4,13 @@ namespace App\Service;
+@@ -4,11 +4,17 @@ namespace App\Service;
  
  use App\Entity\BigFootSighting;
  use App\Model\BigFootSightingScore;
@@ -15,6 +15,10 @@ index 8edfd65..4670d43 100644
      {
 -        return parent::score($sighting);
 +        $bfsScore = parent::score($sighting);
-+        return new DebuggableBigFootSightingScore($bfsScore->getScore(), 0);
++
++        return new DebuggableBigFootSightingScore(
++            $bfsScore->getScore(),
++            100
++        );
      }
  }

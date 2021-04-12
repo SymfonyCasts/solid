@@ -136,8 +136,8 @@
             "description": null
         },
         {
-            "id": "lsp-debug-example-configure-debuggable-scorer",
-            "name": "LSP DEBUG EXAMPLE: configure debuggable scorer",
+            "id": "delete-me-1",
+            "name": "delete me 1",
             "description": null
         },
         {
@@ -176,8 +176,13 @@
             "description": null
         },
         {
-            "id": "lsp-debug-example-paste-debug-command",
-            "name": "LSP Debug Example: paste debug command",
+            "id": "lsp-debug-example-set-duration-onto-flash",
+            "name": "LSP Debug Example: set duration onto flash",
+            "description": null
+        },
+        {
+            "id": "lsp-debug-example-remove-instanceof",
+            "name": "LSP Debug Example: remove instanceof",
             "description": null
         },
         {
@@ -311,5 +316,5 @@
             "description": null
         }
     ],
-    "sha": "fbea97f91311f6c91523973eb4347568ede14229"
+    "sha": "a79f3d15b937c956821f40e6219b0c10f6dc6de7"
 }
