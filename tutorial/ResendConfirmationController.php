@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,14 +11,10 @@ class ResendConfirmationController extends AbstractController
     /**
      * @Route("/resend-confirmation", methods={"POST"})
      */
-    public function resend(Request $request, UserRepository $userRepository)
+    public function resend()
     {
-        $email = $request->request->get('email');
-
-        $user = $userRepository->findOneBy(['email' => $email]);
-        if (!$user) {
-            throw $this->createNotFoundException('User not found');
-        }
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $user = $this->getUser();
 
         // TODO: send confirmation email
 
