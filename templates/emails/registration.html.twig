@@ -28,9 +28,6 @@
             width: 580px;
             margin: 0 auto;
         }
-        .bottom {
-            background-color: #efefee;
-        }
         .block {
             margin: 0;
             padding: 10px 20px 20px 20px;
@@ -40,17 +37,6 @@
         }
         .text-center {
             text-align: center;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #264459;
-            color: #fefefe;
-            border: 1px solid #fff;
-            border-radius: 3px;
-            font-size: 20px;
-            font-weight: bold;
-            text-decoration: none;
         }
     </style>
 </head>
@@ -65,16 +51,7 @@
         <div class="content">
             <h1 class="text-center">Nice to meet you %name%!</h1>
             <p class="block">
-                Welcome to <strong>the BigFoot Sightings site</strong>, we can't wait to see your sightings.
-            </p>
-            <p class="block text-center">
-                <a href="{{ url('app_sighting_upload') }}" class="btn">Upload your sightings!</a>
-            </p>
-            <p class="block">
-                Check out our existing sightings and share your thoughts in the comments!
-            </p>
-            <p class="block text-center">
-                <a href="{{ url('app_homepage') }}" class="btn">Get reading!</a>
+                Please <a href="{{ confirmationLink }}">Confirm your account</a>.
             </p>
         </div>
         <div class="footer">
