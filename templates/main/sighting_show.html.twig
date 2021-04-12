@@ -16,11 +16,11 @@
     </div>
 
     <h3>Littlefoot (i.e. Human) Reactions</h3>
-    
+
     {% for comment in sighting.comments %}
         <div class="comment-container mb-3">
             <div class="row">
-                <div class="col-1">        
+                <div class="col-1">
                     <img class="px-1 py-1" src="{{ comment.owner.avatarUrl }}" alt="Avatar for {{ comment.owner.username }}">
                 </div>
                 <div class="col">
@@ -34,8 +34,10 @@
                 </div>
             </div>
         </div>
+    {% else %}
+        <div>The little people have not commented yet...</div>
     {% endfor %}
-    
+
 </div>
 {% endblock %}
 
