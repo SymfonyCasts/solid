@@ -33,16 +33,13 @@
                 </li>
                 {% endif %}
               </ul>
-            
         </nav>
 
         {# Flash messages #}
         {% if app.session.flashBag.peek('success')|length > 0 %}
-            <div class="alert alert-block alert-success">
+            <div class="alert alert-success text-center">
                 {% for flash in app.session.flashBag.get('success') %}
-                    <p class="text-center">
-                        {{ flash|trans|raw }}
-                    </p>
+                    {{ flash|trans|raw }}
                 {% endfor %}
             </div>
         {% endif %}
