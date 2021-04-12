@@ -23,7 +23,7 @@ class BigFootSightingScore
                 return 'low';
             case $this->score <= 60:
                 return 'medium';
-            case $this->score > 60:
+            default:
                 return 'high';
         }
     }

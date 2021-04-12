@@ -17,7 +17,7 @@ class UserManager
         $this->entityManager = $entityManager;
     }
 
-    public function register(User $user, string $plainPassword)
+    public function register(User $user, string $plainPassword): void
     {
         $user->setPassword(
             $this->passwordEncoder->encodePassword($user, $plainPassword)
