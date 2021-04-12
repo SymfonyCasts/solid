@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
 
             $userManager->register($user, $plainPassword);
 
-            $this->addFlash('success', 'User created successfully!');
+            $this->addFlash('success', 'Fist Pump! Let\'s go find some Sasquatch!');
 
             return $this->redirectToRoute('app_homepage');
         }
