@@ -46,7 +46,7 @@ adjustments you need - specifically `DATABASE_URL`. Or, better,
 you can create a `.env.local` file and *override* any configuration
 you need there (instead of changing `.env` directly).
 
-** 3) Database Schema**
+**3) Database Schema**
 
 To actually *create* the database and get some tables, run:
 
