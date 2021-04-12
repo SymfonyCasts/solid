@@ -62,7 +62,7 @@ class SightingScorer
             $score += 20;
         }
 
-        if (stripos($title, 'using an Iphone') !== false) {
+        if (stripos($title, 'using an iPhone') !== false) {
             $score -= 50;
         }
 
