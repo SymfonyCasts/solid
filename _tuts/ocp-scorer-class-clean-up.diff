@@ -1,5 +1,5 @@
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index 74255bf..b99dda5 100644
+index 908971a..a8c0c08 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -4,9 +4,20 @@ namespace App\Service;
@@ -13,7 +13,7 @@ index 74255bf..b99dda5 100644
 +    /**
 +     * @var ScoringFactorInterface[]
 +     */
-+    private $scoringFactors;
++    private array $scoringFactors;
 +
 +    public function __construct(array $scoringFactors)
 +    {
@@ -23,7 +23,7 @@ index 74255bf..b99dda5 100644
      public function score(BigFootSighting $sighting): BigFootSightingScore
      {
          $score = 0;
-@@ -16,57 +27,4 @@ class SightingScorer
+@@ -16,56 +27,4 @@ class SightingScorer
  
          return new BigFootSightingScore($score);
      }
@@ -35,8 +35,7 @@ index 74255bf..b99dda5 100644
 -        $lng = (float)$sighting->getLongitude();
 -
 -        // California edge to edge coordinates
--        if (true
--            && $lat >= 32.5121 && $lat <= 42.0126
+-        if ($lat >= 32.5121 && $lat <= 42.0126
 -            && $lng >= -114.1315 && $lng <= -124.6509
 -        ) {
 -            $score += 30;
@@ -74,7 +73,7 @@ index 74255bf..b99dda5 100644
 -            $score += 20;
 -        }
 -
--        if (stripos($title, 'using an Iphone') !== false) {
+-        if (stripos($title, 'using an iPhone') !== false) {
 -            $score -= 50;
 -        }
 -

@@ -1,5 +1,5 @@
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index b99dda5..29a321c 100644
+index a8c0c08..b0648e0 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -21,9 +21,9 @@ class SightingScorer

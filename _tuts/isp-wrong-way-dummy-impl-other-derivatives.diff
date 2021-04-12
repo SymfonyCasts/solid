@@ -1,8 +1,8 @@
 diff --git a/src/Scoring/CoordinatesFactor.php b/src/Scoring/CoordinatesFactor.php
-index 56fce01..e495b17 100644
+index eb8b4fb..c80bbae 100644
 --- a/src/Scoring/CoordinatesFactor.php
 +++ b/src/Scoring/CoordinatesFactor.php
-@@ -22,4 +22,9 @@ class CoordinatesFactor implements ScoringFactorInterface
+@@ -21,4 +21,9 @@ class CoordinatesFactor implements ScoringFactorInterface
  
          return $score;
      }
@@ -13,10 +13,10 @@ index 56fce01..e495b17 100644
 +    }
  }
 diff --git a/src/Scoring/DescriptionFactor.php b/src/Scoring/DescriptionFactor.php
-index 1ca9958..97c00bc 100644
+index dc168ae..34e60c2 100644
 --- a/src/Scoring/DescriptionFactor.php
 +++ b/src/Scoring/DescriptionFactor.php
-@@ -21,4 +21,9 @@ class DescriptionFactor implements ScoringFactorInterface
+@@ -25,4 +25,9 @@ class DescriptionFactor implements ScoringFactorInterface
  
          return $score;
      }

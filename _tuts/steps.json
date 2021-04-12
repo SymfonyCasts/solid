@@ -76,8 +76,8 @@
             "description": null
         },
         {
-            "id": "ocp-scoring-factor-interface",
-            "name": "ocp-scoring-factor-interface",
+            "id": "ocp-creating-scoringfactorinterface",
+            "name": "OCP: creating ScoringFactorInterface",
             "description": null
         },
         {
@@ -106,8 +106,8 @@
             "description": null
         },
         {
-            "id": "ocp-add-photo-factor",
-            "name": "OCP: add photo factor",
+            "id": "lsp-add-photo-factor",
+            "name": "LSP: add photo factor",
             "description": null
         },
         {
@@ -311,5 +311,5 @@
             "description": null
         }
     ],
-    "sha": "91c02266c83cb20c7bbc28b03e99f2ff957bb3dc"
+    "sha": "fbea97f91311f6c91523973eb4347568ede14229"
 }
