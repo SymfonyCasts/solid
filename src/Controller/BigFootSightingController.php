@@ -33,7 +33,7 @@ class BigFootSightingController extends AbstractController
             $entityManager->persist($sighting);
             $entityManager->flush();
 
-            $this->addFlash('success', 'New BigFoot Sighting created successfully');
+            $this->addFlash('success', 'New BigFoot Sighting created successfully!');
 
             return $this->redirectToRoute('app_sighting_show', [
                 'id' => $sighting->getId()
