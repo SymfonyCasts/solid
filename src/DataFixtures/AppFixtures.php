@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
 
     private function createUsers()
     {
-        $this->users = $this->createMany(100, function() {
+        $this->users = $this->createMany(5, function() {
             $user = new User();
             $user->setUsername($this->faker->userName);
             $user->setEmail($user->getUsername().'@example.com');
@@ -58,7 +58,7 @@ class AppFixtures extends Fixture
 
     private function createSightings()
     {
-        $this->sightings = $this->createMany(200, function() {
+        $this->sightings = $this->createMany(50, function() {
             $sighting = new BigFootSighting();
             $sighting->setOwner($this->users[array_rand($this->users)]);
             $sighting->setTitle($this->faker->realText(80));
@@ -74,7 +74,7 @@ class AppFixtures extends Fixture
 
     private function createComments()
     {
-        $this->createMany(4000, function(int $i) {
+        $this->createMany(200, function(int $i) {
             $comment = new Comment();
             if ($i % 5 === 0) {
                 // make every 5th comment done by a small set of users
