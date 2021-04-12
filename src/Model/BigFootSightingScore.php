@@ -4,7 +4,7 @@ namespace App\Model;
 
 class BigFootSightingScore
 {
-    private $score;
+    private int $score;
 
     public function __construct(int $score)
     {

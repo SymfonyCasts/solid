@@ -8,8 +8,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserManager
 {
-    private $passwordEncoder;
-    private $entityManager;
+    private UserPasswordEncoderInterface $passwordEncoder;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
     {

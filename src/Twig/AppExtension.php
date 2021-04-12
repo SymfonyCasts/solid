@@ -10,7 +10,7 @@ use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-    private $commentHelper;
+    private CommentHelper $commentHelper;
 
     public function __construct(CommentHelper $commentHelper)
     {
