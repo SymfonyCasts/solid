@@ -1,5 +1,5 @@
 diff --git a/src/Service/ConfirmationEmailSender.php b/src/Service/ConfirmationEmailSender.php
-index 10ea643..dcb0e43 100644
+index 10ea643..d8e9e94 100644
 --- a/src/Service/ConfirmationEmailSender.php
 +++ b/src/Service/ConfirmationEmailSender.php
 @@ -2,7 +2,17 @@
@@ -11,8 +11,8 @@ index 10ea643..dcb0e43 100644
 +
  class ConfirmationEmailSender
  {
-+    private $mailer;
-+    private $router;
++    private MailerInterface $mailer;
++    private RouterInterface $router;
  
 +    public function __construct(MailerInterface $mailer, RouterInterface $router)
 +    {

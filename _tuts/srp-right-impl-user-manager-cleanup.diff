@@ -1,5 +1,5 @@
 diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index 0ed7c18..428a418 100644
+index 691255c..565d0bd 100644
 --- a/src/Manager/UserManager.php
 +++ b/src/Manager/UserManager.php
 @@ -4,25 +4,17 @@ namespace App\Manager;
@@ -28,10 +28,10 @@ index 0ed7c18..428a418 100644
 -        $this->mailer = $mailer;
      }
  
-     public function create(User $user, string $plainPassword): User
-@@ -37,21 +29,6 @@ class UserManager
-         $this->entityManager->persist($user);
-         $this->entityManager->flush();
+     public function create(User $user, string $plainPassword): void
+@@ -30,27 +22,12 @@ class UserManager
+         $token = $this->createToken();
+         $user->setConfirmationToken($token);
  
 -        $confirmationLink = $this->router->generate('check_confirmation_link', [
 -            'token' => $user->getConfirmationToken()
@@ -46,8 +46,14 @@ index 0ed7c18..428a418 100644
 -                'confirmationLink' => $confirmationLink
 -            ]);
 -
--        $this->mailer->send($confirmationEmail);
+         $user->setPassword(
+             $this->passwordEncoder->encodePassword($user, $plainPassword)
+         );
+ 
+         $this->entityManager->persist($user);
+         $this->entityManager->flush();
 -
-         return $user;
+-        $this->mailer->send($confirmationEmail);
      }
  
+     private function createToken(): string

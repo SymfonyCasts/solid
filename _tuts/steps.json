@@ -46,8 +46,8 @@
             "description": null
         },
         {
-            "id": "srp-right-impl-return-user-method",
-            "name": "SRP Right Impl: return user method",
+            "id": "delete-me-2",
+            "name": "delete me 2",
             "description": null
         },
         {
@@ -71,6 +71,11 @@
             "description": null
         },
         {
+            "id": "srp-right-impl-fix-signup-feature",
+            "name": "SRP Right Impl: fix signup feature",
+            "description": null
+        },
+        {
             "id": "srp-right-impl-copy-resend-controller",
             "name": "SRP Right Impl: copy resend controller",
             "description": null
@@ -81,8 +86,8 @@
             "description": null
         },
         {
-            "id": "srp-right-impl-fix-signup-action",
-            "name": "SRP Right Impl: fix signup action",
+            "id": "delete-me-3",
+            "name": "delete me 3",
             "description": null
         },
         {
@@ -326,5 +331,5 @@
             "description": null
         }
     ],
-    "sha": "52c50e4e9fd5e9934800661afaa0db7515c3869c"
+    "sha": "91c02266c83cb20c7bbc28b03e99f2ff957bb3dc"
 }
