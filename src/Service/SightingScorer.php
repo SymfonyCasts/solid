@@ -24,8 +24,7 @@ class SightingScorer
         $lng = (float)$sighting->getLongitude();
 
         // California edge to edge coordinates
-        if (true
-            && $lat >= 32.5121 && $lat <= 42.0126
+        if ($lat >= 32.5121 && $lat <= 42.0126
             && $lng >= -114.1315 && $lng <= -124.6509
         ) {
             $score += 30;
