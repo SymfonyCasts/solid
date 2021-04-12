@@ -56,7 +56,7 @@ class RegistrationController extends AbstractController
 
         $entityManager->flush();
 
-        $this->addFlash('success', 'The email was successfully confirmed');
+        $this->addFlash('success', 'Your email is confirmed! Let\'s go confirm some Bigfoot!');
 
         return $this->redirectToRoute('app_homepage');
     }
