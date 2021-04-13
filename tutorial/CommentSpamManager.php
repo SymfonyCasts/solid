@@ -13,9 +13,9 @@ class CommentSpamManager
 
         $regex = implode('|', $this->spamWords());
 
-        preg_match("/$regex/", $content, $badWordsOnComment);
+        preg_match_all("/$regex/i", $content, $badWordsOnComment);
 
-        if (count($badWordsOnComment) >= 2) {
+        if (count($badWordsOnComment[0]) >= 2) {
             // We could throw a custom exception if needed
             throw new \RuntimeException('Message detected as spam');
         }
