@@ -6,7 +6,7 @@ use App\Entity\Comment;
 
 class CommentSpamManager
 {
-    public function validate(Comment $comment)
+    public function validate(Comment $comment): void
     {
         $content = $comment->getContent();
         $badWordsOnComment = [];
