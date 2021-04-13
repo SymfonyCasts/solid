@@ -28,7 +28,7 @@ class CommentSpamManager
             'twitter',
             'facebook',
             'earn money',
-            'SymfonyCasts',
+            'SymfonyCats',
         ];
     }
 }
