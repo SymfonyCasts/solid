@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Manager;
+namespace App\Comment;
 
 use App\Entity\Comment;
 
