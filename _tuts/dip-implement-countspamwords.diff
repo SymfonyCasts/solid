@@ -1,0 +1,16 @@
+diff --git a/src/Service/RegexSpamWordHelper.php b/src/Service/RegexSpamWordHelper.php
+index 7e2456a..ffef7d5 100644
+--- a/src/Service/RegexSpamWordHelper.php
++++ b/src/Service/RegexSpamWordHelper.php
+@@ -6,6 +6,11 @@ use App\Comment\CommentSpamCounterInterface;
+ 
+ class RegexSpamWordHelper implements CommentSpamCounterInterface
+ {
++    public function countSpamWords(string $content): int
++    {
++        return count($this->getMatchedSpamWords($content));
++    }
++
+     public function getMatchedSpamWords(string $content): array
+     {
+         $badWordsOnComment = [];

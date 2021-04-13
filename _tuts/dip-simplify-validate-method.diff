@@ -1,23 +1,22 @@
-diff --git a/src/Manager/CommentSpamManager.php b/src/Manager/CommentSpamManager.php
-index 56d0034..0540957 100644
---- a/src/Manager/CommentSpamManager.php
-+++ b/src/Manager/CommentSpamManager.php
-@@ -16,27 +16,10 @@ class CommentSpamManager
- 
-     public function validate(Comment $comment)
+diff --git a/src/Comment/CommentSpamManager.php b/src/Comment/CommentSpamManager.php
+index 2ec488c..1153c4f 100644
+--- a/src/Comment/CommentSpamManager.php
++++ b/src/Comment/CommentSpamManager.php
+@@ -17,26 +17,10 @@ class CommentSpamManager
+     public function validate(Comment $comment): void
      {
--        $content = $comment->getContent();
+         $content = $comment->getContent();
 -        $badWordsOnComment = [];
-+        $badWordsOnComment = $this->spamWordCounter->countSpamWords($comment->getContent());
++        $badWordsOnComment = $this->spamWordHelper->getMatchedSpamWords($content);
  
 -        $regex = implode('|', $this->spamWords());
 -
--        preg_match("/$regex/", $content, $badWordsOnComment);
+-        preg_match_all("/$regex/i", $content, $badWordsOnComment);
 -
--        if (count($badWordsOnComment) >= 2) {
+-        if (count($badWordsOnComment[0]) >= 2) {
 -            // We could throw a custom exception if needed
 -            throw new \RuntimeException('Message detected as spam');
-+        if ($badWordsOnComment >= 2) {
++        if (count($badWordsOnComment) >= 2) {
 +            throw new \Exception('Message detected as spam');
          }
      }
@@ -29,7 +28,7 @@ index 56d0034..0540957 100644
 -            'twitter',
 -            'facebook',
 -            'earn money',
--            'SymfonyCasts',
+-            'SymfonyCats',
 -        ];
 -    }
  }

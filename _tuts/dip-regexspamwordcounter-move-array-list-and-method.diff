@@ -1,12 +1,12 @@
-diff --git a/src/Service/RegexSpamWordCounter.php b/src/Service/RegexSpamWordCounter.php
-index 1c13d70..ffc05ed 100644
---- a/src/Service/RegexSpamWordCounter.php
-+++ b/src/Service/RegexSpamWordCounter.php
+diff --git a/src/Service/RegexSpamWordHelper.php b/src/Service/RegexSpamWordHelper.php
+index 38c2554..2f86499 100644
+--- a/src/Service/RegexSpamWordHelper.php
++++ b/src/Service/RegexSpamWordHelper.php
 @@ -4,5 +4,19 @@ namespace App\Service;
  
- class RegexSpamWordCounter
+ class RegexSpamWordHelper
  {
-+    public function countSpamWords(string $content): int
++    public function getMatchedSpamWords(string $content): array
 +    {
  
 +    }
@@ -18,7 +18,7 @@ index 1c13d70..ffc05ed 100644
 +            'twitter',
 +            'facebook',
 +            'earn money',
-+            'SymfonyCasts',
++            'SymfonyCats',
 +        ];
 +    }
  }

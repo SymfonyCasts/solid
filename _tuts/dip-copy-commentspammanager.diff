@@ -1,27 +1,27 @@
-diff --git a/src/Manager/CommentSpamManager.php b/src/Manager/CommentSpamManager.php
+diff --git a/src/Comment/CommentSpamManager.php b/src/Comment/CommentSpamManager.php
 new file mode 100644
-index 0000000..1559003
+index 0000000..d44d6c5
 --- /dev/null
-+++ b/src/Manager/CommentSpamManager.php
++++ b/src/Comment/CommentSpamManager.php
 @@ -0,0 +1,34 @@
 +<?php
 +
-+namespace App\Manager;
++namespace App\Comment;
 +
 +use App\Entity\Comment;
 +
 +class CommentSpamManager
 +{
-+    public function validate(Comment $comment)
++    public function validate(Comment $comment): void
 +    {
 +        $content = $comment->getContent();
 +        $badWordsOnComment = [];
 +
 +        $regex = implode('|', $this->spamWords());
 +
-+        preg_match("/$regex/", $content, $badWordsOnComment);
++        preg_match_all("/$regex/i", $content, $badWordsOnComment);
 +
-+        if (count($badWordsOnComment) >= 2) {
++        if (count($badWordsOnComment[0]) >= 2) {
 +            // We could throw a custom exception if needed
 +            throw new \RuntimeException('Message detected as spam');
 +        }
@@ -34,7 +34,7 @@ index 0000000..1559003
 +            'twitter',
 +            'facebook',
 +            'earn money',
-+            'SymfonyCasts',
++            'SymfonyCats',
 +        ];
 +    }
 +}

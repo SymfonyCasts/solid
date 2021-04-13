@@ -1,13 +1,15 @@
-diff --git a/src/Service/RegexSpamWordCounter.php b/src/Service/RegexSpamWordCounter.php
-index 77e9077..d4c22c9 100644
---- a/src/Service/RegexSpamWordCounter.php
-+++ b/src/Service/RegexSpamWordCounter.php
-@@ -2,7 +2,7 @@
+diff --git a/src/Service/RegexSpamWordHelper.php b/src/Service/RegexSpamWordHelper.php
+index 9974497..7e2456a 100644
+--- a/src/Service/RegexSpamWordHelper.php
++++ b/src/Service/RegexSpamWordHelper.php
+@@ -2,7 +2,9 @@
  
  namespace App\Service;
  
--class RegexSpamWordCounter
-+class RegexSpamWordCounter implements SpamWordCounterInterface
+-class RegexSpamWordHelper
++use App\Comment\CommentSpamCounterInterface;
++
++class RegexSpamWordHelper implements CommentSpamCounterInterface
  {
-     public function countSpamWords(string $content): int
+     public function getMatchedSpamWords(string $content): array
      {

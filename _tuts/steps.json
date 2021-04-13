@@ -276,8 +276,8 @@
             "description": null
         },
         {
-            "id": "dip-add-regexspamwordcounter",
-            "name": "DIP: add RegexSpamWordCounter",
+            "id": "dip-add-regexspamwordhelper",
+            "name": "DIP: add RegexSpamWordHelper",
             "description": null
         },
         {
@@ -311,10 +311,25 @@
             "description": null
         },
         {
+            "id": "dip-implement-countspamwords",
+            "name": "DIP: implement countSpamWords()",
+            "description": null
+        },
+        {
             "id": "dip-update-argument-type-hint",
             "name": "DIP: update argument type-hint",
             "description": null
+        },
+        {
+            "id": "dip-use-new-method",
+            "name": "DIP: use new method",
+            "description": null
+        },
+        {
+            "id": "dip-make-old-method-private",
+            "name": "DIP: make old method private",
+            "description": null
         }
     ],
-    "sha": "a79f3d15b937c956821f40e6219b0c10f6dc6de7"
+    "sha": "0a0ec84561a717567e0337a448e2a6de54fb1e84"
 }

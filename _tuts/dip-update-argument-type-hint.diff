@@ -1,20 +1,30 @@
-diff --git a/src/Manager/CommentSpamManager.php b/src/Manager/CommentSpamManager.php
-index 0540957..050aa9c 100644
---- a/src/Manager/CommentSpamManager.php
-+++ b/src/Manager/CommentSpamManager.php
-@@ -3,13 +3,13 @@
- namespace App\Manager;
+diff --git a/src/Comment/CommentSpamManager.php b/src/Comment/CommentSpamManager.php
+index 1153c4f..a7961cf 100644
+--- a/src/Comment/CommentSpamManager.php
++++ b/src/Comment/CommentSpamManager.php
+@@ -3,21 +3,20 @@
+ namespace App\Comment;
  
  use App\Entity\Comment;
--use App\Service\RegexSpamWordCounter;
-+use App\Service\SpamWordCounterInterface;
+-use App\Service\RegexSpamWordHelper;
  
  class CommentSpamManager
  {
-     private $spamWordCounter;
+-    private RegexSpamWordHelper $spamWordHelper;
++    private CommentSpamCounterInterface $spamWordCounter;
  
--    public function __construct(RegexSpamWordCounter $spamWordCounter)
-+    public function __construct(SpamWordCounterInterface $spamWordCounter)
+-    public function __construct(RegexSpamWordHelper $spamWordHelper)
++    public function __construct(CommentSpamCounterInterface $spamWordCounter)
      {
-         $this->spamWordCounter = $spamWordCounter;
+-        $this->spamWordHelper = $spamWordHelper;
++        $this->spamWordCounter = $spamWordCounter;
      }
+ 
+     public function validate(Comment $comment): void
+     {
+         $content = $comment->getContent();
+-        $badWordsOnComment = $this->spamWordHelper->getMatchedSpamWords($content);
++        $badWordsOnComment = $this->spamWordCounter->getMatchedSpamWords($content);
+ 
+         if (count($badWordsOnComment) >= 2) {
+             throw new \Exception('Message detected as spam');

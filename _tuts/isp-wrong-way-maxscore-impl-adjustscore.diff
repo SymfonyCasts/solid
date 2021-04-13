@@ -1,5 +1,5 @@
 diff --git a/src/Scoring/MaxScoreAdjuster.php b/src/Scoring/MaxScoreAdjuster.php
-index 6cdaf8b..6d99be7 100644
+index 6cdaf8b..212fdf5 100644
 --- a/src/Scoring/MaxScoreAdjuster.php
 +++ b/src/Scoring/MaxScoreAdjuster.php
 @@ -2,6 +2,12 @@
@@ -12,6 +12,6 @@ index 6cdaf8b..6d99be7 100644
  {
 +    public function adjustScore(int $finalScore, BigFootSighting $sighting): int
 +    {
-+        return $finalScore > 100 ? 100 : $finalScore;
++        return min($finalScore, 100);
 +    }
  }

@@ -1,0 +1,16 @@
+diff --git a/src/Comment/CommentSpamManager.php b/src/Comment/CommentSpamManager.php
+index a7961cf..6ac8f02 100644
+--- a/src/Comment/CommentSpamManager.php
++++ b/src/Comment/CommentSpamManager.php
+@@ -16,9 +16,9 @@ class CommentSpamManager
+     public function validate(Comment $comment): void
+     {
+         $content = $comment->getContent();
+-        $badWordsOnComment = $this->spamWordCounter->getMatchedSpamWords($content);
++        $badWordsCount = $this->spamWordCounter->countSpamWords($content);
+ 
+-        if (count($badWordsOnComment) >= 2) {
++        if ($badWordsCount >= 2) {
+             throw new \Exception('Message detected as spam');
+         }
+     }
