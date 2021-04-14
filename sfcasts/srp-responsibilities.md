@@ -17,7 +17,7 @@ is requested in your project, you would only need to touch code that directly re
 to that change. You wouldn't need to change or even work next to co unrelated code.
 The fact that we're going to need to kind of mess a work near this code for saving
 users and hashing passwords, this unrelated code in order to add this recent
-functionality is assigned that our user manager violates SRP. Our user manager class
+functionality is assigned that our `UserManager` violates SRP. Our `UserManager` class
 has too many responsibilities, but what are the responsibilities of this class? I can
 think of six generate a confirmation link, which actually also includes generating
 the confirmation token. We create an email, we hash a password. We save the user and
@@ -52,8 +52,5 @@ part of SRP. My advice is to do your best and don't overthink it. We'll also tal
 about over-optimization later and keep in mind our original human definition for SRP
 gathered together. The things that change for the same reason, separate those things
 that change for different reasons. So next, now that we've identified the two
-responsibilities that user manager currently has, let's refactor our code to make it
+responsibilities that `UserManager` currently has, let's refactor our code to make it
 more SRP compliant.
-
-Okay.
-
