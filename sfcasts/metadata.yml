@@ -1,6 +1,9 @@
 chapters:
     - solid
-    - srp
+    - srp-defined
+    - srp-responsibilities
+    - srp-refactoring
+    - srp-takeaways
     - ocp
     - liskov
     - isp

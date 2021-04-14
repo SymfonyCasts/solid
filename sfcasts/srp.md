@@ -1,3 +1,0 @@
-# Single Responsibility Principle
-
-Coming soon...
