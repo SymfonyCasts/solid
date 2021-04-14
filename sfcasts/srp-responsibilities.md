@@ -1,4 +1,4 @@
-# Srp Responsibilities
+# SRP Responsibilities
 
 Coming soon...
 
