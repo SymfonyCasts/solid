@@ -1,99 +1,128 @@
-# SRP Defined
+# Single-Responsibility Principle: What is it?
 
-Coming soon...
+SOLID starts with the Single-Responsibility Principle or SRP. SRP says:
 
-Solid starts with the single responsibility principle or SRP, as RP says, a module
-should have only one reason to change. Um, okay. That doesn't really mean anything
-useful. At least to me, that sounded like a bunch of wishy washy, technical speak
+> A module should have only one reason to change.
 
-In somewhat simpler terms. SRP says a function or class should be responsible for
-only one task or should have only one responsibility, but what is a responsibility?
-Exactly. And why is this rule helpful on a high level? What SRP is really trying to
-say is gathered together the things that change for the same reason and separate
-things that change for different reasons. We'll talk more about this, but keep it in
-mind. And what problem is SRP trying to help us solve? In theory, if we organize our
-code into units that will change for the same reason, then when we get a new feature
-or change request, we will only need to modify it one class instead of making 10
-changes to 10 different files and trying not to break anything.
+Um, what? This sounds... a *little* too "fluffy" to be *actually* useful.
 
-Okay. And enough defining stuff. Let's jump into an example, how your browser click
-sign up. As you can see, our app does have a registration form, open 
-`src/Controller/RegistrationController` to see the code behind this. Most of the logic
-for saving the user is in this `UserManager::register()` function. So I'll click into
-that. That's actually a `src/Manager/UserManager.php`, and this method
-hashes the user's password, and then saves the user to the database. Now we have a
-change request. The product manager of Sasquatch sightings would like us to send a
-confirmation email after registration to confirm the user's email address, to
-understand SRP let's implement this the wrong way first, at least wrong. According to
-SRP side note, we're going to build a simple email confirmation system by hand. If
-you have this need in a real project, check out `symfonycasts/verify-email-bundle`.
-Anyways, the easiest way I can see to add this feature just to add the logic right
-inside `UserManager::register()` because then we will only have to touch with one file
-and it will make sure that we always send the confirmation email to the new users.
-Since we always already call this `register()` method at the bottom of this function.
+In... somewhat simpler terms, SRP says:
 
-I'm gonna start by cop pasting in a private function called `createToken()`. You can
-copy this from the code block on this page. This generates a random string that we
-will include in the confirmation link up in register. Let's generate a new token
-`$token = $this->createToken()`
+> A function or class should be responsible for only one task.. or should have
+> only one "responsibility".
 
-Then set it on the user `$user->setConfirmationToken($token)`. Uh, before I started
-recording, if you look in the user dot PHP file, I already created a `$confirmationToken`
-property on here that saves to the database. So now when we are new user
-registers, they will have a random confirmation token set onto their user record row
-back in `RegistrationController`. If you scroll down a little bit, I've also already
-built a confirmation action to confirm their account or user just needs to hit this
-pre-made route
+But... what is a "responsibility" exactly? And why is this rule helpful?
 
-Where
+## SRP: The Human Definition
 
-The token in the URL matches the confirmation token that we've set onto their user
-record. So back in `UserManager`, we have two jobs left. First. We need to generate an
-absolute URL to the confirm action that contains the token. And second, we need to
-send a user an email with that URL inside. Let's generate the URL first up in the
-`__constructor()` autowire `RouterInterface $router` Then I'll hold
-Alt + Enter and go to "Initialize properties" to create that property and set it
+On an *even* simpler level, what SRP is *really* trying to say is:
 
-Now, January that you were all below, let's say `$confirmationLink = $this->router->generate()`
-And then the name of our route, which over here, if you look that is
-called `check_confirmation_link` is that, and for the second argument, we'll need to
-pass a `token` set to `$user->getConfirmationToken()`. And then since we need this
-to generate an absolute URL, we need to pass a third argument, which is going to be
-`UrlGeneratorInterface::ABSOLUTE_URL`, because this will be included in an email to
-send the email we need mailer. So go back up and add one more argument here, 
-`MailerInterface $mailer`. I use the same trick of Alt + Enter to go to "Initialized properties",
-to create that property and set it
+> Gathered together the things that change for the same reason and separate
+> things that change for different reasons.
 
-Beautiful below. I'm going to paste
+We'll talk more about this definition later, but keep it in mind.
 
-Some email generation code. And the only thing I need to do is re type the L on
-`TemplatedEmail` and hit tab. So that as the `use` statement for me,
+And what problem is SRP trying to help us solve? In theory, if we organize our
+code into units that all change for the same reason, then when we get a new feature
+or change request, we will only need to modify one class instead of making 10
+changes to 10 different files... and trying not to break things along the way.
 
-Very simply, this will send it to that user from this email address, here's the
-subject and this template already exists. So down here and `templates/emails/`, there's
-a `registration_confirmation.html.twig`, and you see we're passing any `confirmationLink`
-variable. That `confirmationLink` variable is being rendered inside of this
-email. So I've done some of the work for us, but to get this, to get this started the
-last thing we need to do all the way at the bottom. So after we know that the user
-has saved successfully, we'll say `$this->mailer->send($confirmationEmail)`
+## Sending a Confirmation Email
 
-all right, we did it. We can even test this thing out, back at the registration page.
+Okay, enough defining stuff. Let's jump into an example. On your browser, click
+"Sign Up". As you can see, our app has a registration form! Open
+`src/Controller/RegistrationController.php` to see the code behind this. Most of
+the logic for saving the user is in this `UserManager::register()` method. Hold
+Cmd or Ctrl to jump into this: it lives at `src/Manager/UserManager.php`.
 
-Let's register as a new user, any password it enter and
+This method hashes the user's password and then saves the user to the database.
+Awesome!
 
-Awesome. It looks like it worked. Now,
+But *now*... we've received a change request! The product manager of Sasquatch
+Sightings - a suspiciously harry person - would like us to send a confirmation email
+after registration to verify the user's email address.
 
-The project is set up to not actually send any emails, but we can see what that
-imaginary email would have looked like by going down to the web debug toolbar,
-clicking any of these links to go to the profile profile hitting last 10, and then
-clicking to look, go into the post request for the signup form. Now on the left here,
-there is an email section and you can see that we sent one email and we can even look
-at what the HTML look like for it. So the email did send, and if we kind of steal our
-confirmation link right there, I'll pop this and do another tab. And our email is
-confirmed. Okay. Mission accomplished. And all of our code is centralized into one S
-one method, but we did just violate SRP. Y our `UserManager` class now has too many
-responsibilities, but what is a responsibility? Exactly. And what are the
-responsibilities that this class has. And also what's the problem with violating SRP.
-Anyways, let's talk about all of this in detail next, including refactoring our code
-to follow SRP more closely.
+To understand SRP let's implement this the *wrong* way first. Well "wrong" according
+to SRP.
 
+Side note: we're going to build a simple email confirmation system by hand. If you
+have this need in a *real* project, check out
+[symfonycasts/verify-email-bundle](https://github.com/symfonycasts/verify-email-bundle).
+
+## Coding up the Confirmation Email System
+
+Anyways, the easiest way I can see to add this feature is to add the logic right
+inside `UserManager::register()`... because we will only have to touch with one
+file and it will guarantee that anything that calls this method will trigger the
+confirmation email.
+
+At the bottom of this class, I'm gonna start by pasting in a private function called
+`createToken()`. You can copy this from the code block on this page. This generates
+a random string that we will include in the confirmation link.
+
+Up in register. Let's generate a new token `$token = $this->createToken()`...
+and then set it on the user: `$user->setConfirmationToken($token)`.
+
+Before I started recording, if you look at the `User.php` file, I already created
+a `$confirmationToken` property that saves to the database. So thanks to the new
+code, when a user registers, they will *now* have a random confirmation token saved
+onto their row in the database.
+
+Back in `RegistrationController`... if you scroll down a little bit, I've also already
+built a confirmation action to confirm their email. A user just needs to go to
+this pre-made route - where the `{token}` in the URL matches the `confirmationToken`
+that we've set onto their `User` record - and... bam! They'll be verified.
+
+So back in `UserManager`, we have two jobs left. First, we need to generate an
+absolute URL to the `confirmAction` that contains the token. And second, we need
+to send an email to the user with that URL inside.
+
+Let's generate the URL first. Up in the constructor, autowire
+`RouterInterface $router`. Then I'll hold Alt + Enter and go to "Initialize
+properties" to create that property and set it.
+
+Now, below, let's say `$confirmationLink = $this->router->generate()` and...
+the name of our route... is `check_confirmation_link`. Use that. For the second
+argument, pass a `token` set to `$user->getConfirmationToken()`. And because this
+URL will go into an email, it needs to be absolute: pass a third argument to trigger
+that: `UrlGeneratorInterface::ABSOLUTE_URL`.
+
+Now, let's send the email! On top, add one more argument -
+`MailerInterface $mailer` and use the same Alt + Enter, "Initialize properties",
+trick to create that property and set it.
+
+Beautiful! Below, I'll paste some email generation code. I'll re-type the `l`
+on `TemplatedEmail` and hit tab so that PhpStorm adds the `use` statement
+on top for me.
+
+This creates an email to this user, from this address... and the template it
+references already exists. You can see it in:
+`templates/emails/registration_confirmation.html.twig`.
+
+We're passing a `confirmationLink` variable... and that is rendered inside
+the email.
+
+Finally, all the way at the bottom of `register()`... so after we know that the
+user has saved successfully, deliver the mail with:
+`$this->mailer->send($confirmationEmail)`.
+
+Alright! We did it! And we can even try this! Back at the registration page,
+register as a new user... any password, hit enter and... awesome! It looks like
+it worked!
+
+Now, the project is not set up to *actually* deliver any emails for real. But we
+can see what that imaginary email *would* have looked like by going down to the web
+debug toolbar, clicking any of these links to go to the profiler... hitting
+"last 10"... then clicking to get into the profiler for the POST request to the
+registration form.
+
+Now on the left here, click into this "Email". There's our email! You can even look
+at its HTML. Let's steal the confirmation link... pop this into a new tab and...
+our email is confirmed! Mission accomplished.
+
+And all of our code is centralized into one method. But... we *did* just violate
+SRP: our `UserManager` class now has too many responsibilities. But what do I mean
+by the word "responsibility"? And what *are* the responsibilities that this class
+has. And what's the problem with violating SRP anyways?
+
+Let's answers these questions next.
