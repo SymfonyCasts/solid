@@ -1,5 +1,5 @@
 diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
-index f16d59a..5510189 100644
+index f16d59a..92a94e0 100644
 --- a/src/Controller/RegistrationController.php
 +++ b/src/Controller/RegistrationController.php
 @@ -6,6 +6,7 @@ use App\Entity\User;
@@ -19,35 +19,11 @@ index f16d59a..5510189 100644
      {
          $form = $this->createForm(RegistrationFormType::class);
  
-@@ -29,7 +30,8 @@ class RegistrationController extends AbstractController
- 
+@@ -30,6 +31,7 @@ class RegistrationController extends AbstractController
              $plainPassword = $form->get('plainPassword')->getData();
  
--            $userManager->create($user, $plainPassword);
-+            $user = $userManager->create($user, $plainPassword);
+             $userManager->create($user, $plainPassword);
 +            $confirmationEmailSender->send($user);
  
              $this->addFlash('success', 'Fist Pump! Let\'s go find some Sasquatch!');
  
-diff --git a/src/Manager/UserManager.php b/src/Manager/UserManager.php
-index 565d0bd..428a418 100644
---- a/src/Manager/UserManager.php
-+++ b/src/Manager/UserManager.php
-@@ -17,7 +17,7 @@ class UserManager
-         $this->entityManager = $entityManager;
-     }
- 
--    public function create(User $user, string $plainPassword): void
-+    public function create(User $user, string $plainPassword): User
-     {
-         $token = $this->createToken();
-         $user->setConfirmationToken($token);
-@@ -28,6 +28,8 @@ class UserManager
- 
-         $this->entityManager->persist($user);
-         $this->entityManager->flush();
-+
-+        return $user;
-     }
- 
-     private function createToken(): string

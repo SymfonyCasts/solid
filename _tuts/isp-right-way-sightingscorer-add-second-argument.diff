@@ -1,5 +1,5 @@
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index 2001c8d..69d2207 100644
+index fb1c91b..99cedb1 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -4,6 +4,7 @@ namespace App\Service;
@@ -12,7 +12,7 @@ index 2001c8d..69d2207 100644
  class SightingScorer
 @@ -13,9 +14,15 @@ class SightingScorer
       */
-     private array $scoringFactors;
+     private iterable $scoringFactors;
  
 -    public function __construct(iterable $scoringFactors)
 +    /**

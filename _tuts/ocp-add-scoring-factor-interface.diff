@@ -30,7 +30,7 @@ index 0000000..eb8b4fb
 +}
 diff --git a/src/Scoring/DescriptionFactor.php b/src/Scoring/DescriptionFactor.php
 new file mode 100644
-index 0000000..dc168ae
+index 0000000..9f7a133
 --- /dev/null
 +++ b/src/Scoring/DescriptionFactor.php
 @@ -0,0 +1,28 @@
@@ -45,7 +45,7 @@ index 0000000..dc168ae
 +    public function score(BigFootSighting $sighting): int
 +    {
 +        $score = 0;
-+        $title = strtolower($sighting->getTitle());
++        $title = strtolower($sighting->getDescription());
 +
 +        if (stripos($title, 'hairy') !== false) {
 +            $score += 10;

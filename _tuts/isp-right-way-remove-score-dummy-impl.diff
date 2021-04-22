@@ -13,7 +13,7 @@ index c80bbae..eb8b4fb 100644
 -    }
  }
 diff --git a/src/Scoring/DescriptionFactor.php b/src/Scoring/DescriptionFactor.php
-index 34e60c2..dc168ae 100644
+index 5b2c4a1..9f7a133 100644
 --- a/src/Scoring/DescriptionFactor.php
 +++ b/src/Scoring/DescriptionFactor.php
 @@ -25,9 +25,4 @@ class DescriptionFactor implements ScoringFactorInterface

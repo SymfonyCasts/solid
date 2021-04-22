@@ -12,7 +12,7 @@ index fc7df1a..0715986 100644
  
          $score = 0;
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index 42c8804..e027728 100644
+index 26f993a..688bca8 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -3,7 +3,6 @@

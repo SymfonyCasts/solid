@@ -1,5 +1,5 @@
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index 908971a..a8c0c08 100644
+index 38a156f..a8c0c08 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
 @@ -4,9 +4,20 @@ namespace App\Service;
@@ -63,7 +63,7 @@ index 908971a..a8c0c08 100644
 -    private function evaluateDescription(BigFootSighting $sighting): int
 -    {
 -        $score = 0;
--        $title = strtolower($sighting->getTitle());
+-        $title = strtolower($sighting->getDescription());
 -
 -        if (stripos($title, 'hairy') !== false) {
 -            $score += 10;

@@ -39,12 +39,15 @@ index 655e796..8f81ebb 100644
 +    }
  }
 diff --git a/src/Service/SightingScorer.php b/src/Service/SightingScorer.php
-index b0648e0..e027728 100644
+index b0648e0..688bca8 100644
 --- a/src/Service/SightingScorer.php
 +++ b/src/Service/SightingScorer.php
-@@ -13,7 +13,7 @@ class SightingScorer
+@@ -11,9 +11,9 @@ class SightingScorer
+     /**
+      * @var ScoringFactorInterface[]
       */
-     private array $scoringFactors;
+-    private array $scoringFactors;
++    private iterable $scoringFactors;
  
 -    public function __construct(array $scoringFactors)
 +    public function __construct(iterable $scoringFactors)
