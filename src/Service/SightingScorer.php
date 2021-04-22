@@ -52,7 +52,7 @@ class SightingScorer
     private function evaluateDescription(BigFootSighting $sighting): int
     {
         $score = 0;
-        $title = strtolower($sighting->getTitle());
+        $title = strtolower($sighting->getDescription());
 
         if (stripos($title, 'hairy') !== false) {
             $score += 10;
