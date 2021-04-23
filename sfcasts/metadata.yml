@@ -5,6 +5,9 @@ chapters:
     - srp-refactoring
     - srp-takeaways
     - ocp
-    - liskov
+    - ocp-takeaways
+    - liskov-definition
+    - liskov-exception
+    - liskov-replacement
     - isp
     - dip
