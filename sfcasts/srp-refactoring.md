@@ -1,103 +1,118 @@
-# SRP Refactoring
+# Refactoring for SRP
 
-Coming soon...
-
-We've identified that `UserManager::register()` handles two things that might change for
-different reasons. These are its two responsibilities creating and sending an email
-or a welcome email registration email, and setting up the data for a user and saving
-it to the database. We're not going to follow one of SRPs pieces of advice, separate
-those things that change for different reasons. The first thing I want to do is
-rename `register()` to `create()`, or you could even, uh, name it, something like safe. The
-point is I want to make its intention clear. Its purpose is to set all the required
-data on the user object and save it to the database. All right, click on `register()`. Go
-to Refactor->Rename,
-
-Call this `create`.
-
-When I hit enter over in registration controller. If you're keeping track that
-renamed the usage there automatically,
-
-Good. Now let's move the email related logic into a new class in the `Service/`
-directory though. It doesn't matter where I'm going to create a new PHP class called
-how about `ConfirmationEmailSender`. This class will meet need to services the router
-so it can generate the link and mailer. Let's add a polo function `__construct()`
-
-With those two arguments,
-
-`MailerInterface $mailer`, `RouterInterface $router`. I had escape and go to Alt + Enter
-and go to "Initialize properties". And I'll initialize both those properties. Don't
-need this extra PHP dock up here anymore. Now we can create a public function on here
-called how about `send()` with a `User` object argument
-
-That will return `void`
-
-For the inside of this. We're going to go steal all of the email related logic from
-`UserManager`. So the `$confirmationLink` in `$confirmationEmail` I'll delete those
-things.
-
-When I, PHPStorm asked me if I want to import a couple of use statements, I definitely do. And
-in the last piece I'm going to steal is the actual sending of the email, which we
-will put at the bottom.
-
-Okay.
-
-Very nice. Let's celebrate. Celebrate by cleaning things up and `UserManager`. We can
-now remove the last two arguments, `$router` and `$mailer`. I'll remove those properties as
-well. And then we can remove a couple of you statements up on top. Perfect. Now let's
-see who should be responsible for creating and setting the confirmation token on the
-user? I'm not exactly sure, but I have a useful trick when in doubt invert the
-question who should not be responsible for creating the token, that's a bit easier.
-It probably doesn't make sense that the service that sends emails sends the email
-should be responsible for generating that token and saving user information to the
+We've identified that `UserManager::register()` handles two things that might change
+for different reasons. These are its two responsibilities: one, creating and sending
+a confirmation email and two, setting up the data for a user and saving it to the
 database.
 
-Yes, this service does deal with the confirmation link, but it really is very
-different, has a very different concern than saving things to the database. So if we
-discard a confirmation email sender from our options, then there's only one logical
-place left `UserManager::create`. And it makes sense. This method sets up new user
-objects with all the data they need and then save it saves them. You could also
-isolate this confirmation token creation logic into a third class. There's no right
-or wrong answer, which is what makes this stuff so tricky. But over optimizing, by
-splitting things into too many pieces is also something you do not want to do. We'll
-talk more about that in the next chapter. Anyways, now that we've split all of our
-coat into two places over in `RegistrationController`, we need to call both methods.
-All the wire. I knew argument up here for a `ConfirmationEmailSender`. I'll call it
-`$confirmationEmailSender` and then down here, right after we call 
-`$userManager->create()` we'll call `$confirmationEmailSender->send()` in pass. 
-If the `$user` object done our original feature, sending a confirmation email 
-is now implemented in a more SRP friendly way. By the way,
+We're now going to follow the advice of SRP and "separate those things that change
+for different reasons".
 
-If you don't like needing to call
+## Clarifying The Responsibility of UserManager
 
-Two methods, whenever you're registering a new user, no problem. You can extract
-these two calls into a new class called maybe `UserRegistrationHandler` it's one
-responsibility would be to orchestrate all tasks related to registering a user. It
-wouldn't actually do that. Do that work as the details of persisting the user and
-sending a confirmation email are separate responsibilities, but it is okay to put
-those tasks into a single service. Anyways, now we can work on the new feature that
-our team asked us the ability to re send a confirmation email. You'll instantly feel
-how easy this is now that our code is SRP friendly. If you download the course code
-from this page, you should have a tutorial director down here with a 
-`ResendConfirmationController` file inside. I'm going to copy. Copy that, go up to the
-`Controller/` directory and paste. This comes with the boiler plate needed to have an
-end point that you could post to
+The first thing I want to do is rename `register()` to `create()`... or you could
+use `save()`... or even rename the entire class itself. The point is: I want to make
+its intention clear: its purpose is to set all the required data on the user object
+and save it to the database.
 
-That
+Right click on `register()`, go to Refactor->Rename and call this `create()`.
+When I hit enter, over in `RegistrationController`, PhpStorm renamed the method
+there too.
 
-Would resend your confirmation email, but the actual sending a confirmation mail is
-still a to do True. Remove that to do. We just need to auto wire, the 
-`ConfirmationEmailSender`, and then say `$confirmationEmailSender->send($user)`
+## Creating the ConfirmationEmailSender Class
 
-It's that easy. I won't bother testing this, but it should work ship it most
-importantly, thanks to our new organization of having confirmation email sender and
-`UserManager`.
+Nice! Next, let's move the email-related logic into a new class in the `Service/`
+directory... though, it doesn't matter where this lives. Create a new PHP class
+called, how about, `ConfirmationEmailSender`. This class will need two services:
+the router so it can generate the link and mailer. Add a public function
+`__construct()` with those two arguments: `MailerInterface $mailer`,
+`RouterInterface $router`. I'll hit Alt + Enter and go to "Initialize properties"
+to create both of those properties and set them. We don't need this extra PHPDoc
+up here.
 
-Okay,
+Now we can create a public function called, how about, `send()`, with a `User` object
+argument that will return `void`.
 
-Mark, if for example, a marketing person did want to tweak the subject on our welcome
-email. We can make that change without messing around near code. That saves things to
-the database or hash as passwords. But I have more to say about SRP, like the risks
-of over optimizing for SRP, which violates a concept called cohesion. And I also
-think that thanks to inspiration from Dan North, there's a much easier way to think
-about SRP. I'll tell you what it is next.
+For the inside of this, let's go steal all of the email-related logic from
+`UserManager`. So... copy the `$confirmationLink` and `$confirmationEmail` parts...
+delete those... and paste. And... yes PhpStorm: I definitely want you to import
+those `use` statements for me.
 
+The last line we need to steal is the `$mailer->send()` line. Paste that into the
+new class.
+
+Very nice! Let's celebrate by cleaning things up in `UserManager`: we can
+remove the last two arguments of the constructor - `$router` and `$mailer` - their
+properties... and even some `use` statements on top.
+
+## Who Should Generate the Confirmation Token?
+
+Done! Now... let's see... who should be responsible for creating and setting the
+confirmation token on the User? I'm... not exactly sure. But let's *invert* that
+question: who should *not* be responsible for creating the token?
+
+That's a bit easier: it probably doesn't make sense for the service whose only
+responsibility is creating an email to *also* be responsible for generating this
+cryptographically-secure token and saving it to the database. Yes, this service
+*does* deal with the confirmation link... but it feels like that logic would change
+for very different reasons than the email itself.
+
+So if we discard `ConfirmationEmailSender` from our options, then there's only one
+logical place left `UserManager::create()`. And... it makes sense: this method sets
+up new `User` objects with *all* the data they need and then saves them. You
+could *also* choose to isolate the confirmation token creation logic into a *third*
+class... there's no right or wrong answer, which is what makes this stuff so darn
+tricky! But over optimizing, by splitting things into *too* many pieces, is also
+something that we do *not* want to do. We'll talk more about that in the next chapter.
+
+*Anyways*, now that we've split all of our code into two places, over in
+`RegistrationController`, we need to call both methods. Autowire a new argument
+into the method: `ConfirmationEmailSender $confirmationEmailSender`. Then, below,
+right after we call `$userManager->create()`, say `$confirmationEmailSender->send()`
+and pass in the `$user` object.
+
+Done! Our original feature - sending a confirmation email - is now implemented in
+a more SRP-friendly way.
+
+## Creating a "Takes Care of Everything" Service?
+
+By the way, if you *don't* like that you need to call two method whenever you're
+registering a new user... I kind of agree! And it's no problem: you could extract
+these two calls into a *new* class... maybe called `UserRegistrationHandler`.
+
+It's *one* responsibility would be to "orchestrate" all the tasks related to
+registering a user. This is just *one* responsibility - not many - because it's
+not actually *doing* any of the real work. So, for example, if we needed to make
+a change to the confirmation email... or how users are persisted to the database...
+neither of those would require us to need to change this new class. It would only
+change if we added some new "step" to user registration - like sending an API
+call to a newsletter service to add the new user.
+
+## Enjoying SRP: Adding the Resend Feature
+
+*Anyways*, now that we've refactored to be SRP-compliant, we get to enjoy our
+hard work by *finally* adding the new feature that our team for: the ability to
+resend a confirmation email.
+
+If you download the course code from this page, you should have a `tutorial/`
+directory with a `ResendConfirmationController` file inside. Copy this, go up to
+the `Controller/` directory... and paste. This comes with the boilerplate needed
+for an endpoint that a user could POST to in order to resend their confirmation
+email.
+
+But... the actual *sending* of that confirmation mail is still a TODO. Remove that
+comment, autowire the `ConfirmationEmailSender`... and then say
+`$confirmationEmailSender->send($user)`.
+
+It's that easy! I won't bother testing this... but I will repeat the words that
+every developer likes to say: "it should work".
+
+The important thing is that, thanks to our new organization of having
+`ConfirmationEmailSender` and `UserManager`, if, for example, a marketing person
+*did* want to tweak the subject on our welcome email, we can make that change without
+messing around near code that saves things to the database or hashes passwords.
+
+But... I have *more* that I want to say about SRP... like the risks of over-optimizing,
+which violates a concept called cohesion. I also think that, thanks to inspiration
+from Dan North, there's an easier way to think about SRP. I'll explain that all
+next.
