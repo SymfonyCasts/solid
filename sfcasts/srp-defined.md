@@ -35,6 +35,8 @@ Enough defining stuff! Let's jump into an example. On your browser, click
 the logic for saving the user is in this `UserManager::register()` method. Hold
 Cmd or Ctrl to jump into this: it lives at `src/Manager/UserManager.php`.
 
+[[[ code('37c55e5573') ]]]
+
 This method hashes the user's password... and then saves the user to the database.
 Awesome!
 
@@ -60,18 +62,26 @@ At the bottom of this class, I'm going to start by pasting in a private function
 called `createToken()`. You can copy this from the code block on this page. This
 generates a random string that we will include in the confirmation link.
 
+[[[ code('9f4470de4b') ]]]
+
 Up in register, generate a new token `$token = $this->createToken()`...
 and then set it on the user: `$user->setConfirmationToken($token)`.
+
+[[[ code('d61df95492') ]]]
 
 Before I started recording - if you look at the `User.php` file - I already created
 a `$confirmationToken` property that saves to the database. So thanks to the new
 code, when a user registers, they *will* now have a random confirmation token saved
 onto their row in the database.
 
+[[[ code('405237a2e2') ]]]
+
 Back in `RegistrationController`... if you scroll down a bit, I've *also* already
 built a confirmation action to confirm their email. A user just needs to go to
 this pre-made route - where the `{token}` in the URL matches the `confirmationToken`
 that we've set onto their `User` record - and... bam! They'll be verified!
+
+[[[ code('b71c80b6d4') ]]]
 
 So back in `UserManager`, we have two jobs left. First, we need to generate an
 absolute URL to the `confirmAction` that contains their token. And second, we need
@@ -81,23 +91,33 @@ Let's generate the URL first. Up in the constructor, autowire
 `RouterInterface $router`. I'll hit Alt + Enter and go to "Initialize
 properties" to create that property and set it.
 
+[[[ code('de3b8cfdc6') ]]]
+
 Now, below, say `$confirmationLink = $this->router->generate()` and...
 the name of our route... is `check_confirmation_link`. Use that. For the second
 argument, pass `token` set to `$user->getConfirmationToken()`. And because this
 URL will go into an email, it needs to be absolute. Pass a third argument to trigger
 that: `UrlGeneratorInterface::ABSOLUTE_URL`.
 
+[[[ code('ae80cd9358') ]]]
+
 Now, let's send the email! On top, add one more argument -
 `MailerInterface $mailer` and use the same Alt + Enter, "Initialize properties",
 trick to create that property and set it.
+
+[[[ code('3186718fb5') ]]]
 
 Beautiful! Below, I'll paste in some email generation code. I'll also re-type the
 `l` on `TemplatedEmail` and hit tab so that PhpStorm adds the `use` statement
 on top for me.
 
+[[[ code('887918e60d') ]]]
+
 This creates an email to this user, from this address... and the template it
 references already exists. You can see it in:
 `templates/emails/registration_confirmation.html.twig`.
+
+[[[ code('986490fd0a') ]]]
 
 We're passing a `confirmationLink` variable... and that is rendered inside
 the email.
@@ -105,6 +125,8 @@ the email.
 Finally, all the way at the bottom of `register()`... so after we know that the
 user has saved successfully, deliver the mail with:
 `$this->mailer->send($confirmationEmail)`.
+
+[[[ code('d216e09eb1') ]]]
 
 Alright! We did it! And we can even try this! Back at the registration page,
 register as a new user... any password, hit enter and... awesome! It looks like
