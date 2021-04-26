@@ -10,4 +10,7 @@ chapters:
     - liskov-exception
     - liskov-replacement
     - isp
+    - isp-takeaways
     - dip
+    - dip-refactoring
+    - dip-takeaways
