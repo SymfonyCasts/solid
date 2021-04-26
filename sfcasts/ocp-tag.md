@@ -1,62 +1,68 @@
 # OCP: Autoconfiguration & tagged_iterator
 
-Coming soon...
+When we went to the "submit" page, we got this gigantic error. It's the middle
+of it that's most relevant:
 
-Of course, if you go over and I should try this, it's not going to quite work yet.
-I'll hit submit right here. And, um, immediately we see an error can not resolve
-arguments, citing score. Uh, the middle of the error is the most important part cannot
-auto wire service citing score argument scoring factors of method construct is type
-into the rate. You should configure its value explicitly. We haven't told Symfony
-which objects we want to pass to our `SightingScorer`.
+> Cannot autowire service `SightingScore`, argument `$scoringFactors` of method
+> `__construct` is type-hinted array. You should configure its value explicitly.
 
-The easiest thing we we can do, the easiest solution is to configure this manually
-and `config/services.yaml` So down here we will say `App\Service\SightingScorer`.
+We haven't told Symfony what to pass to the new argument for `SightingScorer`.
 
-Then `arguments:`. And then we are going to specifically configure the `$scoringFactors`
-argument. So I'll copy that. And then this is going to be set to an array. So below
-this we'll use dashes and here we're going to inject each of those services. So at
-`@App\Scoring\TitleFactor`, then I'm going to copy that, paste it and fix my
-indentation. There. We have `DescriptionFactor` and we have `CoordinatesFactor` So
-that should pass an array, which is what these dashes mean of these three services
-for your fresh now, yes, the error has gone. It did kick us over to the log-in page.
-Let's copy the email above and password hit, sign in and beautiful. The page loads.
-Let's give it a try.
+## Manually Wiring the Argument
 
-We'll fill in some details and hit upload. And before actually fill this in. Actually
-I can go up here,
+What *do* we want to pass there? An array of all of our "scoring factor" services.
+The simplest way to do that is to configure it manually in `config/services.yaml`.
+Down at the bottom, we want to configure the `App\Service\SightingScorer`... we
+want to control its `arguments:`, specifically this `$scoringFactors` argument.
+Copy that, paste, and this will be an array - I'll use the multi-line syntax. Each
+entry in the array with be one of the scoring factor services. So
+`@App\Scoring\TitleFactor`, copy that, paste... fix the indentation... then pass
+`DescriptionFactor` and `CoordinatesFactor`.
 
-But in some key words in the description that will help with this. Okay.
+This should pass an array with the three services inside.
 
-And all right, something a and beautiful
+Try it again. Refresh and... the error is gone. It kicked us to the log-in page.
+Copy the email above, enter the password, hit "sign in" and... beautiful! The page
+loads. Let's give it a try. Fill in the details of your most recent interaction
+with Bigfoot. Oh, but before I submit this, I'm going to add some keywords to
+the description that I know our scoring factor is looking for.
 
-Big foot believability score of 10.
+Submit and... it works! Ah man, a believability score of only 10! I really thought
+that was Bigfoot.
 
-Come on. Only a score of 10, four. Talk more about OCP on a technical Symfony level.
-There is one other way to inject these services into, um, the score. In fact, your
-services in deciding score, it's called a tagged iterator. It's pretty cool. And it's
-really commonly done in the core of Symfony. First open up source `Kernel.php`. I
-know we almost never even open up this file. Uh, I'm going to go to code generate or
-command and in the Mac and go to override methods in override one called `build()`. Let
-me see if I can find it. There it is.
+## Enabling Autoconfiguration
 
-This is a hook where we can do some extra processing on a container. The paramedic is
-actually empty, but I'll leave the parent call now at the
-`$container->registerForAutoconfiguration()` pass this `ScoringFactorInterface::class`
-The name is Reiner face and then `->addTag('scoring.factor)` Thanks to this, any auto
-configurable services, which is all of our services that implement `ScoringFactorInterface`
-will automatically be tagged with `scoring.factor`, which is a name I
-totally just made up this on its own. Won't make any real change, but now back in
-`services.yaml` we can simplify. So for scoring the `$scoringFactors` argument, we're
-going to set this to exclamation point. That's a special syntax in YAML, uh,
-`!tagged_iterator scoring.factor`. This says please inject all services that are
-tagged with `scoring.factor`. Pretty cool, right? The only gotcha is that we need
-to change the type hint in scoring setting score to be an `iterable`. It's not actually
-going to pass us a real Ray, but it's still going to be something that we can loop
-over. So I'll also change the `iterable` Up here
+Before we talk more about OCP, on a technical, Symfony level, there is one other
+way to inject these services. It's called a "tagged iterator"... and it's a pretty
+cool idea. It's also commonly used in the core of Symfony itself.
 
-Next, now that we understand the type of changes that OCP wants us to make, let's
-talk about why we should care or not care about OCP and when we should and shouldn't
-follow it.
+Open up `src/Kernel.php`. I know, we almost never open this file. Inside, go to
+Code -> Generate, or Command + N on a Mac, and select Override methods. Override
+one called `build()`... let me find it. There it is.
 
-Okay.
+This is a hook where we can do extra processing on a container while it's being
+built. The parent method is empty... but I'll leave the parent call. Add
+`$container->registerForAutoconfiguration()`, pass this
+`ScoringFactorInterface::class`, then `->addTag('scoring.factor')`.
 
+Thanks to this, any autoconfigurable service, which applies to all of *our* code,
+that implement `ScoringFactorInterface`, will automatically be tagged with
+`scoring.factor`. That `scoring.factor` is a name that I *totally* just made up.
+
+This line, on its own, won't make any real change. But now, back in `services.yaml`
+we can simplify: set the `$scoringFactors` argument to a special YAML syntax:
+`!tagged_iterator scoring.factor`.
+
+This says: please inject all services that are tagged with `scoring.factor`. So
+autoconfiguration automatically adds that tag to our services... and this handles
+passing them in. Pretty cool, right?
+
+The only gotcha is that we need to change the type-hint in `SightingScorer` to be
+an `iterable`. This won't pass us an array... but it *will* still pass us something
+we can `foreach` over. As a bonus, it's a "lazy" iterable: the scoring factor
+services won't be instantiated until and unless we run the `foreach`. Oh, and
+change the property type to `iterable` also.
+
+Next: now that we understand the type of change that OCP wants us to make, let's
+talk about why we should care - or not care - about OCP and when we should and
+should not follow it.
