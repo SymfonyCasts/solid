@@ -5,6 +5,7 @@ chapters:
     - srp-refactoring
     - srp-takeaways
     - ocp
+    - ocp-tag
     - ocp-takeaways
     - liskov-definition
     - liskov-exception
