@@ -9,6 +9,7 @@ chapters:
     - liskov-definition
     - liskov-exception
     - liskov-replacement
+    - liskov-changes
     - isp
     - isp-takeaways
     - dip
