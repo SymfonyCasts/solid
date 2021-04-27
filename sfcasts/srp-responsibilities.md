@@ -11,6 +11,8 @@ going to need to extract *part* of the `register()` method into a separate publi
 function so that we can *just* resend the email... without also creating a new token
 and re-hashing the password.
 
+[[[ code('6b25087b1f') ]]]
+
 Isn't it kind of weird... or at least "not ideal"... that in order to add this
 "email resend" feature, we're going to be messing with and rearranging code that
 deals with hashing passwords and persisting user data? In a perfect world,
