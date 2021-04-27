@@ -1,72 +1,106 @@
-# LSP: Exception
+# Liskov: Unexpected Exceptions
 
-Coming soon...
+Let's jump into our first example where we learn how we can violate the Liskov
+principle! And... maybe more importantly, why we should care.
 
-Let's jump into our first example that shows up how we can violate the Liskov
-principle and why we should care in the source. Scoring directory. Let's create a new
-scoring factor class called photo factor. Make this implement the scoring factor
-interface. Thanks to our work with OCP. We can now add a new scoring factor to our
-system without touching citing score. And thanks to this tag iterator thing in
-services .yaml this new photo factor service will instantly be passed into citing
-score. Yay. Yeah. In photo factor, I'll go do code generate or Command + N on a Mac
-and select "Implement Methods" to generate the score method inside I'll paste some
-code.
+## Creating a new Scoring Factor
 
-Okay. This is pretty simple. We loop over the images and pretend that we're analyzing
-them in some super advanced way. Shh. Don't tell our users. Oh, and if there are no
-photos, no images for this, uh, post, for some reason, we throw an exception. All
-right, let's try it. I'll go back to our homepage, go to Smith and post fill in some
-dominator. I'll leave images empty for simplicity and Oh 500 air. That's our new
-exception. We broke our app and it broke because we just violated Liskov's principle.
-Our new scoring factor class four subtype to use a more technical word, just did
-something, unexpected it through an exception. One way to fix this, which might seem
-silly, but a highlights, a warning sign for the scoff is inside of sighting score.
+In the `src/Scoring/` directory, create a new scoring factor class called
+`PhotoFactor`... and make this implement the `ScoringFactorInterface`. We'll
+finally fulfill the change request we received earlier: to add a scoring factor
+that reads the images posted for this sighting.
 
-Okay. It says photo factor. Doesn't like posts with zero images. Let's just skip it.
-So right inside forage, I'm going to say if scoring factor is an instance of photo
-factor and count of citing arrow, get images = zero, then we'll just continue. And by
-the way, you probably are also realizing that that's a violation of OCP since we just
-had to modify this code, but it does fix our app. I go over here and refresh and
-resubmit. Got it. It did submit, but let's back up a minute. First open the scoring
-factor interface, unlike argument types and return types. There's no way in PHP to
-codify whether or not a method should throw an exception or under, under certain
-situations or which exception types should be used. But this can be described in the
-documentation above the method, which we kind of skipped. When we, when we created
-this, let's fill that in. Now. I don't need the out return to the at parama because
-they are redundant. Unless I wanted to add some more information about their meeting.
-I want to say on this, add a quick description of the method.
+Thanks to our work with the open-closed principle, we can now add a new scoring factor
+to our system without touching `SightingScore`. And to be extra cool, thanks to this
+`tagged_iterator` thing in `services.yaml`, this new `PhotoFactor` service will be
+instantly passed into `SightingScore`. Yay!
 
-And down here, you won't necessarily always see this, but let's be very clear about
-the exception behavior that we expect. This method should not throw an exception for
-any normal reason. That's kind of redundant more commonly. If you are allowed to
-throw an exception, you'll see an add throws that describes that and which exception
-you can throw. And if you don't see that, you should probably assume that you're not
-allowed to throw an exception for any normal reason. Anyways, now that we've
-clarified this, it's easy to see that our photo factor breaks list gobs principle,
-photo factor behaves in a way that the client at the class that uses it citing score
-sometimes called the client class was not expecting, which is why we had to hack in
-this code afterwards. Another way to think about it, which explains why this is
-called Liskov's substitution principle is that right now photo factor could not
-replace or substitute any of the other scoring factors without breaking things.
+In `PhotoFactor`, I'll go do Code -> Generate - or Command + N on a Mac - and select
+"Implement Methods" to generate the `score()` method. Inside, I'll paste some code.
 
-If this is substitution part, doesn't make complete sense yet don't worry. Our next
-example will illustrate that even better. Anyways, our work around was to add some
-instant, an instance of con incidence of code to citing score, to literally work
-around a problem. When you have an instance of conditional like this, it's often a
-signal that you're violating lists. Goff. You have some specific implementation of a
-class or interface that is behaving differently, which you then need to code for. So
-let's remove this, I'll remove the F statement and I'll even go clean out this extra
-use statement on top V real solution. Now that we've clarified that the score method
-shouldn't throw an exception in normal situations is to replace the exception with a
-return statement. We should add zero extra point score when there are no images,
-that's it. The class now acts like we expect it to no surprises, by the way, this
-does not mean that it is illegal for our score method to ever throw an exception. If
-this class method, for example, needed to query a database and the database
-connection was down, then yeah, you should totally throw an exception. That is an
-unexpected situation, but for all the expected normal cases, we should follow the
-rules of our parent class or interface. Next let's look at one more example of
-Liskov's principle, where we create a subclass of an existing class and secretly
-substitute it into our system without breaking anything. Ms. Goff would be so proud.
+This is pretty simple: we loop over the images... and pretend that we're analyzing
+them in some super advanced way. Shh, don't tell our users. Oh, and if there are no
+images for this listing, we throw an exception.
 
-We want to make her proud.
+Cool! Let's try it. Go back to our homepage, click to add a new post and fill in
+some details. I'll leave images empty for simplicity. And... ah! A 500 error! That's
+our new exception! We broke our app! And it broke because we violated Liskov's
+principle! Our new scoring factor class - or subtype - to use a more technical word,
+just did something unexpected: it threw an exception!
 
+## The Ugly Work-Around
+
+One way to fix this, which might seem silly... but there's a reason we're doing
+this... is to add some conditional code inside of `SightingScorer`: if `PhotoFactor`
+doesn't like sightings with zero images, let's just skip that factor in that
+situation!
+
+Inside the `foreach`, if `ScoringFactor` is an `instanceof` `PhotoFactor` and
+count of `$sighting->getImages()` equals zero, then `continue`.
+
+In addition to this *not* being the best way to fix this - more on that in a minute -
+this also violates the open-closed principle. But... it *does* fix things: if
+we resubmit the form... it *did* submit.
+
+## Exceptions are a "Soft" Part of an Interface
+
+But let's back up a minute. Open `ScoringFactorInterface`. Unlike argument types
+and return types, there's no way in PHP to *codify* whether or not a method should
+throw an exception or which types of exceptions should be used. But this *can*,
+at least, be described in the documentation above the method... which we totally
+skipped!
+
+Let's fill that in. We don't need the `@return` or `@param` because they're
+redundant... unless we wanted to add some more information about their meaning.
+I'll add a quick description... and then let's be very clear about the exception
+behavior we expect:
+
+> This method should not throw an exception for any normal reason.
+
+In the real-world, if a method *is* allowed to throw an exception for some expected
+reason, you would typically see an `@throws` that describes that. And if you
+*don't* see that, you can assume that you are *not* allowed to throw an exception
+for any normal situation.
+
+## Our Class Behaves Unexpectedly
+
+*Anyways*, now that we've clarified this, it's easy to see that our `PhotoFactor`
+breaks Liskov's principle: `PhotoFactor` behaves in a way that the the class that
+uses it - `SightingScorer`, sometimes called the "client class" - was not expecting...
+which is why we had to hack in this code afterwards.
+
+Another way to think about it, which explains why this is called Liskov's substitution
+principle, is that, if any of our code currently relies on a `ScoringFactorInterface`
+object - like `DescriptionFactor` - we could *not* "replace" or "substitute" that
+object for our `PhootFactor` without breaking things.
+
+If this substitution aspect doesn't make complete sense yet, don't worry. Our next
+example will illustrate that even better.
+
+## instanceof Checks Indicate Liskov Violation
+
+So: we violated Liskov's principle by throwing an exception. And then, I lazily
+worked around the problem by adding some `instanceof` code to `SightingScore`...
+to *literally* work "around" the problem.
+
+When you have an `instanceof` conditional like this, it's often a signal that you're
+violating Liskov because it means that you have specific implementation of a class
+or interface that is behaving *differently* than the rest... which you then need
+to code for.
+
+So let's remove this: take out the if statement and let's even go clean out the extra
+`use` statement on top. Now that we've clarified that the `score()` method
+should *not* throw an exception in normal situations, the real fix is... kinda
+obvious: stop throwing the exception! Replace the exception with `return 0`.
+
+That's it. The class now acts like we expect it to: no surprises.
+
+By the way, all of this does does not mean that it is *illegal* for our `score()`
+method to *ever* throw an exception. If the method, for example, needed to query
+a database... and the database connection was down... then yeah! You should totally
+throw an exception! That is an *unexpected* situation. But for all the, expected,
+normal cases, we should follow the rules of our parent class or interface.
+
+Next let's look at one more example of Liskov's principle, where we create a subclass
+of an existing class... then secretly substitute it into our system without breaking
+anything. Let's make Liskov proud!
