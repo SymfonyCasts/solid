@@ -23,13 +23,16 @@ as the `SightingScorer` in the `dev` environment only.
 
 It's going to be kinda fun! And it's a pattern you'll find inside Symfony itself,
 like with the `TraceableEventDispatcher`: a class that is substituted in for the
-*real* event dispatcher only while developing, which adds debugging info.
+*real* event dispatcher only while developing, which adds debugging info. Well,
+technically, that class uses *decoration* instead of using a subclass. That's a
+different, and usually better design pattern when you want to *replace* an existing
+class. But, to really understand Liskov, we'll use a subclass.
 
 ## Creating the Subclass
 
-Let's start by creating the subclass that will do the timing. Over in the `Service/`
-directory... so that it's right next to our normal `SightingScorer`, add a new
-class called `DebuggableSightingScorer`. Make it extend the normal `SightingScorer`.
+Let's start by creating that new subclass. Over in the `Service/` directory... so
+that it's right next to our normal `SightingScorer`, add a new class called
+`DebuggableSightingScorer`. Make it extend the normal `SightingScorer`.
 
 Since our subtype is currently making *no* changes to the parent class, Liskov would
 definitely be happy with it. What I mean is: it's not changing *any* behavior and
