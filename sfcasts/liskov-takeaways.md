@@ -1,73 +1,86 @@
-# Liskov Takeaways
+# Liskov Takeaways & Service Alias
 
-Coming soon...
-
-Okay. To celebrate our new system, let's see an action in `BigFootSightingController`
-after the `addFlash()`, let's also add some, uh, duration information. Um, I'm
-actually going to say if the `$bfsScore` is  An instance of `DebuggableBigFootSightingScore`
-then I'm going to say `$this->addFlash('success', sprintf(...))` and down here,
-I'll say:
+To celebrate our new system, let's see it in action. In `BigFootSightingController`,
+after the `addFlash()`, let's also add some duration information. Of course, I
+don't know for sure if I'm using the "debuggable" version of my service, so add
+if the `$bfsScore` is an instance of `DebuggableBigFootSightingScore`, then
+`$this->addFlash('success', sprintf(...))` with:
 
 > Btw, the scoring took %f milliseconds
 
-`$bfsScore->getCalculationTime()`, which we know we can call this
-because I just did the instance of, and I want times a thousand. So that's in
-milliseconds. Oh, wait. Didn't I say that instance of is kind of a signal that we're
-breaking LISC, right?  Principal. Yep. But
+And pass `$bfsScore->getCalculationTime()` times 1000 to convert from microseconds
+to milliseconds.
 
-Since this is my controller, which whose job is to kind of tie pieces together. And
-since this only adds extra functionality for this one case, I'm okay with it.
+Cool! But... wait: didn't I say that `instanceof` is a signal that we may be
+breaking Liskov's principle? Yep! But I'm not too worried about it here, for a
+few reasons. First, this is my controller... whose job is to tie all the ugly
+pieces of my app together. Also, I'm using the `instanceof` to detect if I can
+*add* functionality... not to work-around a misbehaving sub-class.
 
-However,
+However, another solution, depending if you really *do* need to substitute this
+class only in one environment, is to explicitly say that you require the debuggable
+version of the service. So instead of saying, "I allow any `SightingScorer`", we
+could say, "I specifically need a `DebuggableSightingScorer`".
 
-Another solution, depending on your needs would be to explicitly say that you require
-the debuggable service. So instead of saying, I allow any `SightingScorer`, we
-could say, we're always going to use this even in production. So we require a
-`DebuggableSightingScorer`
-If we did that, we would not need the incidenceof, cause we would know that that
-service returns the `DebuggableBigFootSightingScore`, which has that `getCalculationTime()`
-method on it.
+If we did that, we wouldn't need the `instanceof` because we would know that *that*
+service returns a `DebuggableBigFootSightingScore`, which has the
+`getCalculationTime()`  method on it.
 
-But
+But... we're missing one tiny config detail in Symfony. Try to refresh the page.
+Ah! It breaks!
 
-Well, one tiny last little detail. If we refresh now that doesn't work can not
-resolve argument. That sighting score cannot auto automize service,
-`DebuggableSightingScore` arguments, scoring factors is type hinted, Iterable. You should
-configure its value explicitly. We hit this air at the beginning of creating our, uh,
-in the OCP section in services, IMO. We are passing specifically the scoring factors
-that we want, but for some reason that's not working anymore. This is thanks to auto
-registration. Thanks to our registration. There is actually a separate service in our
-container called de `DebuggableSightingScorer`. You can see that if you run
+> Cannot autowire service `DebuggableSightingScore`: argument $scoringFactors is
+> type-hinted `iterable`. You should configure its value explicitly.
+
+Wait... we hit this error when working on the open-closed principle. And, in
+`config/services.yaml`, we fixed it by specifically wiring the `$scoringFactors`
+argument. Why isn't that working anymore?
+
+Thanks to auto-registration - the feature that automatically registers all classes
+in `src/` as a service - there is a *separate* service in our container called
+`DebuggableSightingScorer`. You can see that if you run:
 
 ```terminal
 php bin/console debug:container Sighting
 ```
 
-there is a `DebuggableSightingScorer` and a separate service
-called `SightingScorer`. But when we really want something to do is to pass us the same
-one service, regardless of whether we type into `DebuggableSightingScorer` or `SightingScorer`
-So we'll add an alias inside services.yaml here. We're going to say
+Yup! There's a `DebuggableSightingScorer` and a separate service called
+`SightingScorer`. That is... *not* what we wanted. Instead, I want Symfony to
+pass us the *same* service, regardless of whether we type-hint
+`DebuggableSightingScorer` or `SightingScorer`.
 
-`App\Service\DebuggableSightingScorer`. Actually here, I'm going to actually copy the class name for
-our `DebuggableSightingScorer` and then say colon and then an `@` symbol. And here you
-can say `App\Service\SightingScore`. In other words, whenever somebody auto tries to
-Ottawa or this service, they actually get this service, which uses the debug mobile
-setting score class. I know a little bit hard to follow a little fancy. If you go
-back to the run `debug:container`. Now
+We can do that by adding an alias. Inside `services.yaml`, say
+`App\Service\DebuggableSightingScorer`, colon, an `@` symbol and then
+`App\Service\SightingScorer`.
+
+This says: whenever someone tries to autowire or use the `DebuggableSightingScorer`
+service, you should *actually* pass them the `SightingScorer` service... which,
+I know, is actually an *instance* of `DebuggableSightingScorer`. It *can* be a
+bit confusing.
+
+Back at your terminal, run `debug:container` again:
 
 ```terminal-silent
 php bin/console debug:container Sighting
 ```
 
-you'll see that it looks like there are still
-two services, but if you hit six here to look at the Debuggable one on top, you
-can say, this is an alias for the service `App\Service\SightingScore`. They really
-pointed the same thing in over in the browser when we refreshed it works. So the big
-takeaway from LS from Liskov's principle is this make sure that when you have a
-subclass, I have a class that extends another or implements an interface. It follows
-the rules of that parent type. It doesn't do anything surprising, that's it. And PHP
-will even prevent you from most Liz cough violations. The most interesting part of
-list off for me is learning the things that you are allowed to do. The fact that you
-are allowed to change the return type in an overwritten method, as long as you make
-it more specific or the opposite for the type argument types. Okay. Next up is solid
-principle. Number four, the interface segregation principle.
+It *looks* like there are still 2 services, but if you hit "6" to look at the
+"Debuggable" one, on top, it says:
+
+> This is an alias for the service `App\Service\SightingScore`.
+
+And over in the browser, when we refresh... it works again!
+
+## Liskov Principle Takeaways
+
+So the big takeaway from Liskov's principle is this: make sure that when you have
+a "subtype" - a class that extends another or that implements an interface - it
+follows the rules of that parent type. It doesn't do anything surprising. That's
+it. And PHP will even prevent you from *most* Liskov violations.
+
+The most interesting part of Liskov for *me* is learning about the things that we
+*are* allowed to do. Like, you *are* allowed to change the return type of a method
+as long as you make it more specific. Or, the opposite for argument types: you can
+change them... as long as you make it *less* specific.
+
+Okay, next up is solid principle number 4: the interface segregation principle.
