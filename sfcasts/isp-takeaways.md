@@ -6,23 +6,22 @@ We've just finished adding the ability to add a bonus to the score. If the score
 less than 50, and there are three photos or more on a setting and management is
 already requesting another change, we need to make sure that no matter what a score
 never receives more than a hundred points, no problem. We can create another scoring
-factor class to check for this in the scoring directory, let's add a class called how
-about max score adjuster? I'm giving this one a slightly different name, even though
+factor class to check for this in the `Scoring/` directory, let's add a class called how
+about `MaxScoreAdjuster` I'm giving this one a slightly different name, even though
 it's a scoring factor because it's real job is going to be to adjust the score. We
-will make this implement scoring factor interface.
+will make this implement `ScoringFactorInterface`.
 
-Now I've got a code generate or Command + N on a Mac and generate, just generate,
+Now I've got a Code -> Generate or Command + N on a Mac and generate, just generate,
 adjust the score to start logic. And here is that we're going to return the minimum
-of final score or 100. So the final score is over a hundred, then it would return
+of `$finalScore` or 100. So the `$finalScore` is over a hundred, then it would return
 just a hundred setting the priority for the of this class. So that is the last
 scoring factor injected into citing score would now truly be important. But since
 that doesn't relate to ISP, we're not going to worry about the detail. Of course, in
 this new class, we're also going to need to implement the other method score. And we
 can just return zero since we don't care about that. Okay, we've got this working no
-more under or over scored records, but we've violated. I S P a lot of the classes
-that implement scoring factor interface, like max score adjuster and coordinates
-factor have a dummy method, which we added just to satisfy the needs of the
-interface.
+more under or over scored records, but we've violated. ISP a lot of the classes
+that implement scoring factor interface, like `MaxScoreAdjuster` and `CoordinatesFactor`
+have a dummy method, which we added just to satisfy the needs of the interface.
 
 When you see something like this, it's a signal that your interface is polluted or
 has gotten fat. But again, even though we're using an interface in our example, this
@@ -35,49 +34,43 @@ how they're used. For example, if you have a class with three methods and two of
 those methods are always called together, then the class should be split into only
 two pieces, one class with those two methods and another class would be third method.
 And our example, it's pretty obvious that splitting the interface into two pieces
-would make the classes that implement them simpler. So in this scoring directory,
-let's create a new class or really an interface and call it score on Juster
-interface. And what we'll do is we'll go into our scoring factor interface of what
-was steal that adjusted score method
+would make the classes that implement them simpler. So in this `Scoring/` directory,
+let's create a new class or really an interface and call it `ScoreAdjusterInterface`. 
+And what we'll do is we'll go into our scoring factor interface of what
+was steal that `adjustScore()` method
 
 And move
 
 It over into our new interface and how we'll hit. Okay. To import that you statement,
-Thanks to this. We can now go into coordinates factor and remove the dummy adjust
-score, and then do the same thing in title factor, And also in description factor,
-which feels pretty good. And max score adjuster, we now are going to change this to
-score adjuster interface,
+Thanks to this. We can now go into `CoordinatesFactor` and remove the dummy 
+`adjustScore()`, and then do the same thing in `TitleFactor`, And also in `DescriptionFactor`,
+which feels pretty good. And `MaxScoreAdjuster`, we now are going to change this to
+`ScoreAdjusterInterface` And Then we no longer need the dummy `score()` method.
 
-And
-
-Then we no longer need the dummy score method.
-
-Finally,
-
-Photo factor class is actually interesting. It implements both of them, which is
-totally allowed. So we just need to make it also implement the score adjuster
+Finally, `PhotoFactor` class is actually interesting. It implements both of them, which is
+totally allowed. So we just need to make it also implement the `ScoreAdjusterInterface`
 interface. The last thing to do is make our
 
 Estimate
 
-Our siting score, Both interfaces. We'll repeat the trick of injecting a collection
+Our `SightingScorer`, Both interfaces. We'll repeat the trick of injecting a collection
 of services for score adjuster interface. So in other words, we're not going to
 inject in Iterable, these scoring factors, any second interval of just the scoring
-adjusters start in our kernel source.com class, copy the registered for all
+adjusters start in our kernel `src/Kenel.php` class, copy the registered for all
 configuration. And we're going to repeat the same thing, but this time force or
-adjuster interface, And we'll call on the tag about scoring dots adjuster. Now over
-in services dynamo down on our service confidence scoring factors argument, and let's
-say, we'll have a second argument called scoring adjusters. And then we will pass in
-the new tag scoring dot adjuster, cognitive of that arguments and head into our
+`ScoreAdjusterInterface`, And we'll call on the tag about `scoring.adjuster`. Now over
+in services dynamo down on our service confidence `$scoringFactors` argument, and let's
+say, we'll have a second argument called `$scoringAdjusters`. And then we will pass in
+the new tag `scoring.adjuster`, cognitive of that arguments and head into our
 siting score. And we'll add this now as a second Iterable argument. So interval
 scoring adjusters I'll then hit, enter and go to initialize properties to create that
 property and set it I'll steal the PHP dock from above this, just to help my editor
-know that this is a score adjuster interface to Iterable of score adjuster interface
+know that this is a `ScoreAdjusterInterface` to Iterable of `ScoreAdjusterInterface`
 objects. Now we can loop over these instead, so you can already see that Peter storm
 is not happy because there is no adjust score method on the scoring factors. So let's
-change this to scoring adjusters, and I'll also rename my whoops
+change this to `$scoringAdjusters`, and I'll also rename my whoops
 
-Also rename this to scoring adjuster here and here
+Also rename this to `$scoringAdjuster` here and here
 
 And done.
 
@@ -87,12 +80,10 @@ So other than having
 
 Dummy methods, just to make an interface, happy is kind of silly. Why should we care
 about ISP? I can think of three reasons. The first is naming. Whether you have a
-class that's too big or an interface
-
-Like an hour example,
+class that's too big or an interface Like an hour example,
 
 Splitting it into smaller pieces, allows you to give each a more descriptive name
-that fits its purposes. We can see this inciting score. We're now working with
+that fits its purposes. We can see this `SightingScorer`. We're now working with
 scoring adjusters, which better describes the purpose of those services than just
 scoring factor
 
@@ -109,16 +100,16 @@ Noticing that you're only using some of EI services, public methods is a good wa
 realize that you might have SRP violations and three, five, it keeps your
 dependencies lighter. We didn't see that in this specific example, but we did see it
 earlier. When we talked about SRP, in that case, let me actually close all of my
-classes. We split a user manager class into two pieces, user manager and confirmation
-email sender. The send method simply sends the confirmation email.
+classes. We split a `UserManager` class into two pieces, `UserManager` and 
+`ConfirmationEmailSender`. The send method simply sends the confirmation email.
 
 If
 
-We had not done that in all of this code live in user manager. Then in order to
+We had not done that in all of this code live in `UserManager`. Then in order to
 resend the confirmation email, we would have needed to instantiate a class, which
 depends on, for example, the password encoder service. Why is that a problem? Well,
 it's minor, but this would force Symfony to in-stage you the password encoder so that
-it could end stage of the user manager so that we could send a confirmation email.
+it could end stage of the `UserManager` so that we could send a confirmation email.
 
 Yeah.
 
