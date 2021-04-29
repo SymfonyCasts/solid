@@ -13,13 +13,13 @@ reminds me a lot of the single responsibility principle and that's true, but the
 interface segregation principle kind of looks at this from the other direction.
 Again, the original definition is clients should not be forced to depend upon
 interfaces that they do not use. So for example, suppose you've accidentally built a
-giant class called API client with a ton of methods on it.
+giant class called `ApiClient` with a ton of methods on it.
 
 Then somewhere in your code,
 
 You need to call just one of those methods. This other class is called the client
-because it, because it is using our giant API client class. And unfortunately, even
-though it only needs one method from the API client, it needs to inject the whole
+because it, because it is using our giant `ApiClient` class. And unfortunately, even
+though it only needs one method from the `ApiClient`, it needs to inject the whole
 giant object.
 
 It's forced to depend on
@@ -34,41 +34,36 @@ ability to add to the score, but they don't have the ability to,
 
 I see the final score and then modify it. No problem. Let's add a second method to
 the interface that has the ability to do that. Let's call it. How about pelvic
-function adjust score. And in this case, what it's going to receive is the int final
-score that's been calculated. And then of course the big foot sighting that we're
+function `adjustScore()`. And in this case, what it's going to receive is the 
+`int $finalScore` that's been calculated. And then of course the `BigFootSighting` that we're
 working on and it will return the new to final score. And you can add some PHP doc
 above this to better explain the purpose of this method. In a minute, we're going to
 call this method from inside of our siting score. After the initial scoring is done,
-but first let's open photo factor and add the new bonus logic.
+but first let's open `PhotoFactor` and add the new bonus logic.
 
-So at the bottom, I'm going to co go to co-generation or Command + N on a Mac select
+So at the bottom, I'm going to co go to Code -> Generate or Command + N on a Mac select
 "Implement Methods" and implement the adjusted score. And then very simply I'll say
-photos count = citing arrow, get images. We're not religious getting images, but
-actually count those images. Then if the final score is less than 50 and photos count
-is greater than two or greater than equal than three, then the final score should get
-plus = photos, count times five. And at bottom we will return the file score.
+`$photosCount = $sighting->getImages()`. We're not religious getting images, but
+actually `count()` those images. Then if the `$finalScore` is less than 50 and `$photosCount`
+is greater than two or greater than equal than three, then the `$finalScore` should get
+plus equals `$photosCount` times 5. And at bottom we will return the `$finalScore`
 Perfect. So there is our new bonus logic, but now what do we do to all the other
-classes that implement photo factor interface, scoring factor interface,
+classes that implement `ScoringFactorInterface`,
 unfortunately for PHP to even run, we do need to add this new method to each class,
-but we can just make it return the final score. So at the bottom of coordinates
-factor, I'll go back to code generate or command and go to emblem methods, generate
-adjust score, and we're just going to return final score. And now I can copy this
-close coordinates factor with this at the bottom of description factor. And then also
-at the bottom of title factor.
+but we can just make it return the `$finalScore`. So at the bottom of `CoordinatesFactor`
+I'll go back to Code Generate or Command + N go to emblem methods, generate
+`adjustScore()`, and we're just going to return `$finalScore`. And now I can copy this
+close coordinates factor with this at the bottom of `DescriptionFactor.` And then also
+at the bottom of `TitleFactor`.
 
-Finally, we can update sighting score at a second loop after calculating the score.
-So for each this scoring factors as scoring factor this time, we're gonna say score
-equals
-
-Scoring factor
-
-Aero adjust score, and we'll pass in the score. And then we'll pass in the big foot
-sighting and done. By the way, you might argue correctly that the execution order of
+Finally, we can update `SightingScorer` at a second loop after calculating the score.
+So for each `$this->scoringFactors` as `$scoringFactor` this time, we're gonna say `$score`
+equals `$scoringFactor->adjustScore()`
+and we'll pass in the `$score`. And then we'll pass in the `BigFootSighting` 
+and done. By the way, you might argue correctly that the execution order of
 these scoring factors is now relevant, but we're not going to worry about that for
 simplicity though, there is a way to give a tag service, a higher priority in Symfony
 so that it is passed in earlier or later than the other scoring factors.
-
-Yeah.
 
 So if at this point something is itching you, that might be because we just violated
 the open closed principle. We had to modify the score method in order to add this new
