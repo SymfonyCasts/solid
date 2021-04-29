@@ -16,8 +16,13 @@ its responsibility more clear: to set all the required data on the user object
 and save it to the database.
 
 Right click on `register()`, go to Refactor->Rename and call this `create()`.
+
+[[[ code('568f94a771') ]]]
+
 When I hit enter, over in `RegistrationController`, PhpStorm renamed the method
 there too.
+
+[[[ code('85f4dabf91') ]]]
 
 ## Creating the ConfirmationEmailSender Class
 
@@ -30,8 +35,12 @@ and `RouterInterface $router`. Hit Alt + Enter and go to "Initialize properties"
 to create both of those properties and set them. We don't need this extra PHPDoc
 up here.
 
+[[[ code('974c98bc0c') ]]]
+
 Now we can create a public function called, how about, `send()`, with a `User` object
 argument that will return `void`.
+
+[[[ code('5fdee3b8f4') ]]]
 
 For the inside of this, let's go steal all of the email-related logic from
 `UserManager`. So... copy the `$confirmationLink` and `$confirmationEmail` parts...
@@ -41,9 +50,13 @@ the `use` statements for me.
 The last line we need to steal is the `$mailer->send()` line. Paste that into the
 new class.
 
+[[[ code('247d2f9c51') ]]]
+
 Very nice! Let's celebrate by cleaning things up in `UserManager`: we can
 remove the last two arguments of the constructor - `$router` and `$mailer` - their
 properties... and even some `use` statements on top.
+
+[[[ code('a9364f2b00') ]]]
 
 ## Who Should Generate the Confirmation Token?
 
@@ -70,6 +83,8 @@ something that we do *not* want to do. We'll talk more about that in the next ch
 into the method: `ConfirmationEmailSender $confirmationEmailSender`. Then, below,
 right after we call `$userManager->create()`, say `$confirmationEmailSender->send()`
 and pass the `$user` object.
+
+[[[ code('deb3d37d47') ]]]
 
 Done! Our original feature - sending a confirmation email - is now implemented in
 a more SRP-friendly way.
@@ -100,9 +115,13 @@ the `Controller/` directory... and paste. This comes with the boilerplate needed
 for an endpoint that a user could POST to in order to resend their confirmation
 email.
 
+[[[ code('532e422619') ]]]
+
 But... the actual *sending* of that confirmation email is still a "TODO". Remove
 that comment, autowire the `ConfirmationEmailSender` service... and then say
 `$confirmationEmailSender->send($user)`.
+
+[[[ code('46edfae743') ]]]
 
 It's that easy! I won't bother testing this... but I will repeat the words that
 every developer loves to say: "it should work".
