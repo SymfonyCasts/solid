@@ -1,90 +1,115 @@
-# LSP: Replacement
+# Liskov: Substituting a Class
 
-Coming soon...
+Our highly-advanced, proprietary, believability score system is having some performance
+problems. To help debug it, we want to measure how long calculating a score takes.
+The simplest way to implement this would be almost entirely inside `SightingScorer`.
+We could set a start time on top, then use that down here to calculate a duration.
+And then we could pass that `$duration` into the `BigFootSightingScore` class. Hold
+Command or Ctrl and click to open it: it's in the `src/Model/` directory. Inside
+here, we could create a new property called `$duration`... with a getter so that
+we could use that value.
 
-Our highly advanced proprietary believability score system is having some performance
-problems to help debug it. We want to measure how long calculating a score takes the
-simplest way to implement. This would be almost entirely inside citing score. We
-could set a start time on top and then use that down here To calculate a duration of
-the bottom. And then maybe we pass that new duration into this big foot siting score
-class, which I'll hold command to open that I was in the source model directory, and
-we would maybe have like a new property up here called duration and a Gitter down
-here so that we could read the duration off of this object and use it anywhere we
-want. But let me undo that. Let's make things more interesting to keep our
-application as skinny as possible on production. I only want to run this new timing
-code when we're in Symfonys dev environment. In other words, instead of changing
-siting score, I want to create a subclass that does the timing and substitute that
-class into the system as the citing score in the dev environment only. Well, really,
-we're going to do it in all environments.
+## Lets: Substitute a Class!
 
-Okay.
+But... let me undo that. Let's make things more interesting! To keep our application
+as *skinny* as possible on production, I only want to run this new timing code when
+we're in Symfony's `dev` environment. And yes, we *could* inject some
+`$shouldCalculateDuration` value into `SightingScorer` *based* on the environment
+and use *it* to determine if we should do that work.
 
-It's going to be kind of fun. And it's a pattern you'll find inside Symfony itself
-like with the traceable event, dispatcher, which adds debugging info to the event,
-this patcher, but only in the dev environment start recreating the subclass that will
-do the timing over here in these service directory. So that it's right next to our
-normal setting score. Let's create a new class called the bubble citing
+But, in the spirit of Liskov, instead of *changing* `SightingScorer`, I want to
+create a *subclass* that does the timing and *substitute* that class into our system
+as the `SightingScorer` service.
 
-Score,
+It's gonna be kinda fun! And it's a pattern you'll find inside Symfony itself,
+like with the `TraceableEventDispatcher`: a class that is substituted in for the
+*real* event dispatcher only while developing. It adds debugging info. Well,
+*technically*, that class uses *decoration* instead of being a subclass. That's a
+different, and usually better design pattern when you want to *replace* an existing
+class. But, to really understand Liskov, we'll use a subclass.
 
-Make it extend the normal citing score.
+## Creating the Subclass
 
-Since our subtype is making no changes to the parent class lists, Goff would
-definitely be happy with it. We should be able to substitute this class into our
-application with no problem, but where is the normal setting score service actually
-used in our app? If you've got a source controller, big sighting controller, this
-upload action is the one that is hit when we click to the homepage and then hit
-submit. Yep. And down here, you can see that this is the upload method. One of the
-arguments that's being auto wire to this method is the siting score, which it's used
-down here on submit to calculate the score.
+Let's start by creating that new subclass. Over in the `Service/` directory... so
+that it's right next to our normal `SightingScorer`, add a new class called
+`DebuggableSightingScorer`. Make it extend the normal `SightingScorer`.
 
-Now, I want to change this service to use our new class. I want to substitute it. How
-open config services.yaml. Now I mentioned the beginning. We were going to swap in
-our debugger citing score only in the dev environment. I'm actually going to do it in
-all environments, but you can make these same changes. We're about to make to eight
-services, underscored dev Diane we'll file. If you want these to happen only in the
-dev environment anyways, to suddenly start using our new class everywhere in the
-whole system, we can add class colon and then D app service, debug double siting
-score. I know this looks a little funny. This first line is still the service ID, but
-now instead of using that as the class, it's going to use debugger setting score. The
-end result of this is that whenever someone auto wires citing score like in our
-controller, Symfony is now going to pass them in instance of our debugger citing
-score and then past the normal scoring factors argument to it. Yep. We just
-substituted in our subclass. You can see it. If you find your terminal by running bin
-console, debug, um, container, and I'm going to search for sighting.
+Since our subtype is currently making *no* changes to the parent class, Liskov would
+definitely be happy with it. What I mean is: we should *definitely* be able to
+*substitute* this class into our app in place of the original, with no problems.
 
-And
+## Substituting the Real Class
 
-Right now we want to use the sighting score. So I'll hit five and perfect. You can
-say the service idea, sighting score, but the class is actually going to use is
-debugged, double siting score. Another way to show that would be to go into our big
-foot sighting controller. And I'll just temporarily the citing score over it,
-refresh. And there it is. Debug double setting score. Let's go take that out.
+But where *is* the normal `SightingScorer` service actually used? Open
+`src/Controller/BigFootSightingController.php`. This `upload()` action is the one
+that is executed when, from the homepage, we click to submit a sighting. Yep, down
+here, you can see that this is the `upload()` method.
 
-Wow.
+One of the arguments that's being autowired to this method is the `SightingScorer`...
+which is used down here on submit to calculate the score.
 
-Good. Take that out and then refresh again. The fact that this page loads means that
-Symfony is successfully auto wiring, that new debug bubble setting score into our
-class. How the words it works. So no surprise. If you create a subclass and change
-nothing, that class is of course, substitutable, let's start implementing our timing
-mechanism in a new class. I'm going to go to go to code, generate or command and on
-the Mac, go to override methods and override the score method. If you override a
-method and keep this same argument type hints and return type, this class is still
-substitutable over here. I can refresh and PHP is still happy,
+*Now* I want to change this service to use our new class: I want to substitute it.
+How? Open `config/services.yaml`. I mentioned earlier that we were going to swap
+in our `DebuggableSightingScorer` *only* in the `dev` environment. But to keep
+things simple, I'm *actually* going to do it in *all* environments. If you *did*
+want to have this only affect your `dev` environment, you could make the same
+changes we're about to make in a `services_dev.yaml` file.
 
-But
+*Anyways*, to suddenly start using our new class everywhere that the
+`SightingScorer` is used, add `class:` and then
+`App\Service\DebuggableSightingScorer`.
 
-If we try to change the argument type pens, arguments, or return type to something
-totally different, then even PHP will tell us to cut it up. For example, let's
-completely change the return type to it. You can already see PHP. Storm is mad, and
-if we refresh huge air coming from PHP itself, the bubble setting scores score, it
-must be compatible with score, uh, returning this Bigfoot sighting score. Our
-signature is incompatible. In other words, PHP does not let us violate list offs
-principle. Let's go in and do that change. So does this mean that we can never change
-the return type or argument types in a subclass? Actually, no. Remember our rules
-from earlier, you can change a return type if you make it more narrow or specific And
-you can also change in argument type hint, as long as you make it accept a wider or
-less specific type. Let's see this in action by finishing our timing feature next.
+I know, this looks a little funny. This first line is still the service id. But
+now instead of using that as the class, Symfony will use `DebuggableSightingScorer`.
+The end result is that whenever someone autowires `SightingScorer` - like we do
+in our controller - Symfony will instantiate an instance of our
+`DebuggableSightingScorer`... and pass the normal `$scoringFactors` argument. Yep,
+we just substituted our subclass into the system!
 
-Okay.
+To prove it, find your terminal and run:
 
+```terminal
+php bin/console debug:container Sighting
+```
+
+I want to look at the `SightingScorer` service, so I'll hit 5. And... perfect! The
+service id is `App\Service\SightingScorer`, but the class is
+`App\Service\DebuggableSightingScorer`.
+
+Another way to show this would be to go into our `BigFootSightingController`
+and temporarily `dd($sightingScorer)`.
+
+Back at your browser, refresh and... there it is! `DebuggableSightingScorer`
+
+Let's go take that out... then refresh again. The page works and... even though
+I won't test it, if we submitted, our `DebuggableSightingScorer` *would* correctly
+calculate the believability score.
+
+In other words, no surprise: if you create a subclass and change *nothing* in it,
+you *can* substitute that class for its parent class. It follow's Liskov's principle.
+
+## Method Changes that are NOT Allowed
+
+Let's start adding our timing mechanism. In the class, go to Code -> Generate -
+or Command + N on a Mac - select "Override methods" and override the `score()` method.
+If you override a method and keep the same argument type hints and return type,
+this class is *still* substitutable: I can refresh and PHP is still happy.
+
+But if we *did* change the argument type-hints or return type to something
+totally *different*, then even PHP will tell us to knock it off. For example, let's
+completely change the return type to `int`. PhpStorm is mad! And if we refresh,
+PHP is mad too!
+
+> `DebuggableSightingScorer::score()` must be compatible with the parent
+> `score()`, which returns `BigFootSightingScore`.
+
+Our signature is incompatible and, nicely, PHP does *not* let us violate Liskov's
+principle in this way. Go and undo that change.
+
+So does this mean that we can *never* change the return type or argument type-hints
+in a subclass? Actually... no! Remember the rules from earlier: you *can* change a
+return type if you make it more *narrow*, meaning more *specific*. And you can
+*also* change an argument type-hint... as long as you make it accept a *wider*, or
+*less* specific type.
+
+Let's see this in action by finishing our timing feature next.

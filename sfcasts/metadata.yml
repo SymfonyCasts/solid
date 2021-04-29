@@ -11,6 +11,7 @@ chapters:
     - liskov-exception
     - liskov-replacement
     - liskov-changes
+    - liskov-takeaways
     - isp
     - isp-takeaways
     - dip
