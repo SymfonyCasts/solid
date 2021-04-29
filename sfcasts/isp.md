@@ -24,13 +24,13 @@ of the class itself. Again, the original definition is:
 
 > *Clients* should not be forced to depend upon interfaces that they do not use.
 
-For example, suppose you've accidentally built a giant class called `ApiClient` with
-a ton of methods on it. Then, somewhere in your code, you need to call just *one*
-of those methods. This other class is called the "client" because it is *using*
-our giant `ApiClient` class. And unfortunately, even though it only needs one
-method from the `ApiClient`, it needs to inject the whole giant object. It's forced
-to depend on an object whose interface - whose public methods - are many more than
-it actually needs.
+For example, suppose you've accidentally built a giant class called `ProductManager`
+with a *ton* of methods on it. Then, somewhere in your code, you need to call just
+*one* of those methods. This other class is called the "client" because it is *using*
+our giant `ProductManager` class. And unfortunately, even though it only needs one
+method from the `ProductManager`, it needs to inject the whole giant object. It's
+forced to depend on an object whose interface - whose public methods - are many
+more than it actually needs.
 
 ## New Feature: Adjusting a Score
 
