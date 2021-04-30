@@ -33,11 +33,15 @@ change and we wouldn't need to update any code in this class. So the risk of tha
 changing in some way that *would* cause us to need to change *this* class is probably
 very low.
 
+[[[ code('819b4c52c3') ]]]
+
 What about the token generation logic? Well, do we think it's very likely
 that we might change how our tokens are generated? This... to me feels like a weak
 candidate to separate. It's already simple: one line of code down here... and two
 lines of code up here. And it's unlikely change, especially for a reason that's
 *different* than the other code in this class.
+
+[[[ code('56d00e83d2') ]]]
 
 Overall, my advice is this: don't *over*-anticipate potential future changes.
 
