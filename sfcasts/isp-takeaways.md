@@ -11,7 +11,7 @@ this a slightly different name, even though it's a scoring factor, because it's
 real job is going to be to adjust the score. Make it implement
 `ScoringFactorInterface`.
 
-Now go to Code -> Generate - or Command + N on a Mac 0 and just generate,
+Now go to Code -> Generate - or Command + N on a Mac - and just generate,
 `adjustScore()` to start. For the logic, return the minimum of `$finalScore`
 or 100. So if the `$finalScore` is over a hundred, this will return 100.
 
@@ -49,7 +49,7 @@ In our example, it's pretty obvious that splitting the interface into two pieces
 would make the classes that implement them simpler. So in this `Scoring/` directory,
 create a new class - or really an interface - and call it `ScoreAdjusterInterface`.
 What we'll do is go into `ScoringFactorInterface`, steal the `adjustScore()` method
-and move it into the new interface. Hit okay to import that `use` statement,
+and move it into the new interface. Hit okay to import that `use` statement.
 
 Thanks to this, we can now go into `CoordinatesFactor` and remove the dummy
 `adjustScore()`... and then do the same thing in `TitleFactor`... and also in
@@ -64,10 +64,10 @@ interfaces, which is totally allowed. Add `ScoreAdjusterInterface`.
 
 The last thing to do is make our `SightingScorer` support using *both* interfaces
 by repeating the trick of injecting a collection of services for
-`ScoreAdjusterInterface`. In other words, we're now going to inject in `iterable`
-of scoring factors and a *second* `interable` of scoring adjusters.
+`ScoreAdjusterInterface`. In other words, we're now going to inject an `iterable`
+of scoring factors and a *second* `iterable` of scoring adjusters.
 
-Start in: `src/Kenel.php`. Copy the `registerForAutoConfiguration()`... and we're
+Start in: `src/Kernel.php`. Copy the `registerForAutoConfiguration()`... and we're
 going to repeat the same thing, but this time for `ScoreAdjusterInterface` and
 call the tag `scoring.adjuster`.
 
@@ -76,7 +76,7 @@ argument, paste, rename to `$scoringAdjusters` and use the new tag name:
 `scoring.adjuster`.
 
 Copy that argument name and head into `SightingScorer`. Add this as a second
-`iterable` argument. then hit Alt + Enter and go to Initialize Properties
+`iterable` argument. Then hit Alt + Enter and go to Initialize Properties
 to create that property and set it. I'll steal the PHPDoc from above the old
 property to help my editor know that this will hold an iterable of
 `ScoreAdjusterInterface` objects.
@@ -95,7 +95,7 @@ So, other than being forced to create dummy methods just to make an interface ha
 why should we care about ISP? I can think of three reasons.
 
 The first is *naming*. Whether you have a class that's too big or an interface like
-an our example, splitting it into smaller pieces allows you to give each a more
+in our example, splitting it into smaller pieces allows you to give each a more
 descriptive name that fits its purposes. We can see this in `SightingScorer`.
 We're now working with scoring *adjusters*, which better describes the purpose of
 those services than just a "scoring factor"... which does multiple things.
@@ -124,7 +124,7 @@ which depends on, for example, the password encoder service. Why is that a probl
 Well, it's minor, but this would force Symfony to instantiate the password encoder
 so that it could instantiate the `UserManager`... so that we could send a confirmation
 email... but we would never actually *use* the password encoder. That's a waste
-of memory!
+of resources!
 
 *Anyways*, the tl;dr on the interface segregation principle is this: when you have
 an interface with a method that not all of its classes need... *or* if you have
