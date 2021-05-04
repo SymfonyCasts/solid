@@ -1,17 +1,17 @@
 # Dependency Inversion Principle
 
 We've made it to the fifth and final SOLID principle: the dependency inversion
-principle. This puppy has a two part definition. Ready? One:
+principle, or DIP. This puppy has a *two* part definition. Ready? One:
 
 > High level modules should not depend on low level modules, both should depend
 > on abstractions - for example, interfaces.
 
 And part two says:
 
-> Abstractions should not depend on details, details - or concrete
+> Abstractions should not depend on details. Details - meaning concrete
 > implementations - should depend on abstractions.
 
-Uhh... If that makes sense to you, you are awesome. And... i am jealous of you.
+Uhh... if that makes sense to you, you are *awesome*! And... I am jealous of you!
 
 ## Simpler Definition
 
@@ -24,19 +24,19 @@ And two:
 > Those interfaces should be designed by the class that *uses* them, not by the
 > classes that will *implement* them.
 
-That's probably still fuzzy, but don't sweat it. This requires a real example.
+That's probably still fuzzy... but don't sweat it. This requires a real example.
 
 ## Our Spam Detection System!
 
-Here's our new problem. We've been starting to get *so* popular - no surprise - that
-some of our sighting are getting a lot of spam comments - like comments that say
-that Bigfoot is *not* real. Definitely bots!
+Here's our new problem. We've been getting *so* popular - no surprise - that
+some of our sightings are getting a lot of spam comments... like comments that say
+that Bigfoot is *not* real. Those are definitely bots!
 
 So we need a way to determine whether or not a comment is spam based on some business
 logic that we've created. If you downloaded the course code from this page, then
-should have a `tutorial/` directory with a `CommentSpamManager` class inside. Copy
-that, then go create a new directory in `src` called `Comment/` and paste the class
-there.
+you should have a `tutorial/` directory with a `CommentSpamManager` class inside.
+Copy that, then go create a new directory in `src/` called `Comment/`... and paste
+the class there.
 
 This class basically determines if a comment should be flagged as spam by running
 a regular expression on the content using a list of predefined spam words. If the
@@ -44,49 +44,49 @@ content contains two or more of those words, then we consider the comment as spa
 and throw an exception.
 
 If you think about the single responsibility principle, you could argue that this
-class already has two responsibilities: the low-level regular expression logic that
-looks for the spam words and a higher level business logic that decides that two
-spam words is the limit much
+class *already* has two responsibilities: the low-level regular expression logic
+that looks for the spam words and a higher level business logic that decides that
+two spam words is the limit.
 
 ## Splitting the Class
 
 Let's pretend that we *do* think that these are two different responsibilities. And
-so we want to split this class into two pieces. In the `Service/` directory, create
+so, we decide to split this class into two pieces. In the `Service/` directory, create
 a new class called `RegexSpamWordHelper`. Let's see: move the private `spamWords()`
 method to the new class... and then create a new public function called
-`getMatchedSpamWords()` where we pass it a `string $content` and returns an array
+`getMatchedSpamWords()` where we pass it the `string $content` and return an array
 of the matched spam words.
 
-Next, let's move the regex logic itself into this class. Copy the entire content
-of the existing method, but leave it - then paste. And... we don't need
-`$comment->getContent()` anymore: it's just called `$content`. The 0 index of
-`$badWordsOnComment` will contain the matches, so we can do has just return that.
+Next, move the regex logic itself into the class. Copy the entire contents
+of the existing method.... but leave it... then paste. Let's see... we don't need
+`$comment->getContent()` anymore.... it's just called `$content`... and the 0 index
+of `$badWordsOnComment` will contain the matches, so we can return that.
 
-Beautiful! Now that we have this class all set up, we can inject it into
+Beautiful! Now that this class is ready, let's inject it into
 `CommentSpamManager`. Add public function `__construct()` with `RegexSpamWordHelper`
-`$spamWordHelper`. I'll press Alt + Enter and select to "Initialize properties"
-to create that property and set it. Below, now will now have
+`$spamWordHelper`. I'll press Alt + Enter and select "Initialize properties"
+to create that property and set it. Below, now we can say
 `$badWordsOnComment = $this->spamWordHelper->getMatchedSpamWords()` and pass that
 `$content` from above. We don't need any of the logic in the middle anymore. Finally,
-`$badWordsOnComment` will contain the array of matches so we don't need to use the
+`$badWordsOnComment` will contain the array of matches, so we don't need to use the
 0 index anymore: just count that entire variable.
 
 Done!
 
 ## High Level and Low Level Modules
 
-At this point, we've separated the high level business logic - deciding how many
+At this point, we've separated the high-level business logic - deciding how many
 spam words should cause a comment to be marked as spam - from the low level
-*details*: matching and finding the spam words. The dependency and version principle
+*details*: matching and finding the spam words. The dependency inversion principle
 doesn't necessarily tell us whether or not we should split the original logic into
 two classes like we just did. That's probably more the concern of the single
 responsibility principle.
 
-But DIP *does* teach us to think about our code in terms of high level modules (or
-classes) like `CommentSpamManager` - that depend on low level modules (or classes)
-like `RegexSpamWordHelper`. And it gives us some concrete rules about *how* this
+But DIP *does* teach us to think about our code in terms of "high-level" modules (or
+classes) like `CommentSpamManager` - that depend on "low level" modules (or classes)
+like `RegexSpamWordHelper`. And it gives us concrete rules about *how* this
 relationship should be handled.
 
 Next, let's refactor the relationship between these two classes to be dependency
-inversion principal compliant. We'll see, in real terms, *exactly* what changes
+inversion principle compliant. We'll see, in real terms, *exactly* what changes
 each of the two parts of this principle want us to make.
