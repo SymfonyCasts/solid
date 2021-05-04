@@ -64,6 +64,8 @@ Each factor *should* need only one method. Let's call it `score()`. It will acce
 the `BigFootSighting` object that it's going to score.... and will return an integer,
 which will be the amount to *add* to the total score.
 
+[[[ code('355c366b63') ]]]
+
 Perfect! You could also add some documentation above this to describe the method
 of interface better: probably a good idea.
 
@@ -74,13 +76,19 @@ We'll make it implement `ScoringFactorInterface`... I'll paste the method - hit
 okay to add the `use` statements - rename this to `score()` and make it
 `public`. It already, correctly, returns an integer, so this is done!
 
+[[[ code('031e57dc95') ]]]
+
 Let's repeat this for `evaluateTitle()`. Create a class called `TitleFactor`,
 implement the `ScoringFactorInterface`, paste, make it `public` and rename it to
 `score()`.
 
+[[[ code('0f23a32941') ]]]
+
 And one more: copy, `evaluateDescription()`, delete that, create our last factor
 class for now, which will be `DescriptionFactor`, implement `ScoringFactorInterface`
 paste in the logic, clean things up... and rename to `score()`.
+
+[[[ code('13171987fb') ]]]
 
 That looks happy! Now we can work our magic in `SightingScorer`. Add a
 `__construct()` method that will accept an `array` of scoring factors. I'll hit
@@ -88,8 +96,12 @@ Alt + Enter and go to "Initialize properties" to create that property and set it
 Above the property, I like to add extra PHPDoc so my editor knows this isn't just
 an array of *anything*, it's an array of `ScoringFactorInterface[]` objects.
 
+[[[ code('ed73d709ce') ]]]
+
 Down in `score()`, instead of calling each method individually, we can now loop
 over `$this->scoringFactors` and say `$score += $scoringFactor->score($sighting)`.
+
+[[[ code('905ee06c75') ]]]
 
 That's it! Our SightingScorer is now *closed* to one type of change that we may
 need to make in the future: adding scoring factors. In other words, we can now

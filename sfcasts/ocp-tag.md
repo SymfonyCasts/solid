@@ -20,6 +20,8 @@ entry in the array with be one of the scoring factor services. So
 `@App\Scoring\TitleFactor`, copy that, paste... fix the indentation... then pass
 `DescriptionFactor` and `CoordinatesFactor`.
 
+[[[ code('634ea29bb0') ]]]
+
 This will now pass an array with these three service objects inside.
 
 Try it again. Refresh and... the error is gone... and now it kicked us to the log-in
@@ -46,6 +48,8 @@ built. The parent method is empty... but I'll leave the parent call. Add
 `$container->registerForAutoconfiguration()`, pass this
 `ScoringFactorInterface::class`, then `->addTag('scoring.factor')`.
 
+[[[ code('6e72fd510e') ]]]
+
 Thanks to this, any autoconfigurable service, which is all of our services,
 that implements `ScoringFactorInterface`, will automatically be tagged with
 `scoring.factor`. That `scoring.factor` is a name that I *totally* just made up.
@@ -53,6 +57,8 @@ that implements `ScoringFactorInterface`, will automatically be tagged with
 This line, on its own, won't make any real change. But now, back in `services.yaml`
 we can simplify: set the `$scoringFactors` argument to a special YAML syntax:
 `!tagged_iterator scoring.factor`.
+
+[[[ code('f8d7aa84df') ]]]
 
 This says: please inject all services that are tagged with `scoring.factor`. So
 autoconfiguration adds the tag to our scoring factor services... and this handles
@@ -63,6 +69,8 @@ an `iterable`. This won't pass us an array... but it *will* pass us something th
 we can `foreach` over. As a bonus, it's a "lazy" iterable: the scoring factor
 services won't be instantiated until and unless we run the `foreach`. Oh, and
 change the property type to `iterable` also.
+
+[[[ code('d4a781b3ab') ]]]
 
 Next: now that we understand the type of change that OCP wants us to make to our
 code, let's talk about why we should care - or not care - about OCP and when we
