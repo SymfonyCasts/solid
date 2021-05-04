@@ -2,7 +2,7 @@
 
 Coming soon...
 
-We've made it to the fifth and final solid principle. The dependency inversion
+We've made it to the fifth and final SOLID principle. The dependency inversion
 principle, this puppy has a two part definition
 
 Ready,
@@ -21,10 +21,9 @@ probably still fuzzy, but don't sweat it. This requires a real example. Here's o
 new problem. We've been starting to get so popular That some of our posts are getting
 a lot of spam on them. And so we need a way to determine whether or not a comment is
 spam based on some business logic that we've created. If you download the course code
-from this page, then you should have a tutorial directory with a comment, spam
-manager class inside, copy this, then go create a new directory and source call them
-
-Comment
+from this page, then you should have a `tutorial/` directory with a 
+`CommentSpamManager` class inside, copy this, then go create a new directory and 
+`src/` call them `Comment/`
 
 And paste this class inside This class, basically determines if a comment should be
 flagged as spam by running a regular expression
@@ -35,40 +34,38 @@ exception. If you think about the single responsibility principle, you can argue
 this class already has two responsibilities. The low-level regular logic on the spam
 words and a higher level business logic that decides that to spam words is too much.
 What? Say that again. We do think that these are two different responsibilities. And
-so we want to split this class into two pieces for the rejects logic and the service
+so we want to split this class into two pieces for the rejects logic and the `Service/`
 directory. It doesn't really matter where though let's create a new class called
-rejects bam word helper.
+`RegexSpamWordHelper`
 
-Let's go there. Luke moved the private spam words method over to this new place. I'll
-delete that paste that here. And then we'll create a new public function called get
-matched spam warrants where we will pass it a string of contents. And this will
+Let's go there. Luke moved the private `spamWords()` method over to this new place. I'll
+delete that paste that here. And then we'll create a new public function called 
+`getMatchedSpamWords()` where we will pass it a `string $content`. And this will
 return an array of the match. Spam works next, let's move the rejects logic itself
 into this class. So I'm actually going to copy the entire contents of this method,
 but leave them. Some of this needs to stay here. Well, paste this in here. And, and
-what we actually want to do is we don't need comment or get content anymore. It's
-just called content. And then we are actually going to the bad words on common. Zero
+what we actually want to do is we don't need `$comment->getContent()` anymore. It's
+just called `$content`. And then we are actually going to the `$badWordsOnComment[0]`
 index is going to contain all the matches so we can do has just returned that
 beautiful. Okay, now that we have this class all set up, we can inject it into our
-comments, fair manager.
+`CommentSpamManager`.
 
-So I'll add a public function, honors core honors, welcome with rejects spam or
-helper call the spam were helper. Then I'll go all to enter and go to initialize
-properties to create that property and set it, then use it below. So now we're going
-to have bad words on comment = this->spam word, helper, arrow, get matched spam
-words. We'll pass that content from above and we don't need any of this logic, the
-middle anymore. And now batteries on comment. And actually it'd be the bad word. So
+So I'll add a public function `__construct()` welcome with` RegexSpamWordHelper`
+call the `$spamWordHelper`. Then I'll go Alt + Enter and go to "Initialize properties"
+to create that property and set it, then use it below. So now we're going
+to have `$badWordsOnComment = $this->spamWordHelper->getMatchedSpamWords()`
+We'll pass that `$content` from above and we don't need any of this logic, the
+middle anymore. And now `$badWordsOnComment`. And actually it'd be the bad word. So
 we don't need to get the zero index anymore. We can just count that entire variable
 and done
-
-[inaudible].
 
 At this point, we've separated the high level business logic of deciding how many
 spam words should cause a comment to be marked as spam from the low level details of
 actually matching and finding the spam words. The dependency and version principle
 doesn't necessarily tell us whether or not we should split the original logic into
 two classes like we just did. That's probably more a single responsibility principle
-type of thing, but dip does teach us to think about our code in terms of high level
-modules or classes like comment, spam manager, that deep pen on low level modules or
+type of thing, but DIP does teach us to think about our code in terms of high level
+modules or classes like `CommentSpamManager`, that deep pen on low level modules or
 classes like reject spam word helper. And it gives us some concrete rules about how
 this relationship should be treated next. Let's refactor this relationship, the
 relationship between these two classes to be dependency in version principal
