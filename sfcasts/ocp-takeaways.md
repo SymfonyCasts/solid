@@ -23,7 +23,11 @@ promises that, if you follow it correctly, you will *never* need to mess around
 with your old code. But a system can't be 100% OCP-compliant. Our `SightingScorer`
 class is "closed" against the change of "adding new scoring factors". But what
 would happen if we suddenly needed a scoring factor to be able to *multiply* the
-existing score by a number... instead of just adding *to* it. This unexpected change
+existing score by a number... instead of just adding *to* it. 
+
+[[[ code('e20867c86d') ]]]
+
+This unexpected change
 would require us to, yup, modify the code in `SightingScorer`. If we had
 anticipated this change, we could have added an abstraction to `SightingScorer`
 to protect us from this new kind of change. But no one can perfectly predict the
