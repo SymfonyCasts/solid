@@ -10,6 +10,8 @@ In the `src/Scoring/` directory, create a new scoring factor class called
 finally fulfill the change request we received earlier: to add a scoring factor
 that reads the images for each sighting.
 
+[[[ code('8b8f13ed4e') ]]]
+
 Thanks to our work with the open-closed principle, we can now add this scoring factor
 without touching `SightingScorer`. And to be extra cool, thanks to this
 `tagged_iterator` thing in `services.yaml`, the new `PhotoFactor` service will be
@@ -17,6 +19,8 @@ instantly passed into `SightingScorer`. Yay!
 
 In `PhotoFactor`, go to Code -> Generate - or Command + N on a Mac - and select
 "Implement Methods" to generate the `score()` method. Inside, I'll paste some code.
+
+[[[ code('95748cd52a') ]]]
 
 This is pretty simple: we loop over the images... and pretend that we're analyzing
 them in some super advanced way. Shh, don't tell our users. Oh, and if there are no
@@ -40,6 +44,8 @@ happens!
 Inside the `foreach`, if `ScoringFactor` is an `instanceof PhotoFactor` and
 count of `$sighting->getImages()` equals zero, then `continue`.
 
+[[[ code('1f657ed6c8') ]]]
+
 In addition to this *not* being the best way to fix this - more on that in a minute -
 this also violates the open-closed principle. But... it *does* fix things: if
 we resubmit the form... our app works again!
@@ -58,6 +64,8 @@ I'll add a quick description... and then let's be very clear about the exception
 behavior we expect:
 
 > This method should not throw an exception for any normal reason.
+
+[[[ code('1db7cc1b65') ]]]
 
 In the real-world, if a method *is* allowed to throw an exception when some
 expected situation happens, you would typically see an `@throws` that describes
@@ -91,9 +99,15 @@ or interface that is behaving *differently* than the rest... which you then need
 to code for.
 
 So let's remove this: take out the if statement and let's even go clean out the extra
-`use` statement on top. Now that we've clarified that the `score()` method
+`use` statement on top. 
+
+[[[ code('06843e075e') ]]]
+
+Now that we've clarified that the `score()` method
 should *not* throw an exception in normal situations, the real fix is... kinda
 obvious: stop throwing the exception! Replace the exception with `return 0`.
+
+[[[ code('aac8979001') ]]]
 
 That's it. The class now acts like we expect: no surprises.
 
