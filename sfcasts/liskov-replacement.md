@@ -34,6 +34,8 @@ Let's start by creating that new subclass. Over in the `Service/` directory... s
 that it's right next to our normal `SightingScorer`, add a new class called
 `DebuggableSightingScorer`. Make it extend the normal `SightingScorer`.
 
+[[[ code('504c810a6a') ]]]
+
 Since our subtype is currently making *no* changes to the parent class, Liskov would
 definitely be happy with it. What I mean is: we should *definitely* be able to
 *substitute* this class into our app in place of the original, with no problems.
@@ -44,6 +46,8 @@ But where *is* the normal `SightingScorer` service actually used? Open
 `src/Controller/BigFootSightingController.php`. This `upload()` action is the one
 that is executed when, from the homepage, we click to submit a sighting. Yep, down
 here, you can see that this is the `upload()` method.
+
+[[[ code('f9b94716fb') ]]]
 
 One of the arguments that's being autowired to this method is the `SightingScorer`...
 which is used down here on submit to calculate the score.
@@ -58,6 +62,8 @@ changes we're about to make in a `services_dev.yaml` file.
 *Anyways*, to suddenly start using our new class everywhere that the
 `SightingScorer` is used, add `class:` and then
 `App\Service\DebuggableSightingScorer`.
+
+[[[ code('5370f75079') ]]]
 
 I know, this looks a little funny. This first line is still the service id. But
 now instead of using that as the class, Symfony will use `DebuggableSightingScorer`.
@@ -95,10 +101,15 @@ or Command + N on a Mac - select "Override methods" and override the `score()` m
 If you override a method and keep the same argument type hints and return type,
 this class is *still* substitutable: I can refresh and PHP is still happy.
 
+[[[ code('df17ba1e8d') ]]]
+
 But if we *did* change the argument type-hints or return type to something
 totally *different*, then even PHP will tell us to knock it off. For example, let's
-completely change the return type to `int`. PhpStorm is mad! And if we refresh,
-PHP is mad too!
+completely change the return type to `int`. 
+
+[[[ code('dd14f9d90b') ]]]
+
+PhpStorm is mad! And if we refresh, PHP is mad too!
 
 > `DebuggableSightingScorer::score()` must be compatible with the parent
 > `score()`, which returns `BigFootSightingScore`.
