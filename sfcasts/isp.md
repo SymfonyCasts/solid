@@ -52,6 +52,8 @@ going to receive the `int $finalScore` that's just been calculated and the
 You can add some PHPDoc above this to better explain the purpose of the method
 if you want.
 
+[[[ code('6a2ac553fb') ]]]
+
 In a minute, we're going to call this from inside of `SightingScorer` *after*
 the initial scoring is done. But first, let's open `PhotoFactor` and add the new
 bonus logic.
@@ -65,18 +67,27 @@ the `$finalScore` is less than 50 and `$photosCount` is greater than two - the
 `$finalScore` should get plus equals `$photosCount * 5`. At the bottom, return
 `$finalScore`.
 
+[[[ code('24c0f6cfa3') ]]]
+
 New logic done! But now... what do we do with all the other classes that implement
 `ScoringFactorInterface`? Unfortunately, for PHP to even run, we do need to add the
 new method to *each* class. But we can just make it return `$finalScore`.
 
 So at the bottom of `CoordinatesFactor`, go back to Code -> Generate - select
-"Implement Methods", generate `adjustScore()`, and return `$finalScore`. Copy, this
-close `CoordinatesFactor`, go to `DescriptionFactor` and add it to the bottom.
+"Implement Methods", generate `adjustScore()`, and return `$finalScore`. 
+
+[[[ code('905615159b') ]]]
+
+Copy, this close `CoordinatesFactor`, go to `DescriptionFactor` and add it to the bottom.
 Do the same thing inside of `TitleFactor`.
+
+[[[ code('d13c43c3d4') ]]]
 
 *Finally*, we can update `SightingScorer`. Add a second loop after calculating the
 score: for each `$this->scoringFactors` as `$scoringFactor`, this time say
-say `$score = $scoringFactor->adjustScore()`... and pass in `$score` and `$sighting`.
+`$score = $scoringFactor->adjustScore()`... and pass in `$score` and `$sighting`.
+
+[[[ code('66a2d611fa') ]]]
 
 Done! By the way, you might argue that the *order* of scoring factors is now
 relevant. That's true! But... we're not going to worry about that for simplicity...

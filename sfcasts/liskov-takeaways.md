@@ -11,6 +11,8 @@ if `$bfsScore` is an instance of `DebuggableBigFootSightingScore`, then
 Passing `$bfsScore->getCalculationTime()` times 1000 to convert from microseconds
 to milliseconds.
 
+[[[ code('78d89a9187') ]]]
+
 Cool! But... wait: didn't I say that `instanceof` is a signal that we may be
 breaking Liskov's principle? Yep! But I'm not too worried about it here, for a
 few reasons. First, this is my controller... whose job is to tie all the ugly
@@ -25,6 +27,8 @@ could say, "I specifically need a `DebuggableSightingScorer`".
 If we did that, we wouldn't need the `instanceof` because we would know that *that*
 service returns a `DebuggableBigFootSightingScore`, which has the
 `getCalculationTime()` method on it.
+
+[[[ code('39de176da6') ]]]
 
 But... we're missing one tiny config detail in Symfony. Try to refresh the page.
 It breaks!
@@ -52,6 +56,8 @@ us the *same* service, regardless of whether we type-hint
 We can do that by adding an alias. Inside `services.yaml`, say
 `App\Service\DebuggableSightingScorer`, colon, an `@` symbol and then
 `App\Service\SightingScorer`.
+
+[[[ code('d5d4dec356') ]]]
 
 This says: whenever someone tries to autowire or use the `DebuggableSightingScorer`
 service, you should *actually* pass them the `SightingScorer` service... which,

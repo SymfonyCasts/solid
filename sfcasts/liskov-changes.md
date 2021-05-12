@@ -13,6 +13,8 @@ holds the extra info. `BigFootSightingScore` lives in the `src/Model/` directory
 there it is. Right next to it, add a new class called, how about,
 `DebuggableBigFootSightingScore`. Make it extend the normal `BigFootSightingScore`.
 
+[[[ code('d37a1c6545') ]]]
+
 Now we have two subclasses to play with! This time, override the constructor: do
 that by going to Code -> Generate - or Command + N on a Mac. Override `__construct()`.
 
@@ -21,6 +23,8 @@ argument: `float $calculationTime`. I'll hit Alt + Enter and go to "Initialize
 properties"... select just `$calculationTime`... to create that property and set
 it. To make the `$calculationTime` accessible, at the bottom, go back to Code ->
 Generate and make a "getter" method for this!
+
+[[[ code('b7a45b5867') ]]]
 
 ## Wait: Does __construct need to Follow Liskov's Rules?
 
@@ -48,6 +52,8 @@ the constructor is never called on an object, that's not an issue.
 parent::score()`... and then return a `new DebuggableBigFootSightingScore` passing
 the `int` score - `$bfScore->getScore()` - and `100` for a fake duration. Let's
 also advertise that we return this new class: `DebuggableBigFootSightingScore`
+
+[[[ code('9a95ce22e8') ]]]
 
 But wait: we just changed the return-type to something *different* than our parent
 class! Is that allowed?
