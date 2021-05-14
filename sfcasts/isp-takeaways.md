@@ -15,12 +15,16 @@ Now go to Code -> Generate - or Command + N on a Mac - and just generate,
 `adjustScore()` to start. For the logic, return the minimum of `$finalScore`
 or 100. So if the `$finalScore` is over a hundred, this will return 100.
 
+[[[ code('276250749e') ]]]
+
 Now, setting the priority of the scoring factors so that this is the final one
 would be *especially* important. But since that doesn't relate to ISP, we won't
 worry about it.
 
 Of course, in this new class, we *also* need to implement the *other* method:
 `score()`. We can just return 0 since we don't care about that.
+
+[[[ code('3f8e7e4478') ]]]
 
 Okay, we've got this working! But we've violated ISP! A lot of the classes that
 implement `ScoringFactorInterface` - like `MaxScoreAdjuster` and `CoordinatesFactor` -
@@ -51,16 +55,22 @@ create a new class - or really an interface - and call it `ScoreAdjusterInterfac
 What we'll do is go into `ScoringFactorInterface`, steal the `adjustScore()` method
 and move it into the new interface. Hit okay to import that `use` statement.
 
+[[[ code('38af214cc8') ]]]
+
 Thanks to this, we can now go into `CoordinatesFactor` and remove the dummy
 `adjustScore()`... and then do the same thing in `TitleFactor`... and also in
 `DescriptionFactor`, which feels pretty good! In `MaxScoreAdjuster`, change this
 to implement `ScoreAdjusterInterface`... and then we no longer need the dummy
 `score()` method.
 
+[[[ code('45aa28587e') ]]]
+
 ## Injecting the Collection of Scoring Adjusters
 
 Finally, the `PhotoFactor` class is interesting: it needs to implement both
 interfaces, which is totally allowed. Add `ScoreAdjusterInterface`.
+
+[[[ code('91ce3d95ef') ]]]
 
 The last thing to do is make our `SightingScorer` support using *both* interfaces
 by repeating the trick of injecting a collection of services for
@@ -71,9 +81,13 @@ Start in: `src/Kernel.php`. Copy the `registerForAutoConfiguration()`... and we'
 going to repeat the same thing, but this time for `ScoreAdjusterInterface` and
 call the tag `scoring.adjuster`.
 
+[[[ code('558d142e06') ]]]
+
 Next, over in `services.yaml`, down on our service, copy the `$scoringFactors`
 argument, paste, rename to `$scoringAdjusters` and use the new tag name:
 `scoring.adjuster`.
+
+[[[ code('708f08fe0e') ]]]
 
 Copy that argument name and head into `SightingScorer`. Add this as a second
 `iterable` argument. Then hit Alt + Enter and go to Initialize Properties
@@ -81,10 +95,14 @@ to create that property and set it. I'll steal the PHPDoc from above the old
 property to help my editor know that this will hold an iterable of
 `ScoreAdjusterInterface` objects.
 
+[[[ code('40157ccd65') ]]]
+
 Now loop over *these* instead. You can already see that PhpStorm is not happy
 because there is no `adjustScore()` method on the scoring factors. Change this
 to `$scoringAdjusters`... and I'll rename the variable to `$scoringAdjuster` here
 and here.
+
+[[[ code('0d32cb73d9') ]]]
 
 Done! We made our interface smaller, which allowed us to remove all of the dummy
 methods.
