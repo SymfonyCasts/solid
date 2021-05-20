@@ -59,6 +59,8 @@ change to interface and call it, how about, `CommentSpamCounterInterface`.
 Inside, add one method: public function `countSpamWords()`, which will accept the
 `string $content` and return an `int`.
 
+[[[ code('fc8218ee31') ]]]
+
 Beautiful! Notice that just by inverting, *who* we think should be in charge of
 creating the interface - or who should "own" it - we ended up with a very different
 result. Instead of forcing the *interface* to look like the low level
@@ -70,16 +72,22 @@ or Command + N on a Mac - and select "Implement Methods" to generate
 `countSpamWords()`. Inside, return the `count()` of
 `$this->getMatchedSpamWords($content)`.
 
+[[[ code('d7818960c8') ]]]
+
 Back in `CommentSpamManager`, let's follow the first part of DIP and change this
 to depend on the new interface. Change the type-hint to
 `CommentSpamCounterInterface`... change the type on the property... and let's
 also rename the property itself to be more clear: call it `$spamWordCounter`.
 Rename the argument too.
 
+[[[ code('3c54572a60') ]]]
+
 Down in `validate()`, change `$badWordsOnComment` to `$badWordsCount`. Then, instead
 of calling `getMatchedSpamWords()`, call the new `countSpamWords()`. Below,
 we don't need the `count()` anymore: just check if `$badWordsCount` is greater
 than or equal to 2.
+
+[[[ code('4bf5f6efba') ]]]
 
 Congratulations! Our code now follows the two parts of the dependency inversion
 principle! One, our high level class - `CommentSpamManager` - depends on an interface.
@@ -95,6 +103,8 @@ to mention two things.
 First, over in `RegexSpamWordHelper`, you *are* allowed to have this public function
 `getMatchedSpamWords()` method if you're using it somewhere else in your code. Since
 we're not, I'm going to clean things up and make it `private`.
+
+[[[ code('bf11f80bee') ]]]
 
 Second... well... this is more of a question: will Symfony know which service to
 autowire when it sees the `CommentSpamCounterInterface` type-hint? Will it know

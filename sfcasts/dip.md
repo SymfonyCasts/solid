@@ -38,6 +38,8 @@ you should have a `tutorial/` directory with a `CommentSpamManager` class inside
 Copy that, then go create a new directory in `src/` called `Comment/`... and paste
 the class there.
 
+[[[ code('32e0e54a82') ]]]
+
 This class basically determines if a comment should be flagged as spam by running
 a regular expression on the content using a list of predefined spam words. If the
 content contains two or more of those words, then we consider the comment as spam
@@ -57,19 +59,28 @@ method to the new class... and then create a new public function called
 `getMatchedSpamWords()` where we pass it the `string $content` and return an array
 of the matched spam words.
 
+[[[ code('1ef8ffef26') ]]]
+
 Next, move the regex logic itself into the class. Copy the entire contents
 of the existing method.... but leave it... then paste. Let's see... we don't need
 `$comment->getContent()` anymore.... it's just called `$content`... and the 0 index
 of `$badWordsOnComment` will contain the matches, so we can return that.
 
+[[[ code('3dfa42c2fd') ]]]
+
 Beautiful! Now that this class is ready, let's inject it into
 `CommentSpamManager`. Add public function `__construct()` with `RegexSpamWordHelper`
 `$spamWordHelper`. I'll press Alt + Enter and select "Initialize properties"
-to create that property and set it. Below, now we can say
-`$badWordsOnComment = $this->spamWordHelper->getMatchedSpamWords()` and pass that
-`$content` from above. We don't need any of the logic in the middle anymore. Finally,
+to create that property and set it. 
+
+[[[ code('dc742bb186') ]]]
+
+Below, now we can say `$badWordsOnComment = $this->spamWordHelper->getMatchedSpamWords()` and 
+pass that `$content` from above. We don't need any of the logic in the middle anymore. Finally,
 `$badWordsOnComment` will contain the array of matches, so we don't need to use the
 0 index anymore: just count that entire variable.
+
+[[[ code('306b502000') ]]]
 
 Done!
 
