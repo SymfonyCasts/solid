@@ -1,6 +1,6 @@
 setup:
-    'composer install'
-    'yarn install'
+    - 'composer install'
+    - 'yarn install'
 
 asserts:
-    'composer validate'
+    - 'composer validate'
