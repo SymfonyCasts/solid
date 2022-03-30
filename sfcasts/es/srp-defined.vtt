@@ -1,0 +1,398 @@
+WEBVTT
+
+00:00:01.016 --> 00:00:06.036 align:middle
+SOLID comienza con el Principio
+de Responsabilidad Única o SRP.
+
+00:00:06.896 --> 00:00:12.276 align:middle
+El SRP dice Un módulo debe tener
+una sola razón para cambiar.
+
+00:00:12.906 --> 00:00:15.666 align:middle
+¿Eh? Esto suena...
+
+00:00:15.846 --> 00:00:19.616 align:middle
+un poco demasiado "blando"
+para ser realmente útil.
+
+00:00:20.466 --> 00:00:22.516 align:middle
+Intentémoslo de nuevo con una...
+
+00:00:22.516 --> 00:00:30.546 align:middle
+definición algo más sencilla: Una función o
+clase debe ser responsable de una sola tarea...
+
+00:00:31.006 --> 00:00:34.286 align:middle
+o debe tener una sola "responsabilidad".
+
+00:00:34.986 --> 00:00:36.006 align:middle
+Mejor. Pero...
+
+00:00:36.206 --> 00:00:39.156 align:middle
+¿qué es exactamente una "responsabilidad"?
+
+00:00:39.496 --> 00:00:41.256 align:middle
+¿Y por qué es útil esta regla?
+
+00:00:41.876 --> 00:00:48.636 align:middle
+En un nivel aún más sencillo, lo que la PRS
+intenta decir realmente es Reúne las cosas
+
+00:00:48.636 --> 00:00:54.276 align:middle
+que cambian por la misma razón y separa
+las que cambian por razones diferentes.
+
+00:00:54.946 --> 00:00:58.866 align:middle
+Hablaremos más adelante de esta
+definición, pero tenla en cuenta.
+
+00:00:59.756 --> 00:01:03.066 align:middle
+¿Y qué problema intenta
+ayudarnos a resolver la PRS?
+
+00:01:03.706 --> 00:01:09.356 align:middle
+En teoría, si organizamos nuestro código en
+unidades que cambian todas por la misma razón,
+
+00:01:10.016 --> 00:01:13.046 align:middle
+entonces cuando tengamos una nueva
+característica o petición de cambio,
+
+00:01:13.346 --> 00:01:16.426 align:middle
+sólo tendremos que modificar una clase...
+
+00:01:16.806 --> 00:01:20.186 align:middle
+en lugar de hacer 10 cambios
+en 10 archivos diferentes...
+
+00:01:20.186 --> 00:01:22.766 align:middle
+e intentar no romper cosas por el camino.
+
+00:01:23.636 --> 00:01:25.216 align:middle
+¡Ya está bien de definir cosas!
+
+00:01:25.576 --> 00:01:27.086 align:middle
+Pasemos a un ejemplo.
+
+00:01:27.696 --> 00:01:29.686 align:middle
+En tu navegador, haz clic en "Registrarse".
+
+00:01:30.336 --> 00:01:33.616 align:middle
+Como puedes ver, ¡nuestra aplicación
+tiene un formulario de registro!
+
+00:01:34.346 --> 00:01:39.526 align:middle
+Abre src/Controller/RegistrationController.php
+para ver el código que hay detrás.
+
+00:01:40.406 --> 00:01:45.156 align:middle
+La mayor parte de la lógica para guardar el usuario
+está en este método UserManager::register().
+
+00:01:45.706 --> 00:01:51.136 align:middle
+Mantén pulsada la tecla Cmd o Ctrl para entrar
+en él: está en src/Manager/UserManager.php.
+
+00:01:51.136 --> 00:01:54.956 align:middle
+Este método codifica la
+contraseña del usuario...
+
+00:01:55.306 --> 00:01:57.376 align:middle
+y luego guarda el usuario en la base de datos.
+
+00:01:57.856 --> 00:02:00.216 align:middle
+¡Es increíble! Pero ahora...
+
+00:02:00.276 --> 00:02:02.896 align:middle
+¡hemos recibido una petición de cambio!
+
+00:02:03.646 --> 00:02:09.576 align:middle
+El director de producto de Sasquatch Sightings
+-una persona sospechosamente peluda- quiere que
+
+00:02:10.046 --> 00:02:16.286 align:middle
+enviemos un correo electrónico de confirmación tras el registro
+para verificar la dirección de correo electrónico del usuario.
+
+00:02:17.076 --> 00:02:21.186 align:middle
+Para entender a SRP, primero vamos a
+ponerlo en práctica de forma incorrecta.
+
+00:02:21.616 --> 00:02:23.496 align:middle
+Bueno, "mal" según SRP.
+
+00:02:24.406 --> 00:02:28.926 align:middle
+Nota al margen: vamos a construir un sencillo sistema
+de confirmación por correo electrónico a mano.
+
+00:02:29.476 --> 00:02:34.956 align:middle
+Si tienes esta necesidad en un proyecto real,
+consulta symfonycasts/verify-email-bundle. De
+
+00:02:35.696 --> 00:02:39.546 align:middle
+todos modos, la forma más fácil
+que veo de añadir esta función es
+
+00:02:39.546 --> 00:02:43.086 align:middle
+añadir la lógica justo dentro
+de UserManager::register()...
+
+00:02:43.486 --> 00:02:48.976 align:middle
+porque sólo tendremos que tocar un
+archivo y garantizará que cualquier cosa
+
+00:02:48.976 --> 00:02:53.386 align:middle
+que llame a este método activará definitivamente
+el correo electrónico de confirmación. En la
+
+00:02:54.266 --> 00:02:57.166 align:middle
+parte inferior de esta
+clase, voy a empezar pegando
+
+00:02:57.166 --> 00:02:59.616 align:middle
+una función privada llamada createToken().
+
+00:03:00.276 --> 00:03:02.836 align:middle
+Puedes copiarla del bloque
+de código de esta página.
+
+00:03:03.516 --> 00:03:07.886 align:middle
+Esto genera una cadena aleatoria que
+incluiremos en el enlace de confirmación.
+
+00:03:08.796 --> 00:03:13.786 align:middle
+Arriba en el registro, genera un nuevo
+token $token = $this->createToken()...
+
+00:03:14.366 --> 00:03:19.016 align:middle
+y luego establécelo en el usuario:
+$user->setConfirmationToken($token).
+
+00:03:19.806 --> 00:03:23.946 align:middle
+Antes de empezar a grabar -si
+miras el archivo User.php -
+
+00:03:24.866 --> 00:03:29.916 align:middle
+ya había creado una propiedad $confirmationToken
+que se guarda en la base de datos.
+
+00:03:30.706 --> 00:03:33.936 align:middle
+Así que gracias al nuevo código,
+cuando un usuario se registre,
+
+00:03:34.276 --> 00:03:39.986 align:middle
+ahora tendrá un token de confirmación aleatorio
+guardado en su fila en la base de datos.
+
+00:03:40.876 --> 00:03:42.436 align:middle
+Volviendo a RegistrationController...
+
+00:03:42.896 --> 00:03:48.386 align:middle
+si te desplazas un poco hacia abajo,
+también he creado una acción de
+
+00:03:48.506 --> 00:03:49.986 align:middle
+confirmación para confirmar
+su correo electrónico.
+
+00:03:50.676 --> 00:03:53.586 align:middle
+Un usuario sólo tiene que
+ir a esta ruta prefabricada
+
+00:03:53.936 --> 00:03:58.126 align:middle
+-donde el {token} de la URL coincide
+con el confirmationToken que hemos
+
+00:03:58.126 --> 00:04:01.056 align:middle
+establecido en su registro de User - y...
+
+00:04:01.376 --> 00:04:03.586 align:middle
+¡bam! ¡Estarán verificados!
+
+00:04:04.446 --> 00:04:07.866 align:middle
+Así que de vuelta a UserManager,
+nos quedan dos trabajos.
+
+00:04:08.146 --> 00:04:14.186 align:middle
+En primer lugar, tenemos que generar una URL
+absoluta a la confirmAction que contenga su token.
+
+00:04:15.006 --> 00:04:19.896 align:middle
+Y segundo, tenemos que enviar un correo
+electrónico al usuario con esa URL dentro.
+
+00:04:20.616 --> 00:04:22.346 align:middle
+Vamos a generar primero la URL.
+
+00:04:22.846 --> 00:04:26.656 align:middle
+Arriba en el constructor,
+autowire RouterInterface $router.
+
+00:04:27.486 --> 00:04:32.436 align:middle
+Voy a pulsar Alt + Enter y voy a ir a "Inicializar
+propiedades" para crear esa propiedad y establecerla.
+
+00:04:33.246 --> 00:04:40.276 align:middle
+Ahora, abajo, digamos $confirmationLink
+= $this->router->generate() y...
+
+00:04:40.276 --> 00:04:41.456 align:middle
+el nombre de nuestra ruta...
+
+00:04:41.456 --> 00:04:43.836 align:middle
+es check_confirmation_link.
+
+00:04:44.106 --> 00:04:51.246 align:middle
+Utiliza eso. Para el segundo argumento, pasa
+token ajustado a $user->getConfirmationToken().
+
+00:04:52.076 --> 00:04:56.706 align:middle
+Y como esta URL irá en un correo
+electrónico, tiene que ser absoluta.
+
+00:04:57.346 --> 00:05:03.326 align:middle
+Pasa un tercer argumento para activarlo:
+UrlGeneratorInterface::ABSOLUTE_URL.
+
+00:05:04.146 --> 00:05:06.156 align:middle
+Ahora, ¡vamos a enviar el correo electrónico!
+
+00:05:06.726 --> 00:05:13.956 align:middle
+Encima, añade un argumento más: MailerInterface
+$mailer y utiliza el mismo truco de Alt + Enter,
+
+00:05:14.026 --> 00:05:17.746 align:middle
+"Inicializar propiedades", para
+crear esa propiedad y establecerla.
+
+00:05:18.356 --> 00:05:18.876 align:middle
+¡Muy bien!
+
+00:05:19.646 --> 00:05:22.886 align:middle
+A continuación, pegaré el código de
+generación del correo electrónico.
+
+00:05:23.806 --> 00:05:28.466 align:middle
+También volveré a escribir el l en
+TemplatedEmail y pulsaré el tabulador
+
+00:05:28.466 --> 00:05:31.556 align:middle
+para que PhpStorm añada la
+declaración use encima por mí.
+
+00:05:32.146 --> 00:05:35.846 align:middle
+Esto crea un correo electrónico para
+este usuario, desde esta dirección...
+
+00:05:36.206 --> 00:05:39.366 align:middle
+y la plantilla a la que
+hace referencia ya existe.
+
+00:05:39.986 --> 00:05:44.786 align:middle
+Puedes verla en:
+templates/emails/registration_confirmation.html.twig. Estamos
+
+00:05:45.546 --> 00:05:48.386 align:middle
+pasando una variable confirmationLink... y
+
+00:05:48.756 --> 00:05:51.086 align:middle
+eso se renderiza dentro del correo
+electrónico. Por último, al final de
+
+00:05:51.976 --> 00:05:54.556 align:middle
+register()...
+
+00:05:54.946 --> 00:06:00.026 align:middle
+después de saber que el usuario ha guardado con éxito, entrega
+el correo con: $this->mailer->send($confirmationEmail).
+
+00:06:00.306 --> 00:06:03.746 align:middle
+¡Muy bien!
+
+00:06:04.576 --> 00:06:06.686 align:middle
+¡Lo hemos conseguido! ¡ E
+
+00:06:06.686 --> 00:06:08.276 align:middle
+incluso podemos probar esto! De vuelta
+
+00:06:08.906 --> 00:06:12.546 align:middle
+a la página de registro, regístrate
+como nuevo usuario... cualquier
+
+00:06:13.036 --> 00:06:15.456 align:middle
+contraseña, dale a enter y... ¡impresionante!
+
+00:06:16.766 --> 00:06:18.616 align:middle
+¡Parece que ha funcionado! Ahora,
+
+00:06:19.486 --> 00:06:24.226 align:middle
+el proyecto no está configurado para entregar
+realmente el correo electrónico. Pero
+
+00:06:24.846 --> 00:06:29.896 align:middle
+podemos ver cómo habría sido ese
+correo electrónico imaginario bajando
+
+00:06:29.896 --> 00:06:34.916 align:middle
+a la barra de herramientas de depuración web, haciendo clic en
+cualquiera de estos enlaces para ir al perfilador... pulsando
+
+00:06:35.446 --> 00:06:36.746 align:middle
+"últimos 10"... y luego
+
+00:06:37.236 --> 00:06:40.876 align:middle
+haciendo clic para entrar en el
+perfilador de la petición POST que
+
+00:06:40.876 --> 00:06:43.056 align:middle
+acabamos de hacer al
+formulario de registro. A la
+
+00:06:44.006 --> 00:06:47.016 align:middle
+izquierda, haz clic en la sección
+"Correo electrónico". ¡ Ahí está
+
+00:06:47.676 --> 00:06:48.576 align:middle
+nuestro correo electrónico!
+
+00:06:49.186 --> 00:06:51.136 align:middle
+Incluso puedes ver su HTML. Voy a
+
+00:06:51.136 --> 00:06:54.026 align:middle
+robar el enlace de confirmación...
+
+00:06:55.046 --> 00:06:57.296 align:middle
+lo pongo en una nueva pestaña
+y... ¡nuestro correo electrónico
+
+00:06:57.946 --> 00:06:59.956 align:middle
+está confirmado! ¡ Misión
+
+00:07:00.376 --> 00:07:01.816 align:middle
+cumplida! Y,
+
+00:07:02.476 --> 00:07:06.526 align:middle
+todo nuestro código está centralizado
+en un solo método. Pero...
+
+00:07:07.546 --> 00:07:16.546 align:middle
+acabamos de violar la PRS: ¡nuestra clase UserManager
+tiene ahora demasiadas responsabilidades! ¿Pero
+
+00:07:17.246 --> 00:07:20.756 align:middle
+qué quiero decir con la palabra "responsabilidad"?
+¿Y cuáles son las responsabilidades
+
+00:07:21.486 --> 00:07:25.216 align:middle
+que tiene esta clase? ¿Y cuál es el
+
+00:07:25.736 --> 00:07:28.506 align:middle
+problema de violar la PRS? ¿Y
+
+00:07:29.056 --> 00:07:33.226 align:middle
+la influencia de la gravedad se
+extiende para siempre? Vamos a
+
+00:07:34.076 --> 00:07:36.706 align:middle
+responder a la mayoría de
+estas preguntas a continuación
