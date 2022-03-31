@@ -1,0 +1,476 @@
+WEBVTT
+
+00:00:01.016 --> 00:00:06.426 align:middle
+Acabamos de añadir la posibilidad de añadir una
+bonificación a la puntuación si ésta es inferior a 50
+
+00:00:06.776 --> 00:00:10.086 align:middle
+y hay 3 fotos o más en un avistamiento.
+
+00:00:10.706 --> 00:00:16.036 align:middle
+Y... la dirección ya está solicitando
+otro cambio: tenemos que asegurarnos de que,
+
+00:00:16.306 --> 00:00:21.676 align:middle
+pase lo que pase, una puntuación
+nunca reciba más de 100 puntos.
+
+00:00:21.676 --> 00:00:22.386 align:middle
+¡No hay problema!
+
+00:00:22.816 --> 00:00:26.176 align:middle
+Podemos crear otra clase de factor
+de puntuación para comprobarlo.
+
+00:00:26.586 --> 00:00:32.056 align:middle
+En el directorio Scoring/, añade una
+clase llamada, qué tal, MaxScoreAdjuster.
+
+00:00:32.926 --> 00:00:36.806 align:middle
+Le voy a dar un nombre ligeramente diferente,
+aunque sea un factor de puntuación,
+
+00:00:37.016 --> 00:00:40.426 align:middle
+porque su verdadero trabajo va
+a ser ajustar la puntuación.
+
+00:00:41.076 --> 00:00:44.106 align:middle
+Haz que implemente ScoringFactorInterface.
+
+00:00:44.106 --> 00:00:50.146 align:middle
+Ahora ve a Código -> Generar -o Comando + N en un
+Mac- y simplemente genera, adjustScore() para empezar.
+
+00:00:50.146 --> 00:00:55.156 align:middle
+Para la lógica, devuelve el
+mínimo de $finalScore o 100.
+
+00:00:55.156 --> 00:00:59.236 align:middle
+Así que si el $finalScore es
+superior a cien, esto devolverá 100.
+
+00:01:00.046 --> 00:01:03.066 align:middle
+Ahora bien, establecer la prioridad
+de los factores de puntuación
+
+00:01:03.066 --> 00:01:06.816 align:middle
+para que éste sea el último
+sería especialmente importante.
+
+00:01:07.286 --> 00:01:11.176 align:middle
+Pero como eso no está relacionado con
+el ISP, no nos preocuparemos por ello.
+
+00:01:12.016 --> 00:01:17.806 align:middle
+Por supuesto, en esta nueva clase también
+tenemos que implementar el otro método: score().
+
+00:01:19.276 --> 00:01:22.166 align:middle
+Podemos devolver simplemente
+0, ya que no nos importa.
+
+00:01:22.916 --> 00:01:24.756 align:middle
+Bien, ¡ya tenemos esto funcionando!
+
+00:01:25.216 --> 00:01:28.696 align:middle
+¡Pero hemos violado el ISP! Muchas
+
+00:01:28.696 --> 00:01:33.896 align:middle
+de las clases que implementan
+ScoringFactorInterface -como MaxScoreAdjuster
+
+00:01:34.066 --> 00:01:37.266 align:middle
+y CoordinatesFactor - tienen
+un método ficticio...
+
+00:01:37.906 --> 00:01:41.326 align:middle
+que hemos añadido sólo para satisfacer
+las necesidades de la interfaz.
+
+00:01:42.116 --> 00:01:46.636 align:middle
+Cuando veas algo así, es una señal
+de que tu interfaz está contaminada...
+
+00:01:46.896 --> 00:01:48.376 align:middle
+o ha engordado.
+
+00:01:49.186 --> 00:01:53.056 align:middle
+Pero, de nuevo, aunque estemos utilizando
+una interfaz en nuestro ejemplo,
+
+00:01:53.276 --> 00:01:56.626 align:middle
+esto también se aplica
+a las clases en general.
+
+00:01:56.626 --> 00:02:00.336 align:middle
+Si tienes una clase con
+múltiples métodos públicos...
+
+00:02:00.656 --> 00:02:05.996 align:middle
+y otras partes de tu código sólo
+utilizan uno o algunos de sus métodos...
+
+00:02:06.346 --> 00:02:09.206 align:middle
+eso también es una violación de la ISP.
+
+00:02:09.206 --> 00:02:13.366 align:middle
+De hecho, ése es el principal objetivo de ISP.
+
+00:02:13.366 --> 00:02:18.696 align:middle
+Estás exigiendo a los clientes de
+tu clase que dependan de interfaces
+
+00:02:19.116 --> 00:02:22.536 align:middle
+-en otras palabras, de
+métodos- que no necesitan.
+
+00:02:23.276 --> 00:02:24.256 align:middle
+¿Cuál es la solución?
+
+00:02:24.716 --> 00:02:29.096 align:middle
+Clasificar los métodos en función
+de su finalidad y de su uso...
+
+00:02:29.446 --> 00:02:31.976 align:middle
+y divídelos en varias clases.
+
+00:02:31.976 --> 00:02:36.006 align:middle
+Por ejemplo, si tienes una clase con 3 métodos
+
+00:02:36.006 --> 00:02:40.946 align:middle
+y 2 de esos métodos se llaman siempre
+juntos, entonces la clase debe dividirse
+
+00:02:40.946 --> 00:02:44.796 align:middle
+en sólo dos piezas: una
+clase con esos 2 métodos
+
+00:02:45.136 --> 00:02:47.466 align:middle
+y otra clase con sólo el tercer método.
+
+00:02:48.326 --> 00:02:51.806 align:middle
+En nuestro ejemplo, es bastante obvio
+que dividir la interfaz en dos trozos
+
+00:02:51.806 --> 00:02:55.646 align:middle
+simplificaría las clases que los implementan.
+
+00:02:55.646 --> 00:03:01.056 align:middle
+Así que en este directorio Scoring/, crea
+una nueva clase -o realmente una interfaz-
+
+00:03:01.276 --> 00:03:03.896 align:middle
+y llámala ScoreAdjusterInterface.
+
+00:03:05.036 --> 00:03:10.336 align:middle
+Lo que haremos es entrar en ScoringFactorInterface,
+robar el método adjustScore()
+
+00:03:10.486 --> 00:03:12.266 align:middle
+y trasladarlo a la nueva interfaz.
+
+00:03:13.766 --> 00:03:16.166 align:middle
+Pulsa OK para importar esa
+declaración use . Gracias
+
+00:03:16.166 --> 00:03:20.286 align:middle
+a esto, ahora podemos ir a CoordinatesFactor
+
+00:03:20.406 --> 00:03:22.496 align:middle
+y eliminar el método ficticio adjustScore()...
+
+00:03:25.276 --> 00:03:27.666 align:middle
+y luego hacer lo mismo en TitleFactor...
+
+00:03:30.136 --> 00:03:34.246 align:middle
+y también en DescriptionFactor,
+¡lo cual sienta muy bien!
+
+00:03:36.136 --> 00:03:40.796 align:middle
+En MaxScoreAdjuster, cambia esto para
+implementar ScoreAdjusterInterface...
+
+00:03:41.116 --> 00:03:44.256 align:middle
+y entonces ya no necesitaremos
+el método ficticio score().
+
+00:03:44.256 --> 00:03:47.926 align:middle
+Por último, la clase
+PhotoFactor es interesante:
+
+00:03:48.236 --> 00:03:52.426 align:middle
+necesita implementar ambas interfaces,
+lo que está totalmente permitido.
+
+00:03:53.176 --> 00:03:55.156 align:middle
+Añade ScoreAdjusterInterface. Lo
+
+00:03:56.216 --> 00:04:00.636 align:middle
+último que hay que hacer es que nuestro
+SightingScorer soporte el uso de ambas interfaces
+
+00:04:00.846 --> 00:04:06.896 align:middle
+repitiendo el truco de inyectar una colección
+de servicios para ScoreAdjusterInterface. En
+
+00:04:07.606 --> 00:04:12.056 align:middle
+otras palabras, ahora vamos a inyectar
+un iterable de factores de puntuación
+
+00:04:12.256 --> 00:04:15.376 align:middle
+y un segundo iterable de
+ajustadores de puntuación.
+
+00:04:15.376 --> 00:04:19.066 align:middle
+Empieza en: src/Kernel.php.
+
+00:04:19.066 --> 00:04:21.296 align:middle
+Copiamos el registerForAutoConfiguration()...
+
+00:04:21.296 --> 00:04:27.166 align:middle
+y vamos a repetir lo mismo, pero
+esta vez para ScoreAdjusterInterface
+
+00:04:27.386 --> 00:04:29.726 align:middle
+y llamaremos a la etiqueta scoring.adjuster.
+
+00:04:30.606 --> 00:04:36.836 align:middle
+A continuación, en services.yaml, abajo en nuestro
+servicio, copia el argumento $scoringFactors,
+
+00:04:37.446 --> 00:04:44.496 align:middle
+pégalo, renómbralo a $scoringAdjusters y utiliza
+el nuevo nombre de la etiqueta: scoring.adjuster.
+
+00:04:45.446 --> 00:04:48.526 align:middle
+Copia ese nombre de argumento
+y dirígete a SightingScorer.
+
+00:04:49.386 --> 00:04:51.896 align:middle
+Añade esto como un segundo argumento iterable.
+
+00:04:52.746 --> 00:04:57.216 align:middle
+Luego pulsa Alt + Enter y ve a Inicializar
+Propiedades para crear esa propiedad y establecerla.
+
+00:04:57.856 --> 00:05:02.006 align:middle
+Robaré el PHPDoc de encima de la
+antigua propiedad para que mi editor sepa
+
+00:05:02.116 --> 00:05:07.476 align:middle
+que esto contendrá un iterable
+de objetos ScoreAdjusterInterface.
+
+00:05:07.476 --> 00:05:09.636 align:middle
+Ahora haz un bucle sobre estos en su lugar.
+
+00:05:10.346 --> 00:05:13.456 align:middle
+Ya puedes ver que PhpStorm no está contento
+
+00:05:13.456 --> 00:05:17.476 align:middle
+porque no hay un método adjustScore()
+en los factores de puntuación.
+
+00:05:18.246 --> 00:05:20.326 align:middle
+Cambia esto por $scoringAdjusters...
+
+00:05:20.986 --> 00:05:25.416 align:middle
+y cambia el nombre de la variable
+a $scoringAdjuster aquí y aquí.
+
+00:05:26.616 --> 00:05:33.376 align:middle
+Ya está Hemos hecho nuestra interfaz más pequeña, lo
+que nos ha permitido eliminar todos los métodos ficticios.
+
+00:05:33.376 --> 00:05:38.656 align:middle
+Así que, aparte de vernos obligados
+a crear métodos ficticios sólo
+
+00:05:38.656 --> 00:05:44.156 align:middle
+para contentar a una interfaz, ¿por
+qué deberíamos preocuparnos por el ISP?
+
+00:05:44.156 --> 00:05:45.926 align:middle
+Se me ocurren tres razones.
+
+00:05:45.926 --> 00:05:48.056 align:middle
+La primera es la denominación.
+
+00:05:48.556 --> 00:05:53.886 align:middle
+Si tienes una clase demasiado grande o
+una interfaz como la de nuestro ejemplo,
+
+00:05:53.886 --> 00:05:56.836 align:middle
+dividirla en trozos más pequeños te permite
+
+00:05:56.836 --> 00:06:01.336 align:middle
+dar a cada uno un nombre más descriptivo
+que se ajuste a sus propósitos.
+
+00:06:02.076 --> 00:06:04.066 align:middle
+Podemos ver esto en SightingScorer.
+
+00:06:04.906 --> 00:06:10.186 align:middle
+Ahora estamos trabajando con ajustadores de
+puntuación, lo que describe mejor el propósito
+
+00:06:10.186 --> 00:06:13.256 align:middle
+de esos servicios que un simple
+"factor de puntuación "...
+
+00:06:13.336 --> 00:06:14.896 align:middle
+que hace varias cosas.
+
+00:06:15.676 --> 00:06:18.486 align:middle
+La segunda es que el ISP es una buena señal
+
+00:06:18.706 --> 00:06:22.026 align:middle
+de que puedes estar violando el
+principio de responsabilidad única.
+
+00:06:22.026 --> 00:06:27.706 align:middle
+Si notas que a menudo sólo llamas
+a uno o dos métodos de una clase...
+
+00:06:27.846 --> 00:06:33.486 align:middle
+pero no a sus otros métodos públicos,
+eso es una violación del ISP.
+
+00:06:33.486 --> 00:06:37.406 align:middle
+Esto te obliga a pensar en las
+responsabilidades de esa clase,
+
+00:06:37.946 --> 00:06:43.176 align:middle
+lo que puede hacer que te organices en clases más
+pequeñas en función de esas responsabilidades.
+
+00:06:44.046 --> 00:06:48.826 align:middle
+La tercera razón por la que deberíamos preocuparnos
+por el ISP es que mantiene tus dependencias más ligeras.
+
+00:06:49.516 --> 00:06:56.056 align:middle
+No lo hemos visto en este ejemplo concreto, pero sí
+lo hemos visto antes cuando hemos hablado de SRP.
+
+00:06:56.726 --> 00:06:57.816 align:middle
+En ese caso...
+
+00:06:58.216 --> 00:07:01.026 align:middle
+déjame que cierre todas mis clases...
+
+00:07:01.736 --> 00:07:07.926 align:middle
+dividimos una clase UserManager en dos
+partes: UserManager y ConfirmationEmailSender.
+
+00:07:08.376 --> 00:07:14.496 align:middle
+El método send() simplemente envía el correo electrónico de
+confirmación, y lo utilizamos tanto después de la inscripción
+
+00:07:14.906 --> 00:07:18.166 align:middle
+como cuando solicitamos
+un reenvío de ese correo.
+
+00:07:18.166 --> 00:07:23.016 align:middle
+Si hubiéramos mantenido estas dos funciones
+públicas dentro de UserManager , el
+
+00:07:23.406 --> 00:07:27.056 align:middle
+reenvío de la confirmación
+habría sido una violación
+
+00:07:27.056 --> 00:07:29.526 align:middle
+del principio de segregación
+de interfaces. En ese caso,
+
+00:07:30.146 --> 00:07:34.976 align:middle
+sólo habríamos tenido que llamar a uno
+
+00:07:35.116 --> 00:07:38.046 align:middle
+de los dos métodos públicos de la clase.
+
+00:07:38.046 --> 00:07:44.506 align:middle
+Y, para reenviar el correo electrónico, Symfony
+tendría que instanciar una clase que depende,
+
+00:07:44.506 --> 00:07:47.896 align:middle
+por ejemplo, del servicio de
+codificación de contraseñas.
+
+00:07:48.806 --> 00:07:49.986 align:middle
+¿Por qué es un problema?
+
+00:07:50.516 --> 00:07:56.196 align:middle
+Bueno, es menor, pero esto obligaría a Symfony
+a inst anciar el codificador de contraseñas para
+
+00:07:56.196 --> 00:07:59.696 align:middle
+poder instanciar el UserManager...
+
+00:08:00.146 --> 00:08:03.156 align:middle
+para que pudiéramos enviar
+un correo de confirmación...
+
+00:08:03.746 --> 00:08:06.926 align:middle
+pero nunca utilizaríamos realmente
+el codificador de contraseñas.
+
+00:08:07.436 --> 00:08:09.196 align:middle
+¡Eso es un desperdicio de recursos! De
+
+00:08:10.116 --> 00:08:17.286 align:middle
+todos modos, el tl;dr sobre el principio de segregación
+de la interfaz es el siguiente: cuando tienes una interfaz
+
+00:08:17.476 --> 00:08:21.276 align:middle
+con un método que no todas
+sus clases necesitan...
+
+00:08:21.746 --> 00:08:28.776 align:middle
+o si tienes una clase en la que utilizas habitualmente
+sólo algunos de sus métodos públicos...
+
+00:08:29.346 --> 00:08:32.936 align:middle
+puede ser el momento de dividirla
+en trozos más pequeños.
+
+00:08:33.546 --> 00:08:38.416 align:middle
+O, más sencillamente, puedes acordarte
+de no construir clases gigantescas.
+
+00:08:38.946 --> 00:08:42.386 align:middle
+Pero, como todo, no es una regla absoluta.
+
+00:08:43.236 --> 00:08:49.516 align:middle
+Si tuviera, por ejemplo, un GitHubApiClient
+que me ayudara a hablar con la API de GitHub...
+
+00:08:49.516 --> 00:08:54.556 align:middle
+Podría estar bien poniendo
+5 métodos en este servicio,
+
+00:08:55.076 --> 00:08:59.276 align:middle
+aunque habitualmente sólo utilice
+uno o dos de ellos a la vez.
+
+00:08:59.276 --> 00:09:02.976 align:middle
+Después de todo, el nombre de la
+clase sigue siendo bastante claro...
+
+00:09:03.466 --> 00:09:08.676 align:middle
+y tener más métodos probablemente
+no aumenta el número de dependencias
+
+00:09:08.816 --> 00:09:11.156 align:middle
+que necesito inyectar en ese servicio.
+
+00:09:11.156 --> 00:09:15.216 align:middle
+Siguiente: ¡pasamos al
+principio número cinco!
+
+00:09:15.846 --> 00:09:19.236 align:middle
+Y éste sí que me hizo
+girar la cabeza al principio.
+
+00:09:19.546 --> 00:09:22.426 align:middle
+Es: ¡el principio de
+inversión de la dependencia!
