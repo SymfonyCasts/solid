@@ -1,0 +1,330 @@
+WEBVTT
+
+00:00:01.006 --> 00:00:04.316 align:middle
+Nuestro código, concretamente
+el de estas dos clases,
+
+00:00:04.616 --> 00:00:07.676 align:middle
+no sigue el principio de
+inversión de la dependencia.
+
+00:00:08.476 --> 00:00:13.276 align:middle
+¿Por qué no? Repasemos las dos
+partes de la definición, una por una.
+
+00:00:13.986 --> 00:00:19.326 align:middle
+La primera parte es: Los módulos de alto
+nivel no deben depender de los de bajo nivel.
+
+00:00:19.816 --> 00:00:23.996 align:middle
+Ambos deben depender de abstracciones,
+por ejemplo, de interfaces.
+
+00:00:24.906 --> 00:00:28.176 align:middle
+Es una forma elegante de decir
+que las clases deben depender
+
+00:00:28.176 --> 00:00:31.686 align:middle
+de interfaces en lugar de clases concretas.
+
+00:00:32.316 --> 00:00:34.926 align:middle
+¡Sí! Esta parte de la
+regla es así de sencilla.
+
+00:00:35.686 --> 00:00:39.516 align:middle
+Dice que, en lugar de indicar el
+tipo -es decir, "depender de"-
+
+00:00:39.746 --> 00:00:45.116 align:middle
+de la clase concreta RegexSpamWordHelper,
+debemos indicar el tipo de una interfaz.
+
+00:00:45.976 --> 00:00:49.056 align:middle
+¡De acuerdo! Así que sólo tenemos
+que crear una nueva interfaz,
+
+00:00:49.276 --> 00:00:52.616 align:middle
+hacer que RegexSpamWordHelper
+implemente la interfaz, y
+
+00:00:53.116 --> 00:00:57.026 align:middle
+luego cambiar la sugerencia de tipo
+para utilizar esa interfaz, ¿verdad?
+
+00:00:57.616 --> 00:00:59.216 align:middle
+Sí, ¡exactamente!
+
+00:00:59.946 --> 00:01:04.506 align:middle
+Pero... la segunda parte del DIP nos dice algo
+
+00:01:04.506 --> 00:01:08.566 align:middle
+sobre cómo debemos crear
+y diseñar esa interfaz.
+
+00:01:09.116 --> 00:01:14.046 align:middle
+Esa parte dice Las abstracciones
+no deben depender de los detalles.
+
+00:01:14.806 --> 00:01:20.306 align:middle
+Los detalles -que son implementaciones
+concretas- deben depender de las abstracciones.
+
+00:01:21.106 --> 00:01:26.646 align:middle
+Simplificamos esto a: Una interfaz debe ser
+diseñada por la clase que la utilizará,
+
+00:01:27.046 --> 00:01:29.396 align:middle
+no por la clase que la implementará.
+
+00:01:30.306 --> 00:01:31.156 align:middle
+Me explico. La
+
+00:01:31.816 --> 00:01:36.036 align:middle
+forma más natural de crear la nueva
+interfaz sería fijarse en la clase que
+
+00:01:36.036 --> 00:01:42.666 align:middle
+la implementará -así que RegexSpamWordHelper
+- y crear una interfaz que se ajuste a ella
+
+00:01:43.116 --> 00:01:50.146 align:middle
+Así que un RegexSpamWordHelperInterface
+con un método getMatchedSpamWords().
+
+00:01:50.596 --> 00:01:56.686 align:middle
+Ya está Pero al hacer esto, estamos permitiendo
+que la interfaz sea , en cierto modo,
+
+00:01:56.906 --> 00:02:02.976 align:middle
+"propiedad" de la clase de nivel inferior,
+a veces conocida como clase "detalles".
+
+00:02:03.756 --> 00:02:08.666 align:middle
+En otras palabras, el aspecto de la
+interfaz está "controlado" por la clase
+
+00:02:08.906 --> 00:02:12.906 align:middle
+por la clase de nivel infer
+ior RegexSpamWordHelper.
+
+00:02:13.756 --> 00:02:18.876 align:middle
+Pero el DIP dice que la clase de nivel superior
+- CommentSpamManager - debe encargarse de
+
+00:02:18.876 --> 00:02:26.946 align:middle
+crear la interfaz, permitiéndole
+diseñar su dependencia justo como quiere.
+
+00:02:27.866 --> 00:02:29.356 align:middle
+Pongamos esto en práctica.
+
+00:02:29.856 --> 00:02:35.326 align:middle
+Si te fijas en CommentSpamManager, lo único que
+necesita realmente es poder llamar a un método
+
+00:02:35.746 --> 00:02:38.806 align:middle
+que devuelva el número de palabras de spam...
+
+00:02:39.386 --> 00:02:45.206 align:middle
+porque ese recuento es, en última instancia, lo único que utilizamos:
+en realidad no necesitamos las palabras coincidentes en sí.
+
+00:02:45.936 --> 00:02:52.166 align:middle
+Así que en el directorio Comment/, que estoy
+utilizando para resaltar que esta interfaz es propiedad
+
+00:02:52.306 --> 00:02:58.856 align:middle
+de CommentSpamManager, crea una nueva interfaz:
+selecciona la clase PHP, cambia a interfaz
+
+00:02:59.226 --> 00:03:03.186 align:middle
+y llámala, qué tal,
+CommentSpamCounterInterface.
+
+00:03:04.316 --> 00:03:09.636 align:middle
+Dentro, añade un método: la
+función pública countSpamWords(),
+
+00:03:10.006 --> 00:03:13.916 align:middle
+que aceptará el string
+$content y devolverá un int.
+
+00:03:14.646 --> 00:03:15.216 align:middle
+¡Qué bonito!
+
+00:03:16.106 --> 00:03:21.876 align:middle
+Fíjate en que sólo invirtiendo quién creemos
+que debe encargarse de crear la interfaz
+
+00:03:22.106 --> 00:03:26.186 align:middle
+-o quién debe "poseerla"- acabamos
+con un resultado muy diferente.
+
+00:03:26.926 --> 00:03:32.646 align:middle
+En lugar de obligar a la interfaz a parecerse
+a la clase de bajo nivel RegexSpamWordHelper,
+
+00:03:33.136 --> 00:03:39.236 align:middle
+ahora se va a obligar a esa clase a cambiarse
+a sí misma para implementar la interfaz.
+
+00:03:40.376 --> 00:03:45.476 align:middle
+Añade implementa CommentSpamCounterInterface,
+luego iré a Código -> Generar -
+
+00:03:45.476 --> 00:03:50.986 align:middle
+o Comando + N en un Mac - y seleccionaré
+"Implementar métodos" para generar countSpamWords().
+
+00:03:51.846 --> 00:03:57.106 align:middle
+Dentro, devuelve el count() de
+$this->getMatchedSpamWords($content). De
+
+00:03:58.046 --> 00:04:02.276 align:middle
+vuelta a CommentSpamManager, vamos
+a seguir la primera parte del DIP
+
+00:04:02.736 --> 00:04:05.506 align:middle
+y cambiar esto para que
+dependa de la nueva interfaz.
+
+00:04:06.386 --> 00:04:09.316 align:middle
+Cambia el tipo-indicación a
+CommentSpamCounterInterface...
+
+00:04:09.696 --> 00:04:11.456 align:middle
+cambiemos el tipo de la propiedad...
+
+00:04:12.016 --> 00:04:18.656 align:middle
+y cambiemos también el nombre de la propia propiedad
+para que sea más clara: llámala $spamWordCounter.
+
+00:04:19.246 --> 00:04:20.636 align:middle
+Cambia también el nombre del argumento.
+
+00:04:21.776 --> 00:04:26.496 align:middle
+Abajo, en validate(), cambia
+$badWordsOnComment por $badWordsCount.
+
+00:04:27.176 --> 00:04:32.346 align:middle
+Entonces, en lugar de llamar a getMatchedSpamWords(),
+llama al nuevo countSpamWords().
+
+00:04:33.116 --> 00:04:35.556 align:middle
+Abajo, ya no necesitamos el count():
+
+00:04:36.096 --> 00:04:40.386 align:middle
+sólo comprueba si $badWordsCount
+es mayor o igual que 2.
+
+00:04:41.146 --> 00:04:42.256 align:middle
+¡Enhorabuena!
+
+00:04:42.556 --> 00:04:47.446 align:middle
+¡Nuestro código sigue ahora las dos partes
+del principio de inversión de la dependencia!
+
+00:04:48.046 --> 00:04:54.286 align:middle
+Una, nuestra clase de alto nivel -
+CommentSpamManager - depende de una interfaz.
+
+00:04:54.846 --> 00:05:02.386 align:middle
+Y dos, esa interfaz fue diseñada para -y
+es controlada por- la clase de alto nivel,
+
+00:05:02.906 --> 00:05:06.106 align:middle
+en lugar de ser diseñada y
+controlada por la clase de bajo nivel,
+
+00:05:06.376 --> 00:05:09.296 align:middle
+o de "detalles": RegexSpamWordHelper.
+
+00:05:10.116 --> 00:05:11.856 align:middle
+Antes de hablar de las conclusiones
+
+00:05:11.916 --> 00:05:15.386 align:middle
+del principio de inversión de la
+dependencia, quiero mencionar dos cosas.
+
+00:05:16.116 --> 00:05:18.616 align:middle
+En primer lugar, en RegexSpamWordHelper, se
+
+00:05:19.006 --> 00:05:23.386 align:middle
+te permite tener esta función pública
+del método getMatchedSpamWords()
+
+00:05:23.716 --> 00:05:25.946 align:middle
+si la utilizas en otra parte de tu código.
+
+00:05:26.456 --> 00:05:30.006 align:middle
+Como no es así, voy a limpiar
+las cosas y hacer que sea private.
+
+00:05:30.976 --> 00:05:32.346 align:middle
+En segundo lugar... bueno...
+
+00:05:32.506 --> 00:05:37.846 align:middle
+esto es más bien una pregunta: ¿sabrá
+Symfony qué servicio debe autoconectar
+
+00:05:38.126 --> 00:05:41.166 align:middle
+cuando vea la sugerencia de tipo
+CommentSpamCounterInterface?
+
+00:05:41.836 --> 00:05:46.646 align:middle
+¿Sabrá que en realidad debe pasarnos
+el servicio RegexSpamWordHelper?
+
+00:05:47.476 --> 00:05:48.046 align:middle
+En realidad...
+
+00:05:48.356 --> 00:05:54.856 align:middle
+¡lo hará! Busca tu terminal y ejecútalo:
+php bin/console debug:autowiring Comment
+
+00:05:54.856 --> 00:05:59.276 align:middle
+--all Paso --all para que
+podamos ver todos los resultados.
+
+00:05:59.846 --> 00:06:01.526 align:middle
+Y... ¡esto lo demuestra! Como
+
+00:06:02.026 --> 00:06:06.916 align:middle
+muestra esto, cuando Symfony ve una sugerencia
+de tipo CommentSpamCounterInterface, se
+
+00:06:07.266 --> 00:06:11.366 align:middle
+autoconecta con el servicio
+RegexSpamWordHelper.
+
+00:06:12.256 --> 00:06:15.526 align:middle
+Esto funciona gracias a una bonita
+función dentro del contenedor de Symfony.
+
+00:06:16.306 --> 00:06:21.656 align:middle
+Si Symfony ve una interfaz en nuestro
+código - como CommentSpamCounterInterface -
+
+00:06:21.896 --> 00:06:27.596 align:middle
+y sólo una de nuestras clases la
+implementa, entonces asume automáticamente
+
+00:06:27.716 --> 00:06:30.956 align:middle
+que esta clase debe ser
+autocableada para esa interfaz.
+
+00:06:31.656 --> 00:06:35.286 align:middle
+Si creara una segunda clase que
+implement ara la interfaz, Symfony
+
+00:06:35.586 --> 00:06:41.896 align:middle
+lanzaría una clara excepción indicándonos
+que debemos elegir cuál autocablear.
+
+00:06:42.886 --> 00:06:48.286 align:middle
+A continuación: vamos a hablar de lo que se desprende del
+principio de inversión de la dependencia, y también...
+
+00:06:48.606 --> 00:06:52.226 align:middle
+lo que significa y no significa
+la palabra "inversión"
