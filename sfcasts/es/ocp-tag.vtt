@@ -1,0 +1,237 @@
+WEBVTT
+
+00:00:01.016 --> 00:00:05.186 align:middle
+Cuando fuimos a la página de "envío",
+nos encontramos con un error gigantesco.
+
+00:00:05.536 --> 00:00:10.716 align:middle
+Lo más relevante es el medio No se puede
+autoconducir el servicio SightingScorer, el
+
+00:00:10.956 --> 00:00:15.126 align:middle
+argumento $scoringFactors del método
+__construct es un array de tipo.
+
+00:00:15.916 --> 00:00:18.356 align:middle
+Debes configurar su valor explícitamente.
+
+00:00:18.906 --> 00:00:19.736 align:middle
+¡Eso tiene sentido!
+
+00:00:20.146 --> 00:00:25.156 align:middle
+No le hemos dicho a Symfony qué debe
+pasar al nuevo argumento de SightingScorer.
+
+00:00:25.906 --> 00:00:27.676 align:middle
+¿Qué queremos pasar ahí?
+
+00:00:28.396 --> 00:00:31.886 align:middle
+Un array con todos nuestros
+servicios de "factor de puntuación".
+
+00:00:32.646 --> 00:00:38.676 align:middle
+La forma más sencilla de hacerlo es
+configurarlo manualmente en config/services.yaml.
+
+00:00:39.346 --> 00:00:44.366 align:middle
+En la parte inferior, queremos configurar
+el serv icio App\Service\SightingScorer...
+
+00:00:44.366 --> 00:00:51.286 align:middle
+y queremos controlar su arguments:,
+concretamente este argumento $scoringFactors.
+
+00:00:51.846 --> 00:00:58.536 align:middle
+Copia eso, pégalo y esto será un array:
+Utilizaré la sintaxis de varias líneas.
+
+00:00:59.266 --> 00:01:03.516 align:middle
+Cada entrada del array será uno de los
+servicios del factor de puntuación.
+
+00:01:03.976 --> 00:01:09.276 align:middle
+Así que @App\Scoring\TitleFactor,
+copia eso, peg a...
+
+00:01:09.716 --> 00:01:11.256 align:middle
+arregla la sangría...
+
+00:01:11.906 --> 00:01:15.796 align:middle
+y pasa DescriptionFactor y CoordinatesFactor.
+
+00:01:16.646 --> 00:01:21.216 align:middle
+Así pasarás un array con estos
+tres objetos de servicio dentro.
+
+00:01:21.906 --> 00:01:22.486 align:middle
+Inténtalo de nuevo.
+
+00:01:22.916 --> 00:01:23.916 align:middle
+Actualiza y...
+
+00:01:24.776 --> 00:01:26.346 align:middle
+el error ha desaparecido...
+
+00:01:26.976 --> 00:01:29.246 align:middle
+y ahora nos lleva a la
+página de inicio de sesión.
+
+00:01:30.016 --> 00:01:34.456 align:middle
+Copia el correo electrónico anterior, introduce
+la contraseña, pulsa "iniciar sesión" y...
+
+00:01:34.986 --> 00:01:35.686 align:middle
+¡bien!
+
+00:01:36.046 --> 00:01:37.376 align:middle
+La página se carga.
+
+00:01:38.306 --> 00:01:39.086 align:middle
+Vamos a intentarlo.
+
+00:01:39.746 --> 00:01:43.346 align:middle
+Rellena los detalles de tu interacción
+más reciente con el Pie grande.
+
+00:01:43.916 --> 00:01:49.546 align:middle
+Ah, pero antes de enviar esto, voy a añadir
+algunas palabras clave a la descripción
+
+00:01:49.786 --> 00:01:52.506 align:middle
+que sé que busca nuestro
+factor de puntuación.
+
+00:01:53.516 --> 00:01:54.496 align:middle
+Envíalo y...
+
+00:01:55.186 --> 00:02:00.016 align:middle
+¡funciona! Ah, tío, ¿¡una
+puntuación de credibilidad de sólo 10!?
+
+00:02:00.546 --> 00:02:01.996 align:middle
+Realmente pensé que era un Pie grande.
+
+00:02:02.946 --> 00:02:07.256 align:middle
+Antes de hablar más de OCP,
+a nivel técnico, de Symfony,
+
+00:02:07.536 --> 00:02:10.646 align:middle
+hay otra forma de inyectar estos servicios.
+
+00:02:11.056 --> 00:02:13.126 align:middle
+Se llama "iterador etiquetado"...
+
+00:02:13.446 --> 00:02:15.166 align:middle
+y es una idea muy interesante.
+
+00:02:16.016 --> 00:02:19.146 align:middle
+También se utiliza habitualmente
+en el propio núcleo de Symfony.
+
+00:02:20.086 --> 00:02:22.956 align:middle
+Abre src/Kernel.php.
+
+00:02:22.956 --> 00:02:25.216 align:middle
+Lo sé, casi nunca abrimos este archivo.
+
+00:02:25.846 --> 00:02:31.436 align:middle
+Dentro, ve a Código -> Generar, o Comando
++ N en un Mac, y selecciona Anular métodos.
+
+00:02:32.086 --> 00:02:34.006 align:middle
+Anula uno llamado build()...
+
+00:02:34.576 --> 00:02:35.436 align:middle
+déjame encontrarlo.
+
+00:02:35.946 --> 00:02:36.446 align:middle
+Ahí está.
+
+00:02:37.306 --> 00:02:42.696 align:middle
+Se trata de un gancho en el que podemos realizar un
+procesamiento adicional en el contenedor mientras se construye.
+
+00:02:43.436 --> 00:02:44.906 align:middle
+El método padre está vacío...
+
+00:02:44.906 --> 00:02:46.506 align:middle
+pero dejaré la llamada al padre.
+
+00:02:47.326 --> 00:02:50.156 align:middle
+Añade
+$container->registerForAutoconfiguration(),
+
+00:02:50.616 --> 00:02:58.286 align:middle
+pasa este ScoringFactorInterface::class, y
+luego ->addTag('scoring.factor'). Gracias
+
+00:02:59.216 --> 00:03:03.986 align:middle
+a esto, cualquier servicio autoconfigurable,
+que son todos nuestros servicios,
+
+00:03:04.386 --> 00:03:11.286 align:middle
+que implemente ScoringFactorInterface, se
+etiquetará automáticamente con scoring.factor.
+
+00:03:12.216 --> 00:03:16.336 align:middle
+Ese scoring.factor es un nombre
+que me acabo de inventar.
+
+00:03:17.346 --> 00:03:21.376 align:middle
+Esta línea, por sí sola,
+no hará ningún cambio real.
+
+00:03:21.776 --> 00:03:28.746 align:middle
+Pero ahora, de vuelta en services.yaml podemos
+simplificar: establece el argumento $scoringFactors
+
+00:03:28.746 --> 00:03:36.256 align:middle
+con una sintaxis YAML especial:
+!tagged_iterator scoring.factor.
+
+00:03:37.016 --> 00:03:41.756 align:middle
+Esto dice: por favor, inyecta todos los servicios
+que estén etiquetados con scoring.factor.
+
+00:03:42.486 --> 00:03:47.366 align:middle
+Así, la autoconfiguración añade la etiqueta
+a nuestros servicios de factor de puntuación...
+
+00:03:47.986 --> 00:03:50.286 align:middle
+y esto se encarga de pasarlos.
+
+00:03:50.846 --> 00:03:51.636 align:middle
+Bastante bien, ¿verdad?
+
+00:03:52.446 --> 00:03:58.556 align:middle
+El único problema es que tenemos que cambiar el tipo de
+sugerencia en SightingScorer para que sea un iterable.
+
+00:03:59.386 --> 00:04:01.326 align:middle
+Esto no nos pasará un array...
+
+00:04:01.686 --> 00:04:04.596 align:middle
+pero nos pasará algo sobre
+lo que podemos foreach. Como
+
+00:04:05.206 --> 00:04:12.656 align:middle
+ventaja, es un iterable "perezoso": los servicios
+del factor de puntuación no se instanciarán
+
+00:04:12.926 --> 00:04:16.536 align:middle
+hasta que ejecutemos el foreach.
+
+00:04:17.256 --> 00:04:19.996 align:middle
+Ah, y cambia también el
+tipo de propiedad a iterable.
+
+00:04:20.986 --> 00:04:27.016 align:middle
+A continuación: ahora que entendemos el tipo de
+cambio que OCP quiere que hagamos en nuestro código,
+
+00:04:27.386 --> 00:04:30.426 align:middle
+hablemos de por qué
+debería importarnos -o no-
+
+00:04:30.426 --> 00:04:34.996 align:middle
+OCP y de cuándo deberíamos seguirlo o no
