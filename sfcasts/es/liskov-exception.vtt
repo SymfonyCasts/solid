@@ -1,0 +1,346 @@
+WEBVTT
+
+00:00:01.006 --> 00:00:06.146 align:middle
+Pasemos a nuestro primer ejemplo, en el que
+aprenderemos cómo podemos violar el principio de Liskov
+
+00:00:06.546 --> 00:00:09.056 align:middle
+Y... quizá más importante, por qué...
+
+00:00:09.056 --> 00:00:10.996 align:middle
+no es tan buena idea.
+
+00:00:11.926 --> 00:00:17.276 align:middle
+En el directorio src/Scoring/, crea una nueva clase
+de factor de puntuación llamada PhotoFactor...
+
+00:00:18.736 --> 00:00:21.966 align:middle
+y haz que implemente el ScoringFactorInterface.
+
+00:00:22.776 --> 00:00:28.726 align:middle
+Por fin cumpliremos la petición de cambio que hemos
+recibido antes: añadir un factor de puntuación
+
+00:00:28.726 --> 00:00:31.276 align:middle
+que lea las imágenes de cada avistamiento.
+
+00:00:31.276 --> 00:00:34.516 align:middle
+Gracias a nuestro trabajo con
+el principio de abierto-cerrado,
+
+00:00:34.846 --> 00:00:39.006 align:middle
+ahora podemos añadir este factor de
+puntuación sin tocar SightingScorer.
+
+00:00:39.786 --> 00:00:44.786 align:middle
+Y para ser más guay, gracias a esta
+cosa de tagged_iterator en services.yaml,
+
+00:00:45.346 --> 00:00:50.196 align:middle
+el nuevo servicio PhotoFactor se pasará
+instantáneamente a SightingScorer.
+
+00:00:50.546 --> 00:00:56.146 align:middle
+¡Sí! En PhotoFactor, ve a Código
+-> Generar -o Comando + N en un Mac-
+
+00:00:56.346 --> 00:00:59.766 align:middle
+y selecciona "Implementar métodos"
+para generar el método score().
+
+00:01:00.346 --> 00:01:02.306 align:middle
+Dentro, pegaré algo de código.
+
+00:01:03.246 --> 00:01:06.276 align:middle
+Es bastante sencillo: hacemos
+un bucle sobre las imágenes...
+
+00:01:06.576 --> 00:01:11.106 align:middle
+y hacemos como si las analizáramos
+de una forma súper avanzada.
+
+00:01:11.476 --> 00:01:13.276 align:middle
+Shh, no se lo digas a nuestros usuarios.
+
+00:01:14.106 --> 00:01:17.586 align:middle
+Ah, y si no hay imágenes para este
+avistamiento, lanzamos una excepción.
+
+00:01:18.396 --> 00:01:19.536 align:middle
+¡Genial! Vamos a probarlo.
+
+00:01:20.076 --> 00:01:27.576 align:middle
+Vuelve a nuestra página de inicio, haz clic para
+añadir una nueva entrada y rellena algunos detalles.
+
+00:01:30.146 --> 00:01:32.246 align:middle
+Dejaré las imágenes vacías para simplificar.
+
+00:01:32.746 --> 00:01:34.276 align:middle
+Y... ¡ah!
+
+00:01:34.976 --> 00:01:36.296 align:middle
+¡Un error 500!
+
+00:01:36.846 --> 00:01:38.566 align:middle
+¡Esa es nuestra nueva excepción!
+
+00:01:38.836 --> 00:01:40.306 align:middle
+¡Hemos roto nuestra aplicación!
+
+00:01:40.306 --> 00:01:44.826 align:middle
+¡Y se ha roto porque hemos
+violado el principio de Liskov!
+
+00:01:45.336 --> 00:01:47.746 align:middle
+¡Intentó advertirnos!
+
+00:01:47.746 --> 00:01:52.556 align:middle
+Nuestra nueva clase -o subtipo- de factor de
+puntuación, para usar la palabra más técnica,
+
+00:01:52.946 --> 00:01:57.256 align:middle
+acaba de hacer algo inesperado:
+¡lanzó una excepción!
+
+00:01:58.076 --> 00:02:01.006 align:middle
+Una forma de arreglar esto, que
+puede parecer una tontería...
+
+00:02:01.006 --> 00:02:03.316 align:middle
+pero hay una razón por la
+que estamos haciendo esto...
+
+00:02:03.746 --> 00:02:08.536 align:middle
+es añadir algo de código condicional
+dentro de SightingScorer. Si a
+
+00:02:09.346 --> 00:02:12.646 align:middle
+PhotoFactor no le gustan los
+avistamientos con cero imágenes,
+
+00:02:12.976 --> 00:02:16.036 align:middle
+¡simplemente saltemos ese factor
+cuando eso ocurra! Dentro de
+
+00:02:16.976 --> 00:02:23.326 align:middle
+foreach, si ScoringFactor es un
+instanceof PhotoFactor y la cuenta
+
+00:02:23.326 --> 00:02:28.856 align:middle
+de $sighting->getImages() es
+igual a cero, entonces continue.
+
+00:02:29.746 --> 00:02:34.676 align:middle
+Además de no ser la mejor manera de
+arreglar esto -más sobre esto en un minuto-,
+
+00:02:35.236 --> 00:02:38.026 align:middle
+esto también viola el
+principio de abierto-cerrado.
+
+00:02:38.746 --> 00:02:45.056 align:middle
+Pero... sí arregla las cosas: si
+volvemos a enviar el formulario...
+
+00:02:45.056 --> 00:02:46.156 align:middle
+¡nuestra aplicación vuelve a funcionar!
+
+00:02:46.876 --> 00:02:48.606 align:middle
+Pero... retrocedamos.
+
+00:02:49.096 --> 00:02:50.896 align:middle
+Abrir ScoringFactorInterface.
+
+00:02:51.516 --> 00:02:58.476 align:middle
+A diferencia de los tipos de argumento y los tipos
+de retorno, en PHP no hay forma de codificar si
+
+00:02:58.476 --> 00:03:04.436 align:middle
+un método debe lanzar una excepción o no,
+ni qué tipos de excepción deben utilizarse.
+
+00:03:05.076 --> 00:03:10.136 align:middle
+Pero esto puede, al menos, describirse
+en la documentación sobre el método...
+
+00:03:10.476 --> 00:03:12.206 align:middle
+que nos hemos saltado por completo
+
+00:03:12.876 --> 00:03:13.636 align:middle
+Vamos a completarla.
+
+00:03:14.176 --> 00:03:18.146 align:middle
+No necesitamos el @return ni el
+@param porque son redundantes...
+
+00:03:18.676 --> 00:03:22.026 align:middle
+a no ser que queramos añadir algo más
+de información sobre su significado.
+
+00:03:22.716 --> 00:03:24.246 align:middle
+Añadiré una rápida descripción...
+
+00:03:24.246 --> 00:03:32.036 align:middle
+y luego vamos a ser muy claros sobre el
+comportamiento de las excepciones que esperamos:
+
+00:03:32.846 --> 00:03:36.346 align:middle
+Este método no debe lanzar una excepción
+por ningún motivo normal. En el
+
+00:03:37.216 --> 00:03:41.226 align:middle
+mundo real, si un método
+puede lanzar una excepción
+
+00:03:41.346 --> 00:03:48.106 align:middle
+cuando se produce alguna situación esperada,
+normalmente verás un @throws que lo describe.
+
+00:03:48.786 --> 00:03:52.806 align:middle
+Y si no lo ves, puedes asumir que no está permitido
+lanzar una excepción por ninguna situación normal.
+
+00:03:52.806 --> 00:03:55.786 align:middle
+De
+
+00:03:56.646 --> 00:03:59.186 align:middle
+todos modos, ahora que hemos aclarado esto, es
+
+00:03:59.646 --> 00:04:06.216 align:middle
+fácil ver que nuestro PhotoFactor rompe el principio
+de Liskov: PhotoFactor se comporta de una manera
+
+00:04:06.216 --> 00:04:09.526 align:middle
+que la clase que lo utiliza - SightingScorer,
+
+00:04:09.786 --> 00:04:13.916 align:middle
+a veces llamada "clase cliente" - no esperaba.
+
+00:04:14.776 --> 00:04:19.636 align:middle
+Ese "mal comportamiento" hizo que tuviéramos
+que hackear este código para que funcionara.
+
+00:04:20.416 --> 00:04:25.976 align:middle
+Otra forma de pensarlo, que explica por qué
+se llama principio de sustitución de Liskov
+
+00:04:25.976 --> 00:04:31.866 align:middle
+, es que, si algo de nuestro código
+depende de un objeto ScoringFactorInterface
+
+00:04:32.276 --> 00:04:38.726 align:middle
+-como DescriptionFactor - no podríamos
+"reemplazar" o "sustituir" ese objeto
+
+00:04:38.766 --> 00:04:41.756 align:middle
+por nuestro PhotoFactor sin romper las cosas.
+
+00:04:41.756 --> 00:04:47.936 align:middle
+Si este aspecto de la sustitución todavía
+no tiene mucho sentido, no te preocupes.
+
+00:04:48.276 --> 00:04:51.086 align:middle
+Nuestro siguiente ejemplo
+lo ilustrará aún mejor.
+
+00:04:51.086 --> 00:04:56.346 align:middle
+Así que: hemos violado el principio
+de Liskov lanzando una excepción.
+
+00:04:56.946 --> 00:05:03.456 align:middle
+Y luego, he trabajado perezosamente alrededor del problema
+añadiendo algo de código instanceof a SightingScorer...
+
+00:05:03.846 --> 00:05:07.426 align:middle
+para que funcione literalmente
+"alrededor" del problema.
+
+00:05:08.276 --> 00:05:12.356 align:middle
+Cuando tienes un instanceof condicional
+como éste, suele ser una señal
+
+00:05:12.356 --> 00:05:17.496 align:middle
+de que estás violando Liskov, porque significa
+que tienes una implementación específica
+
+00:05:17.496 --> 00:05:21.926 align:middle
+de una clase o interfaz que se
+comporta de forma diferente al resto...
+
+00:05:22.376 --> 00:05:24.506 align:middle
+para lo que tienes que codificar.
+
+00:05:24.506 --> 00:05:30.616 align:middle
+Así que vamos a eliminar esto: quita la
+sentencia if e incluso vamos a limpiar
+
+00:05:30.616 --> 00:05:32.876 align:middle
+la sentencia extra use de la parte superior.
+
+00:05:33.646 --> 00:05:38.826 align:middle
+Ahora que hemos aclarado que el método
+score() no debe lanzar una excepción
+
+00:05:38.826 --> 00:05:41.836 align:middle
+en situaciones normales, la
+verdadera solución es...
+
+00:05:42.056 --> 00:05:45.686 align:middle
+algo obvio: ¡deja de lanzar la excepción!
+
+00:05:46.246 --> 00:05:48.726 align:middle
+Sustituye la excepción por return 0.
+
+00:05:49.276 --> 00:05:50.206 align:middle
+Y ya está.
+
+00:05:50.746 --> 00:05:55.076 align:middle
+Ahora la clase actúa como
+esperamos: sin sorpresas. Por
+
+00:05:55.976 --> 00:06:00.126 align:middle
+cierto, todo esto no significa que sea ilegal
+
+00:06:00.126 --> 00:06:03.436 align:middle
+que nuestro método score()
+lance alguna vez una excepción.
+
+00:06:03.436 --> 00:06:08.646 align:middle
+Si el método, por ejemplo, necesitara
+consultar una base de datos...
+
+00:06:08.646 --> 00:06:11.136 align:middle
+y la conexión a la base de
+datos estuviera caída...
+
+00:06:11.576 --> 00:06:12.056 align:middle
+entonces, ¡sí!
+
+00:06:12.586 --> 00:06:14.686 align:middle
+¡Deberías lanzar una excepción!
+
+00:06:15.046 --> 00:06:17.886 align:middle
+Esa es una situación inesperada.
+
+00:06:18.646 --> 00:06:23.366 align:middle
+Pero para todos los casos normales,
+esperados, debemos seguir las reglas
+
+00:06:23.366 --> 00:06:26.016 align:middle
+de nuestra clase o interfaz madre.
+
+00:06:26.016 --> 00:06:29.986 align:middle
+A continuación, veamos otro
+ejemplo del principio de Liskov
+
+00:06:30.246 --> 00:06:33.466 align:middle
+en el que creamos una subclase
+de una clase existente...
+
+00:06:33.816 --> 00:06:38.986 align:middle
+y luego la sustituimos secretamente
+en nuestro sistema sin romper nada.
+
+00:06:39.746 --> 00:06:41.626 align:middle
+¡Liskov estaría muy orgulloso!
