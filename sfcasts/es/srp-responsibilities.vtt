@@ -1,0 +1,312 @@
+WEBVTT
+
+00:00:01.006 --> 00:00:05.376 align:middle
+Nos acaban de informar
+de que, de vez en cuando,
+
+00:00:05.376 --> 00:00:09.606 align:middle
+nuestro correo electrónico de confirmación no
+llega a la bandeja de entrada de nuestros usuarios
+
+00:00:09.896 --> 00:00:14.446 align:middle
+Así que tenemos que implementar
+una función de reenvío.
+
+00:00:15.256 --> 00:00:16.806 align:middle
+Esto debería ser fácil, ¿verdad?
+
+00:00:17.286 --> 00:00:20.566 align:middle
+Después de todo, hemos
+encapsulado toda nuestra lógica
+
+00:00:20.566 --> 00:00:23.976 align:middle
+para enviar un correo electrónico
+de confirmación en un método.
+
+00:00:24.616 --> 00:00:25.446 align:middle
+Pero... hmm.
+
+00:00:26.286 --> 00:00:32.496 align:middle
+Para que esto funcione, probablemente tendremos
+que extraer parte del método register()
+
+00:00:32.966 --> 00:00:38.216 align:middle
+en una función pública separada para que podamos
+simplemente reenviar el correo electrónico...
+
+00:00:38.816 --> 00:00:42.556 align:middle
+sin tener que crear también un nuevo
+token y volver a introducir la contraseña.
+
+00:00:43.496 --> 00:00:45.066 align:middle
+¿No es un poco raro...
+
+00:00:45.446 --> 00:00:47.686 align:middle
+o al menos "no es lo ideal"...
+
+00:00:48.146 --> 00:00:54.016 align:middle
+que para añadir esta función de "reen vío
+de correo electrónico" vayamos a trastear
+
+00:00:54.216 --> 00:00:59.656 align:middle
+y reorganizar el código que se ocupa de hacer hash de
+las contraseñas y de persistir los datos del usuario?
+
+00:01:00.606 --> 00:01:05.796 align:middle
+En un mundo perfecto, ¿no debería poder crear
+esta función de "reenvío de correo electrónico"
+
+00:01:06.176 --> 00:01:11.226 align:middle
+sin acercarme al código que no está
+relacionado con esta funcionalidad?
+
+00:01:11.876 --> 00:01:14.916 align:middle
+Esto es lo que intenta ayudarnos SRP.
+
+00:01:15.706 --> 00:01:23.306 align:middle
+En ese mundo "perfecto" de SRP, cada vez que se solicite
+un cambio en nuestro proyecto, sólo tendríamos
+
+00:01:23.306 --> 00:01:29.146 align:middle
+que tocar el código directamente relacionado
+con ese cambio: no tendríamos que cambiar
+
+00:01:29.466 --> 00:01:32.756 align:middle
+-ni siquiera trabajar cerca-
+de código no relacionado.
+
+00:01:33.576 --> 00:01:37.376 align:middle
+El hecho de que tengamos que
+modificar un método que también se
+
+00:01:37.376 --> 00:01:39.926 align:middle
+ocupa de guardar los usuarios y
+hacer hash de las contraseñas...
+
+00:01:40.276 --> 00:01:44.286 align:middle
+para añadir una función que no
+tiene nada que ver con esas cosas...
+
+00:01:44.786 --> 00:01:48.326 align:middle
+es una señal de que UserManager viola la SRP.
+
+00:01:49.166 --> 00:01:53.266 align:middle
+Nuestra clase UserManager tiene
+demasiadas responsabilidades.
+
+00:01:54.116 --> 00:01:57.336 align:middle
+Pero, ¿cuáles son las
+responsabilidades de esta clase?
+
+00:01:58.076 --> 00:02:03.046 align:middle
+Se me ocurren al menos 5: generar
+un enlace de confirmación...
+
+00:02:03.336 --> 00:02:07.626 align:middle
+que también incluye la creación del token de
+confirmación, crear un correo electrónico,
+
+00:02:07.886 --> 00:02:12.026 align:middle
+hacer un hash de la contraseña, guardar
+el usuario y enviar un correo electrónico.
+
+00:02:12.886 --> 00:02:14.486 align:middle
+Pero... espera un segundo.
+
+00:02:14.486 --> 00:02:20.976 align:middle
+Y éste es un punto muy, muy
+importante -y confuso- sobre la PRS.
+
+00:02:21.906 --> 00:02:28.296 align:middle
+Definir las responsabilidades no
+significa: Piensa en todas las diferentes y
+
+00:02:28.476 --> 00:02:31.106 align:middle
+pequeñas cosas que hace tu clase.
+
+00:02:31.906 --> 00:02:34.786 align:middle
+No Una forma mejor de decirlo podría ser
+
+00:02:35.176 --> 00:02:40.106 align:middle
+Piensa en todas las diferentes razones
+por las que esta clase puede cambiar.
+
+00:02:40.876 --> 00:02:42.616 align:middle
+Eso es mucho más difícil...
+
+00:02:43.306 --> 00:02:47.526 align:middle
+y depende completamente de tu
+aplicación y de tu negocio.
+
+00:02:48.086 --> 00:02:53.146 align:middle
+Para ayudarte con esto, a veces es útil pensar
+en lo que hace nuestra clase en un nivel superior.
+
+00:02:53.996 --> 00:02:57.576 align:middle
+En mi opinión, nuestro método de
+registro hace dos cosas básicas
+
+00:02:57.976 --> 00:03:04.156 align:middle
+(1) prepara y persigue al usuario y
+(2) envía un correo electrónico.
+
+00:03:04.916 --> 00:03:11.826 align:middle
+Ahora veamos si podemos pensar en una persona de
+nuestra empresa "totalmente no falsa" que pueda pedir
+
+00:03:11.826 --> 00:03:14.716 align:middle
+un cambio en una de estas dos cosas. Por
+
+00:03:15.516 --> 00:03:21.056 align:middle
+ejemplo, para el "trabajo de alto nivel"
+de "preparar y persistir al usuario ",
+
+00:03:21.506 --> 00:03:26.966 align:middle
+nuestro administrador de la base de datos podría, en el
+futuro, querer cambiar cómo se almacenan los usuarios...
+
+00:03:27.276 --> 00:03:33.806 align:middle
+o nuestro director de tecnología podría querer empezar a
+utilizar un proveedor de autenticación de terceros en lugar
+
+00:03:33.806 --> 00:03:38.036 align:middle
+de almacenar los usuarios en una base de
+datos local y gestionar sus contraseñas.
+
+00:03:38.746 --> 00:03:43.816 align:middle
+Este tipo de cambio afectaría a la forma en que hacemos hash de
+las contraseñas y a la forma en que guardamos los usuarios. En
+
+00:03:44.526 --> 00:03:51.026 align:middle
+otras palabras, dos de nuestras denominadas
+"responsabilidades" originales -el hash de la contraseña
+
+00:03:51.186 --> 00:03:55.316 align:middle
+y la persistencia del usuario- probablemente
+cambiarán por la misma razón.
+
+00:03:56.076 --> 00:04:00.986 align:middle
+Por tanto, en realidad forman parte
+de la misma y única responsabilidad:
+
+00:04:01.346 --> 00:04:03.446 align:middle
+"preparar y persistir al usuario".
+
+00:04:04.346 --> 00:04:08.856 align:middle
+La otra cosa de "alto nivel" que hace el método
+es enviar el correo electrónico de confirmación.
+
+00:04:09.546 --> 00:04:13.776 align:middle
+Lo más probable es que tenga que cambiar
+si una persona de marketing quiere
+
+00:04:13.776 --> 00:04:16.686 align:middle
+retocar el asunto de un correo
+electrónico para que sea más divertido...
+
+00:04:17.086 --> 00:04:22.106 align:middle
+o pasar algunas variables de "producto destacado"
+a la plantilla para intentar vender cosas.
+
+00:04:22.816 --> 00:04:27.466 align:middle
+Esto significa que 3 de las otras
+llamadas "responsabilidades" originales
+
+00:04:27.886 --> 00:04:32.616 align:middle
+-generar la URL de confirmación, crear el correo
+electrónico y enviar el correo electrónico-
+
+00:04:32.976 --> 00:04:35.856 align:middle
+probablemente cambiarán por la misma razón.
+
+00:04:36.486 --> 00:04:41.446 align:middle
+Y así, para nuestro proyecto, todas se
+considerarían una sola responsabilidad:
+
+00:04:42.046 --> 00:04:43.856 align:middle
+"enviar el correo electrónico
+de confirmación".
+
+00:04:44.666 --> 00:04:45.946 align:middle
+¿Es esto perfecto?
+
+00:04:46.536 --> 00:04:47.936 align:middle
+Desde luego que no
+
+00:04:48.406 --> 00:04:52.986 align:middle
+Podrías argumentar fácilmente que el envío del
+correo electrónico cambiaría por otra razón.
+
+00:04:53.716 --> 00:04:58.936 align:middle
+Si alguien decide que vamos a empezar a enviar correos electrónicos
+utilizando un servicio de proveedor de correo electrónico diferente...
+
+00:05:00.256 --> 00:05:02.876 align:middle
+ya estamos protegidos de ese cambio:
+
+00:05:03.646 --> 00:05:07.726 align:middle
+eso sólo requeriría algunos ajustes de
+configuración en un archivo diferente.
+
+00:05:07.726 --> 00:05:10.376 align:middle
+Pero, ¿y si pensamos que es probable
+
+00:05:10.576 --> 00:05:14.826 align:middle
+que cambiemos el funcionamiento de nuestro sistema de
+verificación del correo electrónico en el futuro?
+
+00:05:15.616 --> 00:05:20.706 align:middle
+En ese caso, tendríamos una razón
+legítima para pensar que la generación
+
+00:05:20.706 --> 00:05:25.816 align:middle
+del token y el enlace de confirmación
+cambiarían por un motivo distinto
+
+00:05:26.086 --> 00:05:29.786 align:middle
+al de la persistencia de nuestro usuario
+o la creación del correo electrónico.
+
+00:05:30.586 --> 00:05:35.056 align:middle
+Identificar las razones más probables por
+las que una función podría tener que cambiar
+
+00:05:35.166 --> 00:05:42.596 align:middle
+y luego agrupar la funcionalidad en esas
+responsabilidades es la parte más difícil de la PRS.
+
+00:05:43.516 --> 00:05:46.126 align:middle
+Incluso nuestra agrupación parece imperfecta.
+
+00:05:46.676 --> 00:05:48.146 align:middle
+Pero, sinceramente, ¡es suficientemente buena!
+
+00:05:49.036 --> 00:05:51.836 align:middle
+Mi consejo es que lo hagas lo mejor
+posible y no lo pienses demasiado.
+
+00:05:52.386 --> 00:05:56.616 align:middle
+También vamos a hablar de la
+sobreoptimización de la PRS más adelante...
+
+00:05:56.916 --> 00:05:58.786 align:middle
+que puede llevar a un problema diferente.
+
+00:05:59.546 --> 00:06:04.846 align:middle
+También es útil tener presente nuestra
+definición "humana" original para la PRS: Reúne
+
+00:06:05.486 --> 00:06:10.306 align:middle
+las cosas que cambian por
+la misma razón y separa las
+
+00:06:10.306 --> 00:06:12.246 align:middle
+que cambian por razones diferentes.
+
+00:06:13.016 --> 00:06:18.786 align:middle
+A continuación: ahora que hemos identificado las dos
+responsabilidades que tiene actualmente UserManager, vamos a
+
+00:06:19.176 --> 00:06:23.276 align:middle
+refactorizar nuestro código para
+que sea más compatible con el SRP
