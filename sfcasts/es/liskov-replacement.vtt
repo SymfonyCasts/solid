@@ -1,0 +1,364 @@
+WEBVTT
+
+00:00:01.006 --> 00:00:06.206 align:middle
+Nuestro sistema de puntuación de credibilidad,
+altamente avanzado y patentado, está teniendo algunos
+
+00:00:06.206 --> 00:00:07.526 align:middle
+problemas de rendimiento.
+
+00:00:08.246 --> 00:00:12.886 align:middle
+Para ayudar a depurarlo, queremos medir el
+tiempo que tarda en calcularse una puntuación.
+
+00:00:13.576 --> 00:00:18.686 align:middle
+La forma más sencilla de implementarlo sería
+casi por completo dentro de SightingScorer.
+
+00:00:19.216 --> 00:00:25.376 align:middle
+Podríamos establecer una hora de inicio en la parte superior,
+y luego utilizarla aquí abajo para calcular una duración.
+
+00:00:25.376 --> 00:00:31.006 align:middle
+Y luego podríamos pasar ese $duration
+a la clase BigFootSightingScore.
+
+00:00:31.476 --> 00:00:36.676 align:middle
+Mantén pulsado Comando o Ctrl y haz clic para
+abrirla: está en el directorio src/Model/.
+
+00:00:37.286 --> 00:00:41.216 align:middle
+Aquí dentro, podríamos crear una
+nueva propiedad llamada $duration...
+
+00:00:41.646 --> 00:00:44.626 align:middle
+con un getter para poder utilizar ese valor.
+
+00:00:45.336 --> 00:00:47.516 align:middle
+Pero... déjame deshacer eso.
+
+00:00:47.976 --> 00:00:49.996 align:middle
+¡Hagamos las cosas más interesantes!
+
+00:00:50.676 --> 00:00:54.556 align:middle
+Para mantener nuestra aplicación lo
+más delgada posible en producción,
+
+00:00:54.986 --> 00:01:00.986 align:middle
+sólo quiero ejecutar este nuevo código de sincronización
+cuando estemos en el entorno dev de Symfony.
+
+00:01:01.846 --> 00:01:07.126 align:middle
+Y sí, podríamos inyectar algún
+valor de $shouldCalculateDuration
+
+00:01:07.126 --> 00:01:13.616 align:middle
+en SightingScorer basado en el entorno y utilizarlo
+para determinar si debemos hacer ese trabajo.
+
+00:01:14.566 --> 00:01:19.416 align:middle
+Pero, siguiendo el espíritu de Liskov,
+en lugar de cambiar SightingScorer,
+
+00:01:19.696 --> 00:01:24.786 align:middle
+quiero crear una subclase que haga la
+sincronización y sustituir esa clase
+
+00:01:24.876 --> 00:01:28.946 align:middle
+en nuestro sistema como el
+servicio SightingScorer.
+
+00:01:29.706 --> 00:01:30.496 align:middle
+¡Va a ser muy divertido!
+
+00:01:30.496 --> 00:01:36.986 align:middle
+Y es un patrón que encontrarás dentro del propio
+Symfony, como con el TraceableEventDispatcher:
+
+00:01:37.686 --> 00:01:43.946 align:middle
+una clase que se sustituye por el despachador
+de eventos real sólo durante el desarrollo.
+
+00:01:44.526 --> 00:01:46.106 align:middle
+Añade información de depuración.
+
+00:01:46.946 --> 00:01:52.306 align:middle
+Bueno, técnicamente, esa clase utiliza la
+decoración en lugar de ser una subclase.
+
+00:01:53.016 --> 00:01:56.716 align:middle
+Ese es un patrón de diseño
+diferente, y normalmente mejor,
+
+00:01:56.816 --> 00:01:59.736 align:middle
+cuando quieres sustituir una clase existente.
+
+00:02:00.506 --> 00:02:04.626 align:middle
+Pero, para entender realmente a
+Liskov, utilizaremos una subclase.
+
+00:02:05.436 --> 00:02:07.276 align:middle
+Empecemos por crear esa nueva subclase.
+
+00:02:07.746 --> 00:02:09.256 align:middle
+En el directorio Service/...
+
+00:02:09.706 --> 00:02:12.756 align:middle
+para que esté justo al lado de
+nuestro SightingScorer normal,
+
+00:02:13.156 --> 00:02:16.636 align:middle
+añade una nueva clase llamada
+DebuggableSightingScorer.
+
+00:02:18.776 --> 00:02:21.356 align:middle
+Haz que extienda la normal SightingScorer.
+
+00:02:22.206 --> 00:02:26.306 align:middle
+Dado que nuestra subclase no realiza
+ningún cambio en la clase madre,
+
+00:02:26.776 --> 00:02:29.666 align:middle
+Liskov estará definitivamente
+contento con ella.
+
+00:02:30.406 --> 00:02:37.526 align:middle
+Lo que quiero decir es que deberíamos poder
+sustituir esta clase en nuestra aplicación en lugar
+
+00:02:37.526 --> 00:02:39.976 align:middle
+de la original, sin problemas.
+
+00:02:40.916 --> 00:02:44.716 align:middle
+Pero, ¿dónde se utiliza realmente
+el servicio normal de SightingScorer?
+
+00:02:45.346 --> 00:02:48.896 align:middle
+Abre
+src/Controller/BigFootSightingController.php.
+
+00:02:49.876 --> 00:02:53.796 align:middle
+Esta acción upload() es
+la que se ejecuta cuando,
+
+00:02:54.116 --> 00:02:58.386 align:middle
+desde la página de inicio, hacemos
+clic para enviar un avistamiento.
+
+00:02:59.146 --> 00:03:02.656 align:middle
+Sí, aquí abajo, puedes ver que
+éste es el método upload().
+
+00:03:03.476 --> 00:03:08.056 align:middle
+Uno de los argumentos que se está autoconduciendo
+a este método es el SightingScorer...
+
+00:03:08.656 --> 00:03:12.056 align:middle
+que se utiliza aquí abajo en el
+envío para calcular la puntuación.
+
+00:03:12.946 --> 00:03:19.636 align:middle
+Ahora quiero cambiar este servicio para que
+utilice nuestra nueva clase: Quiero sustituirla.
+
+00:03:20.286 --> 00:03:23.526 align:middle
+¿Cómo? Abre config/services.yaml.
+
+00:03:24.116 --> 00:03:26.836 align:middle
+Antes he mencionado que íbamos a cambiar
+
+00:03:26.916 --> 00:03:31.356 align:middle
+nuestro DebuggableSightingScorer
+sólo en el entorno dev.
+
+00:03:32.186 --> 00:03:36.846 align:middle
+Pero para simplificar las cosas, en realidad voy
+a hacerlo en todos los entornos. Si quisieras
+
+00:03:37.446 --> 00:03:41.416 align:middle
+que esto sólo afectara a tu entorno dev,
+
+00:03:41.836 --> 00:03:47.056 align:middle
+podrías hacer los mismos cambios que vamos
+a hacer en un archivo services_dev.yaml . De
+
+00:03:47.846 --> 00:03:54.716 align:middle
+todos modos, para empezar a utilizar de repente nuestra nueva
+clase en todos los lugares en los que se utiliza el SightingScorer,
+
+00:03:55.296 --> 00:04:02.156 align:middle
+añade class: y luego
+App\Service\DebuggableSightingScorer.
+
+00:04:02.816 --> 00:04:04.656 align:middle
+Lo sé, esto parece un poco raro.
+
+00:04:05.416 --> 00:04:08.056 align:middle
+Esta primera línea sigue
+siendo el id de servicio.
+
+00:04:08.716 --> 00:04:15.196 align:middle
+Pero ahora en lugar de usar eso como clase,
+Symfony usará DebuggableSightingScorer. El
+
+00:04:15.876 --> 00:04:20.216 align:middle
+resultado final es que cada vez que
+alguien autocablee SightingScorer -
+
+00:04:20.586 --> 00:04:24.246 align:middle
+como hacemos en nuestro controlador
+- Symfony instanciará una instancia
+
+00:04:24.276 --> 00:04:26.416 align:middle
+de nuestro DebuggableSightingScorer...
+
+00:04:27.036 --> 00:04:29.826 align:middle
+y pasará el argumento
+normal de $scoringFactors.
+
+00:04:30.646 --> 00:04:35.186 align:middle
+Sí, ¡acabamos de sustituir
+nuestra subclase en el sistema!
+
+00:04:35.876 --> 00:04:40.846 align:middle
+Para probarlo, busca tu terminal y ejecuta php
+bin/console debug:container Sighting Quiero
+
+00:04:42.376 --> 00:04:46.096 align:middle
+mirar el servicio SightingScorer,
+así que le daré al 5.
+
+00:04:46.636 --> 00:04:48.246 align:middle
+Y... ¡perfecto!
+
+00:04:48.676 --> 00:04:53.086 align:middle
+El id del servicio es
+App\Service\SightingScorer,
+
+00:04:53.436 --> 00:04:58.116 align:middle
+pero la clase es
+App\Service\DebuggableSightingScorer.
+
+00:04:59.096 --> 00:05:03.056 align:middle
+Otra forma de mostrar esto sería entrar
+en nuestro BigFootSightingController
+
+00:05:03.346 --> 00:05:06.246 align:middle
+y temporalmente en dd($sightingScorer).
+
+00:05:07.126 --> 00:05:09.386 align:middle
+De vuelta a tu navegador, actualiza y...
+
+00:05:09.776 --> 00:05:10.656 align:middle
+¡ahí está!
+
+00:05:11.026 --> 00:05:14.596 align:middle
+DebuggableSightingScorer Vamos a quitar eso...
+
+00:05:15.636 --> 00:05:16.996 align:middle
+y vuelve a refrescar.
+
+00:05:17.936 --> 00:05:19.356 align:middle
+La página funciona y...
+
+00:05:19.576 --> 00:05:22.456 align:middle
+aunque no lo pruebe, si la enviamos,
+
+00:05:22.816 --> 00:05:28.156 align:middle
+nuestro DebuggableSightingScorer calcularía
+correctamente la puntuación de credibilidad. En
+
+00:05:29.046 --> 00:05:35.466 align:middle
+otras palabras, ninguna sorpresa: si creas
+una subclase y no cambias nada en ella,
+
+00:05:35.816 --> 00:05:39.166 align:middle
+puedes sustituir esa clase por su clase madre.
+
+00:05:39.606 --> 00:05:41.826 align:middle
+Sigue el principio de Liskov.
+
+00:05:42.706 --> 00:05:44.856 align:middle
+Empecemos a añadir nuestro
+mecanismo de sincronización.
+
+00:05:45.646 --> 00:05:49.216 align:middle
+En la clase, ve a Código ->
+Generar -o Comando + N en un Mac-,
+
+00:05:49.456 --> 00:05:53.096 align:middle
+selecciona "Anular métodos" y
+anula el método score(). Si anulas
+
+00:05:53.936 --> 00:05:59.576 align:middle
+un método y mantienes las mismas sugerencias
+de tipo de argumento y tipo de retorno,
+
+00:06:00.086 --> 00:06:06.276 align:middle
+esta clase sigue siendo sustituible:
+Puedo actualizar y PHP sigue contento.
+
+00:06:06.936 --> 00:06:13.526 align:middle
+Pero si cambiamos las pistas de tipo de argumento
+o el tipo de retorno por algo totalmente diferente,
+
+00:06:14.036 --> 00:06:16.726 align:middle
+entonces incluso PHP nos dirá que lo dejemos.
+
+00:06:17.606 --> 00:06:21.486 align:middle
+Por ejemplo, cambiemos completamente
+el tipo de retorno a int.
+
+00:06:22.956 --> 00:06:24.456 align:middle
+¡PhpStorm se vuelve loco!
+
+00:06:24.456 --> 00:06:28.126 align:middle
+Y si refrescamos, ¡PHP también está loco!
+
+00:06:28.686 --> 00:06:33.986 align:middle
+DebuggableSightingScorer::score() debe
+ser compatible con el padre score(),
+
+00:06:34.246 --> 00:06:36.526 align:middle
+que devuelve BigFootSightingScore.
+
+00:06:37.396 --> 00:06:41.356 align:middle
+Nuestra firma es incompatible y, amablemente,
+
+00:06:41.656 --> 00:06:46.586 align:middle
+PHP no nos permite violar el
+principio de Liskov de esta manera.
+
+00:06:47.446 --> 00:06:49.176 align:middle
+Ve y deshaz ese cambio.
+
+00:06:49.856 --> 00:06:53.786 align:middle
+Entonces, ¿significa esto que nunca
+podemos cambiar el tipo de retorno
+
+00:06:53.916 --> 00:06:56.506 align:middle
+o las sugerencias de tipo de
+los argumentos en una subclase?
+
+00:06:57.086 --> 00:06:57.656 align:middle
+En realidad...
+
+00:06:57.876 --> 00:07:04.096 align:middle
+¡no! Recuerda las reglas anteriores:
+puedes cambiar un tipo de retorno
+
+00:07:04.286 --> 00:07:08.316 align:middle
+si lo haces más estrecho,
+es decir, más específico.
+
+00:07:08.956 --> 00:07:12.046 align:middle
+Y también puedes cambiar una
+sugerencia de tipo de argumento...
+
+00:07:12.376 --> 00:07:17.746 align:middle
+siempre que lo hagas aceptar un tipo
+más amplio, o menos específico.
+
+00:07:18.616 --> 00:07:22.576 align:middle
+Veamos esto en acción terminando nuestra
+función de tiempo a continuación
