@@ -1,0 +1,355 @@
+WEBVTT
+
+00:00:01.006 --> 00:00:04.786 align:middle
+El segundo principio SOLID es
+el principio abierto-cerrado.
+
+00:00:05.276 --> 00:00:11.486 align:middle
+O PCO. ¿Listo para la definición
+técnica súper comprensible?
+
+00:00:11.866 --> 00:00:12.886 align:middle
+Allá vamos.
+
+00:00:13.746 --> 00:00:19.156 align:middle
+Un módulo debe estar abierto para su
+ampliación, pero cerrado para su modificación.
+
+00:00:20.046 --> 00:00:24.116 align:middle
+Como siempre -y espero que seas
+un poco más rápido que yo-
+
+00:00:24.506 --> 00:00:27.276 align:middle
+esta definición no tiene sentido para mí....
+
+00:00:27.846 --> 00:00:29.066 align:middle
+al menos al principio.
+
+00:00:29.816 --> 00:00:31.696 align:middle
+Probemos nuestra propia definición.
+
+00:00:32.346 --> 00:00:40.636 align:middle
+OCP dice: Deberías poder cambiar lo que hace
+una clase sin cambiar realmente su código.
+
+00:00:40.636 --> 00:00:43.016 align:middle
+Si eso parece una locura...
+
+00:00:43.016 --> 00:00:46.536 align:middle
+o directamente imposible,
+¡en realidad no lo es!
+
+00:00:47.056 --> 00:00:50.156 align:middle
+Y aprenderemos un patrón
+común que lo hace posible.
+
+00:00:50.846 --> 00:00:56.826 align:middle
+Pero, para que quede claro, OCP
+no es mi principio SOLID favorito.
+
+00:00:57.376 --> 00:01:00.996 align:middle
+Y más adelante hablaremos de
+cuándo debe utilizarse y cuándo...
+
+00:01:01.276 --> 00:01:02.846 align:middle
+tal vez no.
+
+00:01:03.516 --> 00:01:08.796 align:middle
+Pero hablaremos más de ello una vez que hayamos
+comprendido bien lo que es realmente OCP. El
+
+00:01:09.616 --> 00:01:13.256 align:middle
+objetivo de Avistamientos de
+Sasquatch es que la gente pueda
+
+00:01:13.256 --> 00:01:16.116 align:middle
+enviar sus propios avistamientos.
+
+00:01:16.756 --> 00:01:21.996 align:middle
+Para ayudar a clasificarlos, hemos
+desarrollado un algoritmo propio
+
+00:01:21.996 --> 00:01:25.726 align:middle
+para dar a cada avistamiento una
+"puntuación de credibilidad".
+
+00:01:26.116 --> 00:01:29.256 align:middle
+Ooh. ¿Cómo se implementa eso?
+
+00:01:30.146 --> 00:01:32.886 align:middle
+Abre src/Service/SightingScorer.php.
+
+00:01:32.886 --> 00:01:37.186 align:middle
+Después de enviar un
+avistamiento, llamamos a score()...
+
+00:01:37.606 --> 00:01:40.536 align:middle
+y toda la lógica vive en esta clase.
+
+00:01:41.206 --> 00:01:47.566 align:middle
+Miramos la latitud y la longitud, el título y la
+descripción en busca de determinadas palabras clave.
+
+00:01:48.216 --> 00:01:51.196 align:middle
+Llamamos a cada una de ellas
+"factores de puntuación".
+
+00:01:52.046 --> 00:01:54.736 align:middle
+Ahora, hemos recibido una petición de cambio.
+
+00:01:55.176 --> 00:02:00.296 align:middle
+Necesitamos añadir un nuevo factor de puntuación en
+el que nos fijemos en las fotos incluidas en el post. La
+
+00:02:00.946 --> 00:02:03.996 align:middle
+forma más fácil de implementar
+esto sería ir aquí abajo,
+
+00:02:04.276 --> 00:02:07.576 align:middle
+crear un nuevo método privado
+llamado evaluatePhotos()...
+
+00:02:07.876 --> 00:02:11.606 align:middle
+y luego llamarlo desde aquí
+arriba en el método score().
+
+00:02:12.286 --> 00:02:15.206 align:middle
+Pero hacer eso violaría la OCP
+
+00:02:15.516 --> 00:02:20.986 align:middle
+porque estaríamos cambiando nuestro código
+existente para añadir la nueva función.
+
+00:02:21.766 --> 00:02:29.566 align:middle
+OCP nos dice que el comportamiento de una clase
+debe poder modificarse sin cambiar su código.
+
+00:02:30.266 --> 00:02:31.986 align:middle
+¿Cómo es posible?
+
+00:02:32.826 --> 00:02:39.666 align:middle
+La verdad es que nuestra clase ya violaba la
+OCP antes de recibir esta petición de cambio.
+
+00:02:40.306 --> 00:02:44.796 align:middle
+Para poder añadir la nueva función
+sin cambiar nuestro código existente,
+
+00:02:45.276 --> 00:02:49.776 align:middle
+teníamos que escribir nuestra clase
+de forma diferente desde el principio.
+
+00:02:49.776 --> 00:02:58.056 align:middle
+Como ya es un poco tarde para eso, vamos a repasar
+la mentalidad de OCP y a refactorizar esta clase
+
+00:02:58.346 --> 00:03:00.656 align:middle
+para que sí siga las reglas.
+
+00:03:00.656 --> 00:03:08.386 align:middle
+En primer lugar, tenemos que identificar contra
+qué tipo de cambio queremos "cerrar" esta clase. En
+
+00:03:09.036 --> 00:03:14.406 align:middle
+otras palabras, qué tipo de cambio
+queremos que un futuro desarrollador pueda
+
+00:03:14.406 --> 00:03:17.406 align:middle
+hacer sin modificar esta clase.
+
+00:03:18.176 --> 00:03:22.426 align:middle
+Según la petición de cambio, necesitamos
+poder añadir más factores de puntuación
+
+00:03:22.576 --> 00:03:26.486 align:middle
+sin modificar el propio método score().
+
+00:03:26.486 --> 00:03:30.746 align:middle
+Como ahora no hay forma de hacerlo,
+vamos a modificar este método para
+
+00:03:30.746 --> 00:03:33.696 align:middle
+"cerrarlo" a este cambio.
+
+00:03:34.376 --> 00:03:38.456 align:middle
+¿Cómo? Separando cada factor
+de puntuación en su propia clase
+
+00:03:38.836 --> 00:03:42.336 align:middle
+e inyectándolos en el servicio SightingScorer.
+
+00:03:42.336 --> 00:03:48.086 align:middle
+El primer paso es crear una interfaz que describa
+lo que debe hacer cada factor de puntuación.
+
+00:03:48.646 --> 00:03:53.326 align:middle
+En src/, para la organización, crea
+un nuevo directorio llamado Scoring/.
+
+00:03:53.706 --> 00:03:56.976 align:middle
+Y dentro de éste, elige "nueva clase PHP"...
+
+00:03:57.236 --> 00:03:59.406 align:middle
+y luego cambia esto para
+que sea una interfaz...
+
+00:03:59.716 --> 00:04:02.126 align:middle
+llamada ScoringFactorInterface.
+
+00:04:02.896 --> 00:04:05.706 align:middle
+Cada factor debería
+necesitar sólo un método.
+
+00:04:06.046 --> 00:04:07.246 align:middle
+Llamémoslo score().
+
+00:04:07.246 --> 00:04:11.996 align:middle
+Aceptará el objeto BigFootSighting
+que va a puntuar....
+
+00:04:12.606 --> 00:04:18.316 align:middle
+y devolverá un número entero, que será
+la cantidad a sumar a la puntuación total.
+
+00:04:19.096 --> 00:04:24.276 align:middle
+¡Perfecto! También podrías añadir algo de documentación
+por encima de esto para describir mejor el método
+
+00:04:24.276 --> 00:04:26.956 align:middle
+de la interfaz: probablemente
+sea una buena idea. El
+
+00:04:26.956 --> 00:04:31.196 align:middle
+segundo paso es crear una nueva
+clase para cada factor de puntuación
+
+00:04:31.526 --> 00:04:33.566 align:middle
+y hacer que implemente la nueva interfaz.
+
+00:04:33.566 --> 00:04:41.036 align:middle
+Por ejemplo, copia, evaluateCoordinates(),
+bórrala y luego ve al directorio Scoring
+
+00:04:41.116 --> 00:04:43.966 align:middle
+y crea una nueva clase
+llamada CoordinatesFactor.
+
+00:04:45.576 --> 00:04:48.026 align:middle
+Haremos que implemente
+ScoringFactorInterface... Pondré
+
+00:04:48.776 --> 00:04:52.576 align:middle
+el método - pulsa OK para
+añadir las sentencias use -
+
+00:04:52.936 --> 00:04:56.266 align:middle
+cambia el nombre a score() y hazlo public.
+
+00:04:57.146 --> 00:05:01.326 align:middle
+Ya devuelve, correctamente, un número
+entero, ¡así que ya está hecho!
+
+00:05:02.106 --> 00:05:04.336 align:middle
+Repitamos esto para evaluateTitle().
+
+00:05:10.206 --> 00:05:16.476 align:middle
+Crea una clase llamada TitleFactor, implementa
+la ScoringFactorInterface , pégala, hazla
+
+00:05:18.306 --> 00:05:21.486 align:middle
+public y renómbrala a score().
+
+00:05:22.356 --> 00:05:29.336 align:middle
+Y una más: copia, evaluateDescription(),
+borra eso, crea nuestra última clase factorial
+
+00:05:29.336 --> 00:05:32.136 align:middle
+por ahora, que será
+DescriptionFactor , implementa
+
+00:05:33.976 --> 00:05:38.676 align:middle
+ScoringFactorInterface pega la
+lógica, limpia las cosas...
+
+00:05:40.736 --> 00:05:42.976 align:middle
+y renombrar a score().
+
+00:05:43.876 --> 00:05:44.726 align:middle
+¡Eso parece feliz!
+
+00:05:45.416 --> 00:05:48.276 align:middle
+Ahora podemos hacer nuestra
+magia en SightingScorer.
+
+00:05:51.606 --> 00:05:56.956 align:middle
+Añade un método __construct() que acepte
+un array de factores de puntuación.
+
+00:05:57.306 --> 00:06:02.466 align:middle
+Voy a pulsar Alt + Enter y a ir a "Inicializar propiedades"
+para crear esa propiedad y establecerla. Por encima de
+
+00:06:03.266 --> 00:06:09.706 align:middle
+la propiedad, me gusta añadir un PHPDoc adicional
+para que mi editor sepa que no se trata de una matriz
+
+00:06:09.706 --> 00:06:14.706 align:middle
+de cualquier cosa, sino de una matriz
+de objetos ScoringFactorInterface[].
+
+00:06:15.516 --> 00:06:19.586 align:middle
+Abajo, en score(), en lugar de llamar
+a cada método individualmente,
+
+00:06:19.876 --> 00:06:30.896 align:middle
+ahora podemos hacer un bucle sobre $this->scoringFactors
+y decir $score += $scoringFactor->score($sighting).
+
+00:06:31.876 --> 00:06:32.856 align:middle
+Y ya está
+
+00:06:32.856 --> 00:06:38.406 align:middle
+Nuestro Avistador-Escritor está ahora cerrado
+a un tipo de cambio que podemos necesitar en el
+
+00:06:38.406 --> 00:06:41.126 align:middle
+futuro: añadir factores de puntuación.
+
+00:06:41.886 --> 00:06:47.136 align:middle
+En otras palabras, ahora podemos añadir nuevos
+factores de puntuación, sin modificar este método.
+
+00:06:47.676 --> 00:06:49.556 align:middle
+¡Ya! Pero...
+
+00:06:49.556 --> 00:06:52.466 align:middle
+a nivel técnico, esto todavía no funciona.
+
+00:06:52.886 --> 00:06:56.036 align:middle
+En tu navegador, haz clic para
+enviar un nuevo avistamiento.
+
+00:06:58.206 --> 00:06:59.196 align:middle
+¡Error instantáneo!
+
+00:06:59.676 --> 00:07:00.446 align:middle
+Por supuesto.
+
+00:07:01.006 --> 00:07:05.696 align:middle
+Esto no está realmente relacionado con
+OCP, pero Symfony no sabe qué pasar
+
+00:07:05.696 --> 00:07:08.436 align:middle
+por el nuevo argumento $scoringFactors.
+
+00:07:09.316 --> 00:07:13.316 align:middle
+A continuación, vamos a ver dos formas
+de arreglar esto: la forma sencilla...
+
+00:07:13.626 --> 00:07:18.546 align:middle
+y la más elegante, que
+implica un iterador etiquetado.
+
+00:07:18.546 --> 00:07:23.366 align:middle
+Después, veremos algunos puntos de partida
+para el principio de abierto-cerrado
