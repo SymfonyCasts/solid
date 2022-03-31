@@ -1,0 +1,274 @@
+WEBVTT
+
+00:00:01.016 --> 00:00:04.656 align:middle
+Hemos llegado al quinto
+y último principio SOLID
+
+00:00:04.806 --> 00:00:09.306 align:middle
+el principio de inversión
+de la dependencia, o DIP.
+
+00:00:09.536 --> 00:00:13.116 align:middle
+Este cachorro tiene una
+definición en dos partes.
+
+00:00:13.506 --> 00:00:20.996 align:middle
+¿Preparado? Una: Los módulos de alto nivel no deben depender
+de los módulos de bajo nivel, sino que ambos deben depend er
+
+00:00:20.996 --> 00:00:24.366 align:middle
+de las abstracciones, por
+ejemplo, de las interfaces.
+
+00:00:25.206 --> 00:00:30.026 align:middle
+Y la segunda parte dice Las abstracciones
+no deben depender de los detalles.
+
+00:00:30.846 --> 00:00:36.796 align:middle
+Los detalles -es decir, las implementaciones
+concretas- deben depender de las abstracciones.
+
+00:00:37.656 --> 00:00:42.796 align:middle
+Uhh... si eso tiene sentido
+para ti, ¡eres increíble!
+
+00:00:42.996 --> 00:00:44.726 align:middle
+Y... ¡estoy celoso de ti!
+
+00:00:45.646 --> 00:00:47.896 align:middle
+¿Cómo podría reformular esto?
+
+00:00:48.476 --> 00:00:49.966 align:middle
+Eh, vaya.
+
+00:00:50.296 --> 00:00:51.666 align:middle
+¿Qué te parece esto?
+
+00:00:52.276 --> 00:00:58.396 align:middle
+Uno: Las clases deberían depender de las
+interfaces en lugar de las clases concretas.
+
+00:00:59.106 --> 00:01:05.326 align:middle
+Y dos: Esas interfaces deberían ser
+diseñadas por la clase que las utiliza,
+
+00:01:05.606 --> 00:01:08.556 align:middle
+no por las clases que las implementarán.
+
+00:01:09.376 --> 00:01:11.286 align:middle
+Probablemente esto aún sea confuso...
+
+00:01:11.346 --> 00:01:12.726 align:middle
+pero no te preocupes.
+
+00:01:12.726 --> 00:01:14.696 align:middle
+Esto requiere un ejemplo real.
+
+00:01:15.346 --> 00:01:16.796 align:middle
+He aquí nuestro nuevo problema.
+
+00:01:17.376 --> 00:01:20.476 align:middle
+Nos hemos vuelto tan
+populares -no es una sorpresa-
+
+00:01:20.836 --> 00:01:25.286 align:middle
+que algunos de nuestros avistamientos están
+recibiendo muchos comentarios de spam...
+
+00:01:25.746 --> 00:01:29.296 align:middle
+como los comentarios que dicen
+que Pie grande no es real.
+
+00:01:29.806 --> 00:01:32.236 align:middle
+¡Esos son definitivamente bots!
+
+00:01:32.236 --> 00:01:37.016 align:middle
+Así que necesitamos una forma de determinar
+si un comentario es spam o no , basándonos
+
+00:01:37.016 --> 00:01:39.466 align:middle
+en una lógica de negocio que hemos creado.
+
+00:01:39.466 --> 00:01:45.126 align:middle
+Si has descargado el código del curso desde esta
+página, deberías tener un directorio tutorial/
+
+00:01:45.246 --> 00:01:48.336 align:middle
+con una clase CommentSpamManager dentro.
+
+00:01:49.046 --> 00:01:53.636 align:middle
+Cópiala, luego ve a crear un nuevo
+directorio en src/ llamado Comment/...
+
+00:01:54.086 --> 00:01:55.846 align:middle
+y pega allí la clase.
+
+00:01:56.716 --> 00:02:01.156 align:middle
+Esta clase básicamente determina si un
+comentario debe ser marcado como spam
+
+00:02:01.576 --> 00:02:07.596 align:middle
+ejecutando una expresión regular sobre el contenido
+utilizando una lista de palabras spam predefinidas.
+
+00:02:07.596 --> 00:02:11.866 align:middle
+Si el contenido contiene
+dos o más de esas palabras,
+
+00:02:12.076 --> 00:02:15.676 align:middle
+entonces consideramos el comentario
+como spam y lanzamos una excepción.
+
+00:02:15.676 --> 00:02:19.266 align:middle
+Si piensas en el principio
+de responsabilidad única,
+
+00:02:19.676 --> 00:02:24.396 align:middle
+podrías argumentar que esta clase
+ya tiene dos responsabilidades
+
+00:02:25.176 --> 00:02:30.156 align:middle
+la lógica de expresión regular de bajo
+nivel que busca las palabras de spam
+
+00:02:30.606 --> 00:02:36.236 align:middle
+y una lógica de negocio de alto nivel que
+decide que dos palabras de spam es el límite.
+
+00:02:37.006 --> 00:02:41.056 align:middle
+Imaginemos que sí pensamos que se trata
+de dos responsabilidades diferentes.
+
+00:02:41.506 --> 00:02:45.326 align:middle
+Por tanto, decidimos dividir
+esta clase en dos partes.
+
+00:02:46.246 --> 00:02:51.356 align:middle
+En el directorio Service/, crea una
+nueva clase llamada RegexSpamWordHelper.
+
+00:02:52.606 --> 00:02:57.666 align:middle
+Veamos: mueve el método privado
+spamWords() a la nueva clase...
+
+00:03:01.736 --> 00:03:06.116 align:middle
+y luego crear una nueva función pública
+llamada getMatchedSpamWords() a la
+
+00:03:06.576 --> 00:03:12.566 align:middle
+que le pasamos el string $content y que devuelve
+un array de las palabras spam coincidentes.
+
+00:03:13.476 --> 00:03:16.426 align:middle
+A continuación, traslada la
+propia lógica regex a la clase.
+
+00:03:17.036 --> 00:03:19.566 align:middle
+Copia todo el contenido
+del método existente....
+
+00:03:19.946 --> 00:03:20.706 align:middle
+pero déjalo...
+
+00:03:21.476 --> 00:03:23.276 align:middle
+y pégalo.
+
+00:03:23.276 --> 00:03:24.046 align:middle
+A ver...
+
+00:03:24.046 --> 00:03:26.666 align:middle
+ya no necesitamos $comment->getContent()....
+
+00:03:26.806 --> 00:03:29.606 align:middle
+sólo se llama $content...
+
+00:03:29.606 --> 00:03:35.346 align:middle
+y el índice 0 de $badWordsOnComment contendrá
+las coincidencias, así que podemos devolverlo.
+
+00:03:35.346 --> 00:03:37.056 align:middle
+¡Qué bien!
+
+00:03:37.946 --> 00:03:42.996 align:middle
+Ahora que esta clase está lista, vamos
+a inyectarla en CommentSpamManager.
+
+00:03:44.366 --> 00:03:49.526 align:middle
+Añade la función pública __construct()
+con RegexSpamWordHelper $spamWordHelper .
+
+00:03:50.316 --> 00:03:55.036 align:middle
+Pulsaré Alt + Enter y seleccionaré "Inicializar
+propiedades" para crear esa propiedad y establecerla.
+
+00:03:55.876 --> 00:04:03.936 align:middle
+Abajo, ahora podemos decir $badWordsOnComment =
+$this->spamWordHelper->getMatchedSpamWords()
+
+00:04:04.016 --> 00:04:05.986 align:middle
+y pasar ese $content de arriba.
+
+00:04:06.936 --> 00:04:09.316 align:middle
+Ya no necesitamos nada de la lógica del medio.
+
+00:04:09.316 --> 00:04:14.266 align:middle
+Por último, $badWordsOnComment
+contendrá la matriz de coincidencias,
+
+00:04:14.266 --> 00:04:19.526 align:middle
+por lo que ya no necesitamos utilizar el
+índice 0: basta con contar toda esa variable.
+
+00:04:20.146 --> 00:04:24.746 align:middle
+¡Ya está! Llegados a este punto, hemos
+separado la lógica de negocio de alto nivel
+
+00:04:25.016 --> 00:04:29.476 align:middle
+-decidir cuántas palabras de spam deben
+hacer que un comentario se marque como spam-
+
+00:04:29.476 --> 00:04:34.896 align:middle
+de los detalles de bajo nivel: la coincidencia
+y la búsqueda de las palabras de spam.
+
+00:04:35.676 --> 00:04:39.616 align:middle
+El principio de inversión de la
+dependencia no nos dice necesariamente si
+
+00:04:39.616 --> 00:04:44.406 align:middle
+debemos o no dividir la lógica original
+en dos clases como acabamos de hacer.
+
+00:04:45.246 --> 00:04:49.426 align:middle
+Eso es probablemente más propio del
+principio de responsabilidad única.
+
+00:04:50.086 --> 00:04:57.996 align:middle
+Pero el DIP nos enseña a pensar en nuestro código
+en términos de módulos (o clases) de "alto nivel ",
+
+00:04:58.146 --> 00:05:01.576 align:middle
+como CommentSpamManager, que
+
+00:05:01.576 --> 00:05:06.726 align:middle
+dependen de módulos (o clases) de
+"bajo nivel", como RegexSpamWordHelper.
+
+00:05:07.386 --> 00:05:12.666 align:middle
+Y nos da reglas concretas sobre
+cómo debe manejarse esta relación.
+
+00:05:13.576 --> 00:05:18.136 align:middle
+A continuación, vamos a refactorizar
+la relación entre estas dos clases
+
+00:05:18.506 --> 00:05:21.606 align:middle
+para que cumpla el principio de
+inversión de la dependencia.
+
+00:05:22.416 --> 00:05:27.686 align:middle
+Veremos, en términos reales, qué cambios
+quiere que hagamos cada una de las dos partes
+
+00:05:27.686 --> 00:05:29.956 align:middle
+de este principio
