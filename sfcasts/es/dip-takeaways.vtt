@@ -1,0 +1,449 @@
+WEBVTT
+
+00:00:01.036 --> 00:00:05.456 align:middle
+Las dos reglas del principio de inversión de
+la dependencia nos dan instrucciones claras
+
+00:00:05.516 --> 00:00:12.456 align:middle
+sobre cómo deben interactuar dos clases,
+como CommentSpamManager y RegexSpamWordHelper.
+
+00:00:13.246 --> 00:00:16.506 align:middle
+Pero antes de hablar de los
+pros y los contras del DIP...
+
+00:00:17.016 --> 00:00:20.326 align:middle
+¿por qué se llama
+inversión de la dependencia?
+
+00:00:20.716 --> 00:00:22.716 align:middle
+¿Qué es la "inversión"?
+
+00:00:23.516 --> 00:00:26.966 align:middle
+Esto me costó mucho tiempo entenderlo.
+
+00:00:27.616 --> 00:00:31.426 align:middle
+Esperaba que la inversión de la
+dependencia significara de alguna manera
+
+00:00:31.426 --> 00:00:35.956 align:middle
+que las dos clases empezaran a depender
+literalmente la una de la otra de alguna...
+
+00:00:36.006 --> 00:00:36.956 align:middle
+manera diferente.
+
+00:00:37.416 --> 00:00:43.416 align:middle
+Como si de repente inyectáramos el
+CommentSpamManager en el RegexSpamWordHelper...
+
+00:00:43.746 --> 00:00:48.486 align:middle
+en lugar de al revés, "invirtiendo"
+realmente la dependencia.
+
+00:00:49.486 --> 00:00:50.906 align:middle
+Pero, como puedes ver...
+
+00:00:51.076 --> 00:00:52.876 align:middle
+ese no es el caso. A alto nivel
+
+00:00:53.406 --> 00:00:59.706 align:middle
+, estas dos clases dependen la
+una de la otra exactamente igual
+
+00:00:59.706 --> 00:01:05.216 align:middle
+que siempre: la clase de bajo nivel, de
+detalles - RegexSpamWordHelper - se inyecta en
+
+00:01:05.536 --> 00:01:09.316 align:middle
+la clase de alto nivel - CommentSpamManager.
+
+00:01:10.236 --> 00:01:12.606 align:middle
+La parte de la "inversión" es...
+
+00:01:12.906 --> 00:01:15.616 align:middle
+más bien un concepto abstracto.
+
+00:01:16.506 --> 00:01:22.116 align:middle
+Antes de refactorizar nuestro código para
+crear y utilizar la interfaz, habría dicho
+
+00:01:22.336 --> 00:01:26.226 align:middle
+CommentSpamManager depende
+de RegexSpamWordHelper.
+
+00:01:26.996 --> 00:01:34.506 align:middle
+Si decidimos modificar RegexSpamWordHelper,
+entonces tendremos que actualizar CommentSpamManager
+
+00:01:34.816 --> 00:01:37.156 align:middle
+para que funcione con esos cambios.
+
+00:01:37.716 --> 00:01:40.366 align:middle
+RegexSpamWordHelper es el jefe.
+
+00:01:41.246 --> 00:01:48.486 align:middle
+Pero después de la refactorización, concretamente,
+después de crear una interfaz basada en las necesidades
+
+00:01:48.486 --> 00:01:56.456 align:middle
+de CommentSpamManager, ahora diría esto:
+CommentSpamManager depende de cualquier clase
+
+00:01:56.506 --> 00:01:59.426 align:middle
+que implemente CommentSpamCounterInterface.
+
+00:02:00.186 --> 00:02:04.176 align:middle
+En realidad, se trata de la
+clase RegexSpamWordHelper.
+
+00:02:04.746 --> 00:02:10.386 align:middle
+Pero si decidiéramos refactorizar el
+funcionamiento de RegexSpamWordHelper,
+
+00:02:10.796 --> 00:02:16.496 align:middle
+seguiría siendo responsable de
+implementar CommentSpamCounterInterface. En
+
+00:02:17.276 --> 00:02:20.706 align:middle
+otras palabras, cuando
+RegexSpamWordHelper cambie,
+
+00:02:21.116 --> 00:02:26.516 align:middle
+nuestra clase de alto nivel
+CommentSpamManager no tendrá que cambiar.
+
+00:02:27.176 --> 00:02:36.156 align:middle
+Esa es la inversión: es una inversión de control:
+una "inversión" de quién está al mando. Gracias
+
+00:02:37.176 --> 00:02:41.586 align:middle
+a la nueva interfaz, la clase de
+alto nivel - CommentSpamManager -
+
+00:02:41.976 --> 00:02:47.046 align:middle
+ha tomado el control sobre el aspecto
+que debe tener su dependencia.
+
+00:02:48.306 --> 00:02:53.396 align:middle
+Así que, ahora que entendemos el principio de
+inversión de la dependencia, ¿cuáles son sus ventajas?
+
+00:02:54.146 --> 00:02:57.716 align:middle
+En pocas palabras: el DIP
+consiste en desacoplar.
+
+00:02:58.266 --> 00:03:02.716 align:middle
+CommentSpamManager está ahora
+desacoplado de RegexSpamWordHelper.
+
+00:03:03.476 --> 00:03:07.606 align:middle
+Incluso podríamos sustituirla por una
+clase diferente que implemente esta interfaz
+
+00:03:07.816 --> 00:03:11.146 align:middle
+sin tocar ningún código
+de la clase de alto nivel.
+
+00:03:11.936 --> 00:03:16.246 align:middle
+Ésta es una de las estrategias fundamentales
+para escribir código "agnóstico al marco".
+
+00:03:17.146 --> 00:03:23.356 align:middle
+En esta situación, los desarrolladores crean
+interfaces en su código y sólo dependen
+
+00:03:23.356 --> 00:03:27.726 align:middle
+de esas interfaces, en lugar
+de las interfaces o clases
+
+00:03:27.876 --> 00:03:29.916 align:middle
+de cualquier marco que estén utilizando.
+
+00:03:30.506 --> 00:03:35.506 align:middle
+Sin embargo, en mi código, rara vez sigo el
+principio de inversión de la dependencia.
+
+00:03:36.246 --> 00:03:37.656 align:middle
+Bueno, permíteme que lo aclare.
+
+00:03:38.246 --> 00:03:43.616 align:middle
+Si estuviera trabajando en una biblioteca de código
+abierto y reutilizable, como el propio Symfony,
+
+00:03:43.956 --> 00:03:47.116 align:middle
+definitivamente crearía
+interfaces, como acabamos de hacer.
+
+00:03:47.716 --> 00:03:53.346 align:middle
+¿Por qué? Porque quiero permitir que los
+usuarios de mi código sustituyan este servicio
+
+00:03:53.346 --> 00:03:59.616 align:middle
+por alguna otra clase, como por ejemplo, si alguien
+quiere sustituir nuestro sencillo RegexSpamWordHelper
+
+00:03:59.616 --> 00:04:04.926 align:middle
+en su aplicación por una clase que utilice
+una API para encontrar estas palabras de spam.
+
+00:04:05.786 --> 00:04:08.426 align:middle
+Pero si yo estuviera escribiendo
+esto en mi propia aplicación,
+
+00:04:08.696 --> 00:04:14.856 align:middle
+me saltaría la creación de la interfaz: Haría que
+mi código tuviera el mismo aspecto que el original,
+
+00:04:15.216 --> 00:04:21.626 align:middle
+con CommentSpamManager, dependiendo directamente
+de RegexSpamWordHelper, sin interfaz.
+
+00:04:22.286 --> 00:04:28.726 align:middle
+¿Por qué? Como señala Dan North en la entrada de su
+blog: no es necesario invertir todas las dependencias.
+
+00:04:29.386 --> 00:04:35.356 align:middle
+Si algo de lo que dependes va a necesitar realmente
+ser cambiado por una clase o implementación diferente
+
+00:04:35.356 --> 00:04:41.286 align:middle
+más adelante, entonces esa
+dependencia es casi más una "opción".
+
+00:04:42.066 --> 00:04:47.116 align:middle
+Si tuviéramos esa situación,
+probablemente querríamos aplicar DIP.
+
+00:04:47.866 --> 00:04:54.556 align:middle
+Al crear una interfaz y darle una pista de tipo,
+estamos diciendo Por favor, pásame la "opción"
+
+00:04:54.646 --> 00:04:57.976 align:middle
+que te gustaría utilizar para
+contar las palabras de spam.
+
+00:04:58.846 --> 00:05:04.246 align:middle
+Pero, la mayoría de las veces, citando
+parcialmente a Dan Las dependencias no son opciones:
+
+00:05:04.516 --> 00:05:08.886 align:middle
+son simplemente la forma en que vamos a contar
+las palabras de spam en esta situación.
+
+00:05:09.686 --> 00:05:15.506 align:middle
+Si siguieras el DIP a la perfección, acabarías
+teniendo una base de código con un montón de interfaces
+
+00:05:15.576 --> 00:05:18.826 align:middle
+que son implementadas por
+una sola clase cada una.
+
+00:05:19.576 --> 00:05:21.106 align:middle
+Eso añade una flexibilidad...
+
+00:05:21.216 --> 00:05:23.196 align:middle
+que probablemente no necesitarás.
+
+00:05:23.776 --> 00:05:28.176 align:middle
+El "coste" es el despiste: tu código
+es más difícil de seguir. Por
+
+00:05:29.066 --> 00:05:34.266 align:middle
+ejemplo, en CommentSpamManager,
+ahora cuesta un poco más de trabajo
+
+00:05:34.346 --> 00:05:39.016 align:middle
+averiguar qué clase cuenta las
+palabras de spam y cómo funciona todo.
+
+00:05:39.826 --> 00:05:44.896 align:middle
+Y si alguna vez intentas cambiar una dependencia
+para utilizar una clase diferente y concreta,
+
+00:05:45.466 --> 00:05:51.386 align:middle
+puedes descubrir que, aunque hayas seguido
+el DIP, ¡el cambio no es tan fácil! Por
+
+00:05:52.046 --> 00:05:55.136 align:middle
+ejemplo, cambiar de un sistema de base de datos
+
+00:05:55.136 --> 00:05:58.556 align:middle
+a otro va a ser probablemente un trabajo feo...
+
+00:05:58.916 --> 00:06:04.196 align:middle
+aunque hayas creado una interfaz para
+abstraer las diferencias de antemano.
+
+00:06:05.036 --> 00:06:07.116 align:middle
+Aun así, puede valer la pena hacerlo...
+
+00:06:07.366 --> 00:06:12.036 align:middle
+si crees que tu base de datos va a
+cambiar, pero no es una bala de plata
+
+00:06:12.216 --> 00:06:14.446 align:middle
+que lo convierta en una tarea fácil.
+
+00:06:15.436 --> 00:06:21.476 align:middle
+Así que mi consejo es el siguiente: a menos que estés
+escribiendo código que vaya a ser compartido entre proyectos,
+
+00:06:21.786 --> 00:06:27.386 align:middle
+no crees una interfaz hasta que tengas
+más de una clase que la implemente...
+
+00:06:27.916 --> 00:06:31.666 align:middle
+que de hecho hemos visto antes con
+nuestros factores de puntuación.
+
+00:06:32.276 --> 00:06:34.856 align:middle
+Este es un buen uso de las interfaces.
+
+00:06:35.626 --> 00:06:41.136 align:middle
+Pero admito que no todo el mundo está
+de acuerdo con mi opinión al respecto
+
+00:06:41.666 --> 00:06:44.116 align:middle
+Y si no estás de acuerdo, ¡genial!
+
+00:06:44.546 --> 00:06:46.316 align:middle
+Haz lo que creas que es mejor.
+
+00:06:46.876 --> 00:06:52.556 align:middle
+Hay mucha gente inteligente que crea
+interfaces adicionales en su código
+
+00:06:52.956 --> 00:06:56.546 align:middle
+para desvincularse de los marcos
+o bibliotecas que utilizan.
+
+00:06:56.956 --> 00:06:58.286 align:middle
+Yo no soy uno de ellos.
+
+00:06:59.146 --> 00:07:00.806 align:middle
+Bien amigos, ¡eso es todo!
+
+00:07:01.076 --> 00:07:03.526 align:middle
+¡Hemos terminado con los principios SOLID!
+
+00:07:04.316 --> 00:07:05.716 align:middle
+Hagamos un resumen rápido...
+
+00:07:05.946 --> 00:07:08.066 align:middle
+utilizando nuestras definiciones simplificadas.
+
+00:07:08.946 --> 00:07:11.926 align:middle
+Uno: el principio de
+responsabilidad única dice
+
+00:07:12.416 --> 00:07:15.586 align:middle
+Escribe clases para que tu
+código "quepa en tu cabeza".
+
+00:07:16.456 --> 00:07:20.576 align:middle
+Dos: el principio de abierto-cerrado
+dice: Diseña tus clases de forma que
+
+00:07:20.816 --> 00:07:24.656 align:middle
+puedas cambiar su comportamiento
+sin cambiar su código.
+
+00:07:25.476 --> 00:07:27.546 align:middle
+Esto nunca es del todo posible...
+
+00:07:27.666 --> 00:07:30.746 align:middle
+y en el código de mi
+aplicación, rara vez lo sigo.
+
+00:07:31.546 --> 00:07:37.696 align:middle
+Tres: el principio de sustitución de Liskov
+dice: Si una clase extiende una clase base
+
+00:07:37.896 --> 00:07:42.746 align:middle
+o implementa una interfaz, haz que tu clase
+se comporte como se supone que debe hacerlo.
+
+00:07:43.566 --> 00:07:48.796 align:middle
+PHP protege contra la mayoría de las violaciones de este
+principio lanzando errores de sintaxis. Cuatro: el principio de
+
+00:07:49.546 --> 00:07:55.626 align:middle
+segregación de la interfaz dice: Si
+una clase tiene una interfaz grande
+
+00:07:55.846 --> 00:08:02.186 align:middle
+-por tanto, muchos métodos- y a menudo inyectas la
+clase y sólo utilizas algunos de estos métodos,
+
+00:08:02.706 --> 00:08:05.846 align:middle
+considera la posibilidad de dividir
+tu clase en trozos más pequeños.
+
+00:08:06.816 --> 00:08:12.916 align:middle
+Y cinco: el principio de inversión de la
+dependencia dice Prefiere las interfaces de tipo
+
+00:08:13.296 --> 00:08:18.506 align:middle
+y permite que cada interfaz se diseñe para
+la clase de "alto nivel" que la utilizará,
+
+00:08:18.976 --> 00:08:22.466 align:middle
+en lugar de para la clase de
+bajo nivel que la implementará.
+
+00:08:23.316 --> 00:08:29.566 align:middle
+En mi aplicación, hago interfaces de sugerencia de tipo
+siempre que existen, normalmente porque los servicios
+
+00:08:29.566 --> 00:08:32.986 align:middle
+de Symfony u otras bibliotecas
+proporcionan una interfaz.
+
+00:08:33.676 --> 00:08:36.026 align:middle
+Pero no creo mis propias interfaces
+
+00:08:36.236 --> 00:08:39.886 align:middle
+hasta que tengo varias clases
+que necesitan implementarlas.
+
+00:08:40.746 --> 00:08:44.226 align:middle
+Mis opiniones son, por supuesto,
+sólo eso: ¡opiniones!
+
+00:08:44.606 --> 00:08:48.526 align:middle
+Y tiendo a ser mucho más
+pragmático que dogmático...
+
+00:08:48.526 --> 00:08:49.926 align:middle
+para bien o para mal.
+
+00:08:50.476 --> 00:08:52.466 align:middle
+La gente seguramente no estará de acuerdo...
+
+00:08:52.756 --> 00:08:53.996 align:middle
+¡y eso es estupendo!
+
+00:08:54.346 --> 00:08:56.986 align:middle
+SOLID nos obliga a pensar de forma crítica.
+
+00:08:57.876 --> 00:09:03.556 align:middle
+Además, los principios SOLID no son el único "juego"
+en la ciudad cuando se trata de escribir código limpio.
+
+00:09:04.016 --> 00:09:08.846 align:middle
+Hay patrones de diseño, composición
+sobre herencia, la ley de Demeter
+
+00:09:09.076 --> 00:09:11.336 align:middle
+y otros principios para guiar tu camino.
+
+00:09:12.166 --> 00:09:15.256 align:middle
+Si tienes alguna pregunta o idea, como siempre,
+
+00:09:15.406 --> 00:09:18.316 align:middle
+nos encantaría que nos lo
+dijeras en los comentarios.
+
+00:09:19.076 --> 00:09:20.666 align:middle
+Muy bien, amigos, ¡hasta la próxima!
