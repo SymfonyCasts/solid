@@ -1,3 +1,5 @@
+# Principio de Responsabilidad Única: ¿Qué es?
+
 SOLID comienza con el Principio de Responsabilidad Única o SRP. El SRP dice:
 
 > Un módulo sólo debe tener una razón para cambiar.
