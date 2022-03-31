@@ -5,11 +5,11 @@ WEBVTT
 
 00:00:03.916 --> 00:00:09.416 align:middle
 Bienvenidos a nuestro esperado tutorial
-sobre los principios de SOLID: principio de
+sobre los principios SOLID: principio de
 
 00:00:09.756 --> 00:00:15.496 align:middle
-responsabilidad única, principio de apertura
-y cierre, principio de sustitución de Liskov,
+responsabilidad única, principio de
+abierto-cerrado, principio de sustitución de Liskov,
 
 00:00:15.976 --> 00:00:22.706 align:middle
 principio de segregación de la interfaz y, mi
@@ -38,7 +38,7 @@ tanto en hacer este tutorial?
 La respuesta corta es: I....
 
 00:00:45.186 --> 00:00:48.026 align:middle
-no me gustan los principios de SOLID.
+no me gustan los principios SOLID.
 
 00:00:48.596 --> 00:00:51.096 align:middle
 Vale, déjame decirlo de otra manera.
@@ -140,7 +140,7 @@ vuelve a tu navegador, pega y...
 
 00:02:58.476 --> 00:03:01.586 align:middle
 Nuestro último esfuerzo por
-encontrar al infame Bigfoot.
+encontrar al infame Pie grande.
 
 00:03:02.076 --> 00:03:04.736 align:middle
 Lo que este código hace realmente es...
@@ -154,7 +154,7 @@ avistamientos de pies grandes y tiene algunos cálculos.
 
 00:03:12.076 --> 00:03:16.216 align:middle
 Será nuestro terreno de juego para
-sumergirnos en los principios de SOLID.
+sumergirnos en los principios SOLID.
 
 00:03:16.216 --> 00:03:21.156 align:middle
 Así que, a continuación, vamos a empezar con el
