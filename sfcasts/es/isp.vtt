@@ -1,0 +1,307 @@
+WEBVTT
+
+00:00:01.036 --> 00:00:02.676 align:middle
+¿Listo para el principio número 4?
+
+00:00:03.086 --> 00:00:07.726 align:middle
+Es el principio de segregación
+de la interfaz, o ISP.
+
+00:00:08.596 --> 00:00:15.786 align:middle
+Dice así: Los clientes no deben verse obligados
+a depender de interfaces que no utilizan.
+
+00:00:16.646 --> 00:00:18.326 align:middle
+¡No es una mala definición!
+
+00:00:18.846 --> 00:00:21.396 align:middle
+Pero quiero aclarar la palabra "interfaz".
+
+00:00:22.046 --> 00:00:26.636 align:middle
+No se refiere necesariamente a
+una interfaz literal. Se refiere
+
+00:00:26.976 --> 00:00:30.726 align:middle
+al concepto abstracto de una interfaz,
+
+00:00:30.946 --> 00:00:34.586 align:middle
+que generalmente significa "los
+métodos públicos" de una clase...
+
+00:00:35.016 --> 00:00:38.366 align:middle
+aunque no implemente
+técnicamente una interfaz.
+
+00:00:39.216 --> 00:00:43.216 align:middle
+El significado de interfaz aquí
+es: las "cosas que puedes hacer
+
+00:00:43.216 --> 00:00:45.656 align:middle
+con un objeto" cuando te lo doy.
+
+00:00:46.606 --> 00:00:50.916 align:middle
+Así que permíteme que intente dar una definición
+aún más sencilla: Construye clases pequeñas y
+
+00:00:50.916 --> 00:00:54.696 align:middle
+centradas en lugar de
+clases grandes y gigantes.
+
+00:00:55.576 --> 00:00:59.456 align:middle
+Esta definición me recuerda mucho al
+principio de responsabilidad única...
+
+00:01:00.086 --> 00:01:01.056 align:middle
+¡y es cierto!
+
+00:01:01.056 --> 00:01:06.666 align:middle
+Pero el principio de segregación de la
+interfaz lo contempla desde la otra dirección
+
+00:01:07.246 --> 00:01:13.896 align:middle
+desde la perspectiva de quién utiliza la clase,
+no desde la perspectiva de la propia clase.
+
+00:01:14.686 --> 00:01:20.996 align:middle
+Una vez más, la definición original es: los clientes
+no deben ser obligados a depender de interfaces -por
+
+00:01:21.466 --> 00:01:25.236 align:middle
+tanto, básicamente métodos- que no utilizan.
+
+00:01:26.076 --> 00:01:32.376 align:middle
+Por ejemplo, supón que has construido accidentalmente
+una clase gigante llamada ProductManager
+
+00:01:32.716 --> 00:01:34.736 align:middle
+con un montón de métodos.
+
+00:01:35.156 --> 00:01:40.746 align:middle
+¡Ups! Entonces, en algún lugar de tu código,
+necesitas llamar a uno de esos métodos.
+
+00:01:41.476 --> 00:01:48.176 align:middle
+Esta otra clase se llama "cliente" porque está
+utilizando nuestra gigantesca clase ProductManager.
+
+00:01:49.006 --> 00:01:54.026 align:middle
+Y, por desgracia, aunque sólo
+necesita un método del ProductManager,
+
+00:01:54.326 --> 00:01:57.196 align:middle
+tiene que inyectar todo
+el objeto gigante. Se ve
+
+00:01:58.116 --> 00:02:02.826 align:middle
+obligada a depender de un objeto cuya
+interfaz -cuyos métodos públicos-
+
+00:02:03.256 --> 00:02:06.086 align:middle
+son muchos más de los que realmente necesita.
+
+00:02:06.536 --> 00:02:08.186 align:middle
+¿Por qué es esto un problema?
+
+00:02:08.936 --> 00:02:13.656 align:middle
+Responderemos a esa pregunta un poco más tarde,
+después de jugar con un ejemplo del mundo real.
+
+00:02:14.216 --> 00:02:14.736 align:middle
+Porque...
+
+00:02:15.046 --> 00:02:21.186 align:middle
+¡la dirección nos ha pedido que hagamos otro cambio
+en nuestro sistema de puntuación de la credibilidad!
+
+00:02:22.106 --> 00:02:26.096 align:middle
+Si un avistamiento recibe una
+puntuación inferior a 50 puntos...
+
+00:02:26.316 --> 00:02:33.486 align:middle
+pero tiene tres o más fotos, le daremos
+un impulso: 5 puntos extra por foto.
+
+00:02:34.446 --> 00:02:38.196 align:middle
+Esto... ¡no era un cambio que esperábamos!
+
+00:02:38.586 --> 00:02:43.346 align:middle
+¡Maldita sea! Nuestros factores de puntuación
+tienen la capacidad de aumentar la puntuación...
+
+00:02:43.626 --> 00:02:48.836 align:middle
+pero no tienen la capacidad de ver
+la puntuación final y modificarla.
+
+00:02:49.646 --> 00:02:55.066 align:middle
+No hay problema: añadamos un segundo método a
+la interfaz que tenga la capacidad de hacer eso.
+
+00:02:55.576 --> 00:02:58.876 align:middle
+Llamémoslo, qué tal, función
+pública adjustScore().
+
+00:02:59.596 --> 00:03:04.456 align:middle
+En este caso, va a recibir el int
+$finalScore que se acaba de calcular
+
+00:03:04.666 --> 00:03:07.226 align:middle
+y el BigFootSighting que estamos puntuando.
+
+00:03:08.056 --> 00:03:10.716 align:middle
+Devolverá la nueva puntuación final de int.
+
+00:03:11.556 --> 00:03:17.076 align:middle
+Si quieres, puedes añadir algo de PHPDoc por encima
+de esto para explicar mejor la finalidad del método.
+
+00:03:18.046 --> 00:03:21.516 align:middle
+En un minuto, vamos a llamar a
+esto desde dentro de SightingScorer
+
+00:03:21.846 --> 00:03:24.186 align:middle
+después de que se haya
+hecho la puntuación inicial.
+
+00:03:24.696 --> 00:03:29.026 align:middle
+Pero primero, vamos a abrir PhotoFactor y a
+añadir la nueva lógica de bonificación.
+
+00:03:29.816 --> 00:03:33.256 align:middle
+En la parte inferior, ve a Código ->
+Generar - o Comando + N en un Mac -
+
+00:03:33.546 --> 00:03:36.766 align:middle
+selecciona "Implementar métodos"
+e implementa adjustScore(). Di
+
+00:03:38.556 --> 00:03:44.806 align:middle
+$photosCount = $sighting->getImages()
+- no te olvides de contarlos -
+
+00:03:45.846 --> 00:03:51.016 align:middle
+entonces si el $finalScore es menor que
+50 y el $photosCount es mayor que dos -
+
+00:03:51.976 --> 00:03:56.556 align:middle
+el $finalScore debe obtener más
+es igual a $photosCount * 5.
+
+00:03:56.556 --> 00:03:59.456 align:middle
+Al final, devuelve $finalScore.
+
+00:04:00.416 --> 00:04:01.686 align:middle
+¡Nueva lógica hecha!
+
+00:04:02.506 --> 00:04:03.516 align:middle
+Pero ahora...
+
+00:04:03.876 --> 00:04:08.346 align:middle
+¿qué hacemos con todas las demás clases
+que implementan ScoringFactorInterface?
+
+00:04:09.006 --> 00:04:14.406 align:middle
+Desgraciadamente, para que PHP funcione, tenemos
+que añadir el nuevo método a cada clase.
+
+00:04:14.976 --> 00:04:17.386 align:middle
+Pero podemos hacer que devuelva $finalScore.
+
+00:04:18.286 --> 00:04:21.636 align:middle
+Así que en la parte inferior de
+CoordinatesFactor, vuelve a Código -> Generar -
+
+00:04:21.736 --> 00:04:28.356 align:middle
+selecciona "Implementar métodos", genera
+adjustScore(), y devuelve $finalScore.
+
+00:04:29.326 --> 00:04:35.256 align:middle
+Copia, esto cierra CoordinatesFactor, ve
+a DescriptionFactor y añádelo al final.
+
+00:04:36.116 --> 00:04:39.446 align:middle
+Haz lo mismo dentro de TitleFactor.
+
+00:04:44.916 --> 00:04:47.556 align:middle
+Por último, podemos actualizar SightingScorer.
+
+00:04:48.136 --> 00:04:53.646 align:middle
+Añade un segundo bucle después de calcular la
+puntuación: para cada $this->scoringFactors
+
+00:04:53.646 --> 00:04:59.586 align:middle
+como $scoringFactor, esta vez di $score
+= $scoringFactor->adjustScore()... y
+
+00:05:00.066 --> 00:05:02.186 align:middle
+pasa en $score y $sighting. Ya está
+
+00:05:03.076 --> 00:05:09.386 align:middle
+Por cierto, podrías argumentar que el orden de los
+factores de puntuación es ahora relevante. ¡ Es
+
+00:05:09.846 --> 00:05:10.656 align:middle
+cierto! Pero...
+
+00:05:11.286 --> 00:05:14.886 align:middle
+no vamos a preocuparnos de
+eso por simplicidad... y
+
+00:05:15.546 --> 00:05:18.126 align:middle
+porque no es relevante para
+este principio. Sin embargo,
+
+00:05:18.606 --> 00:05:24.256 align:middle
+hay una forma de dar a un servicio etiquetado
+una mayor prioridad en Symfony para
+
+00:05:24.676 --> 00:05:29.086 align:middle
+que se pase antes o después que
+otros factores de puntuación. Si,
+
+00:05:29.946 --> 00:05:32.786 align:middle
+en este punto, algo te pica,
+
+00:05:33.146 --> 00:05:37.826 align:middle
+¡puede ser porque acabamos de violar
+el principio de abierto-cerrado ! Hemos
+
+00:05:38.576 --> 00:05:43.316 align:middle
+tenido que modificar el método score()
+para añadir este nuevo comportamiento. Pero
+
+00:05:44.116 --> 00:05:45.366 align:middle
+¡no pasa nada!
+
+00:05:45.946 --> 00:05:52.536 align:middle
+Pone de manifiesto la naturaleza delicada de OCP:
+¡no habíamos previsto este tipo de cambios!
+
+00:05:53.276 --> 00:05:58.046 align:middle
+No puedes "cerrar" una clase contra todo
+tipo de cambios: sólo puedes cerrarla contra
+
+00:05:58.046 --> 00:06:00.646 align:middle
+los cambios que preveas correctamente. Si
+
+00:06:01.406 --> 00:06:05.006 align:middle
+observas nuestra nueva interfaz
+y las clases que la implementan,
+
+00:06:05.346 --> 00:06:08.116 align:middle
+probablemente sientas que no es... ideal
+
+00:06:08.266 --> 00:06:12.616 align:middle
+que todas estas clases tengan
+que implementar este método...
+
+00:06:13.046 --> 00:06:15.706 align:middle
+aunque no les importe realmente.
+A continuación: vamos a
+
+00:06:16.546 --> 00:06:21.886 align:middle
+hacer que esto sea aún más obvio,
+refactorizaremos hacia una solución mejor y
+
+00:06:22.166 --> 00:06:27.396 align:middle
+, finalmente, discutiremos los puntos clave
+del principio de segregación de la interfaz
