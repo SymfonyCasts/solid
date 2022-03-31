@@ -39,4 +39,4 @@ El único problema es que tenemos que cambiar el tipo de sugerencia en `Sighting
 
 [[[ code('d4a781b3ab') ]]]
 
-A continuación: ahora que entendemos el tipo de cambio que OCP quiere que hagamos en nuestro código, hablemos de por qué debería importarnos -o no- OCP y de cuándo deberíamos o no seguirlo.
+A continuación: ahora que entendemos el tipo de cambio que OCP quiere que hagamos en nuestro código, hablemos de por qué debería importarnos -o no- OCP y de cuándo deberíamos seguirlo o no.
