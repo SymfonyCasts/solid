@@ -1,0 +1,282 @@
+WEBVTT
+
+00:00:01.016 --> 00:00:06.326 align:middle
+Lo más importante que OCP quiere que
+saquemos de esta conversación es lo siguiente
+
+00:00:06.866 --> 00:00:13.006 align:middle
+trata de imaginar los cambios futuros que
+probablemente necesites hacer, y diseña
+
+00:00:13.006 --> 00:00:19.816 align:middle
+tu código de forma que puedas hacer esos
+cambios sin modificar las clases existentes.
+
+00:00:20.696 --> 00:00:26.556 align:middle
+Mostramos un patrón común para hacerlo:
+inyectando una matriz o -iterable-
+
+00:00:26.906 --> 00:00:31.596 align:middle
+de servicios en lugar de codificar
+toda la lógica dentro de la clase.
+
+00:00:32.476 --> 00:00:36.336 align:middle
+También hay otros patrones que
+puedes utilizar para lograr la OCP,
+
+00:00:36.746 --> 00:00:41.546 align:middle
+incluido el "patrón de estrategia"
+-que es similar a lo que hicimos,
+
+00:00:41.716 --> 00:00:45.246 align:middle
+pero en el que permites que
+se pase sólo un servicio
+
+00:00:45.246 --> 00:00:49.186 align:middle
+para manejar algún trabajo- y el
+patrón de método de plantilla.
+
+00:00:50.146 --> 00:00:55.596 align:middle
+Todos ellos son diferentes sabores de la misma
+cosa: permitir que la funcionalidad se pase
+
+00:00:55.726 --> 00:00:59.606 align:middle
+a una clase, en lugar de
+vivir dentro de la clase.
+
+00:01:00.376 --> 00:01:04.196 align:middle
+Pero la verdad es que no me gusta OCP.
+
+00:01:04.816 --> 00:01:06.826 align:middle
+Y tengo tres razones.
+
+00:01:07.516 --> 00:01:15.066 align:middle
+En primer lugar, hasta el tío Bob -el padre de los
+principios SOLID- sabe que OCP es una "mentira". OCP
+
+00:01:16.016 --> 00:01:20.996 align:middle
+promete que, si lo sigues correctamente,
+no tendrás que volver a trastear
+
+00:01:20.996 --> 00:01:22.956 align:middle
+con tu antiguo código.
+
+00:01:23.806 --> 00:01:28.376 align:middle
+Pero un sistema no puede
+ser 100% compatible con OCP.
+
+00:01:29.216 --> 00:01:35.336 align:middle
+Nuestra clase SightingScorer está "cerrada" contra
+el cambio de "añadir nuevos factores de puntuación".
+
+00:01:36.106 --> 00:01:40.686 align:middle
+Pero qué pasaría si de repente necesitáramos
+un factor de puntuación para poder
+
+00:01:40.686 --> 00:01:44.476 align:middle
+multiplicar la puntuación
+existente por un número...
+
+00:01:44.936 --> 00:01:47.026 align:middle
+en lugar de sólo sumarlo.
+
+00:01:47.786 --> 00:01:54.546 align:middle
+Este cambio inesperado nos obligaría a,
+sí, modificar el código en SightingScorer.
+
+00:01:55.426 --> 00:02:01.476 align:middle
+Si hubiéramos previsto este cambio, podríamos
+haber añadido una abstracción a SightingScorer
+
+00:02:01.766 --> 00:02:04.646 align:middle
+para protegernos de este nuevo tipo de cambio.
+
+00:02:05.446 --> 00:02:09.306 align:middle
+Pero nadie puede predecir perfectamente el
+futuro: podemos hacerlo lo mejor posible...
+
+00:02:09.546 --> 00:02:11.086 align:middle
+pero a menudo nos equivocaremos.
+
+00:02:11.816 --> 00:02:17.256 align:middle
+Por supuesto, que un principio no sea perfecto
+no significa que no debamos utilizarlo nunca.
+
+00:02:18.016 --> 00:02:21.866 align:middle
+Pero eso me lleva a la segunda
+razón por la que no me gusta la PCO:
+
+00:02:22.606 --> 00:02:25.566 align:middle
+Crea abstracciones innecesarias...
+
+00:02:25.946 --> 00:02:28.166 align:middle
+que hacen que nuestro código
+sea más difícil de entender.
+
+00:02:28.916 --> 00:02:33.076 align:middle
+SightingScorer ahora está cerrada contra
+nuevos factores de puntuación, lo que
+
+00:02:33.616 --> 00:02:39.166 align:middle
+significa que podemos añadir nuevos factores de
+puntuación a nuestro sistema sin modificar la clase.
+
+00:02:39.886 --> 00:02:41.766 align:middle
+¿Pero a qué precio?
+
+00:02:41.766 --> 00:02:47.856 align:middle
+Ya no puedo abrir esta clase y entender rápidamente
+cómo se calcula la puntuación de credibilidad.
+
+00:02:49.816 --> 00:02:54.256 align:middle
+Ahora tengo que indagar para
+saber qué factores se inyectan...
+
+00:02:54.576 --> 00:02:57.776 align:middle
+y luego ir a ver cada
+clase de factor individual.
+
+00:02:58.616 --> 00:03:03.156 align:middle
+Si tienes un equipo grande, poder separar
+las cosas en trozos más pequeños
+
+00:03:03.156 --> 00:03:05.526 align:middle
+como éste resulta más deseable.
+
+00:03:06.076 --> 00:03:11.736 align:middle
+Pero, por ejemplo, aquí en SymfonyCasts
+-con nuestro valiente equipo de unos cuatro-
+
+00:03:12.246 --> 00:03:14.646 align:middle
+probablemente no haríamos este cambio.
+
+00:03:15.146 --> 00:03:18.826 align:middle
+Añade desorientación a nuestro
+código, con un beneficio limitado.
+
+00:03:18.826 --> 00:03:24.406 align:middle
+Y eso me lleva a mi tercera y
+última razón para no amar a OCP.
+
+00:03:24.406 --> 00:03:28.176 align:middle
+Y ésta proviene de la
+entrada del blog de Dan North.
+
+00:03:28.746 --> 00:03:35.556 align:middle
+Sostiene que el principio de abierto-cerrado procede
+de una época en la que los cambios eran caros
+
+00:03:36.276 --> 00:03:41.826 align:middle
+debido a la necesidad de compilar el código,
+al hecho de que aún no dominábamos la ciencia
+
+00:03:41.986 --> 00:03:46.716 align:middle
+de la refactorización del código y a que
+el control de versiones se hacía con CVS,
+
+00:03:46.886 --> 00:03:53.056 align:middle
+lo que, según él, contribuía a una mentalidad
+de querer hacer cambios añadiendo código nuevo,
+
+00:03:53.266 --> 00:03:55.486 align:middle
+en lugar de modificar el existente.
+
+00:03:56.356 --> 00:03:57.616 align:middle
+En otras palabras...
+
+00:03:57.616 --> 00:03:59.356 align:middle
+¡OCP es un dinosaurio!
+
+00:03:59.876 --> 00:04:04.666 align:middle
+El consejo de Dan, con el que estoy de
+acuerdo, es bastante diferente al de OCP.
+
+00:04:05.336 --> 00:04:11.196 align:middle
+Él dice: Si necesitas que el código haga otra
+cosa, cambia el código para que haga otra cosa.
+
+00:04:11.976 --> 00:04:17.356 align:middle
+Citando a Dan, dice El código no es un
+activo que hay que envolver cuidadosamente
+
+00:04:17.356 --> 00:04:20.356 align:middle
+y preservar, sino un coste, una deuda.
+
+00:04:20.966 --> 00:04:22.486 align:middle
+Todo código es un coste.
+
+00:04:23.346 --> 00:04:28.586 align:middle
+Así que si puedo coger un gran montón de código
+existente y sustituirlo por costes más pequeños y
+
+00:04:28.646 --> 00:04:32.526 align:middle
+específicos, entonces
+estoy ganando en código.
+
+00:04:33.206 --> 00:04:34.366 align:middle
+Eso me encanta.
+
+00:04:35.346 --> 00:04:39.116 align:middle
+Entonces, ¿cómo navego personalmente
+por la PCO en el mundo real?
+
+00:04:39.686 --> 00:04:40.656 align:middle
+Es bastante sencillo.
+
+00:04:41.256 --> 00:04:44.526 align:middle
+Si estoy construyendo una biblioteca de
+código abierto en la que las personas
+
+00:04:44.526 --> 00:04:51.246 align:middle
+que utilizan mi código no podrán literalmente
+modificarlo, entonces sigo un patrón
+
+00:04:51.246 --> 00:04:55.666 align:middle
+como el que utilizamos en SightingScorer
+siempre que identifico un cambio
+
+00:04:55.956 --> 00:04:57.556 align:middle
+que un usuario podría necesitar hacer.
+
+00:04:58.276 --> 00:05:01.576 align:middle
+Esto da a mis usuarios la
+posibilidad de hacer ese cambio...
+
+00:05:01.906 --> 00:05:04.296 align:middle
+sin modificar el código de la clase...
+
+00:05:04.516 --> 00:05:06.716 align:middle
+lo que sería imposible para ellos.
+
+00:05:07.486 --> 00:05:11.506 align:middle
+Pero si estoy codificando en una
+aplicación privada, es mucho más probable
+
+00:05:11.506 --> 00:05:14.136 align:middle
+que mantenga todo el
+código dentro de la clase.
+
+00:05:14.856 --> 00:05:16.886 align:middle
+Pero esto no es una regla absoluta.
+
+00:05:17.446 --> 00:05:23.706 align:middle
+Separar el código facilita las pruebas unitarias
+y puede ayudarnos a seguir el consejo de SRP:
+
+00:05:24.446 --> 00:05:26.696 align:middle
+escribir un código que "quepa en tu cabeza".
+
+00:05:27.476 --> 00:05:32.816 align:middle
+Los equipos más grandes también querrán probablemente dividir
+las cosas más fácilmente que los equipos más pequeños.
+
+00:05:33.746 --> 00:05:38.486 align:middle
+Como con todos los principios SOLID, haz lo
+posible por escribir código sencillo y...
+
+00:05:38.576 --> 00:05:39.686 align:middle
+no lo pienses demasiado.
+
+00:05:40.536 --> 00:05:47.196 align:middle
+A continuación, pasemos al principio SOLID número
+tres: el Principio de Sustitución de Liskov
