@@ -1,0 +1,194 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:06.086 align:middle
+El principio sólido número tres es,
+en mi opinión, uno muy interesante. Es
+
+00:00:06.686 --> 00:00:14.836 align:middle
+el Principio de Sustitución de Liskov, desarrollado
+por Barbara Liskov: una investigadora del MIT
+
+00:00:14.836 --> 00:00:18.926 align:middle
+y ganadora del premio Turing,
+que es, según he sabido,
+
+00:00:19.166 --> 00:00:22.256 align:middle
+una especie de premio Nobel de la informática.
+
+00:00:22.746 --> 00:00:23.346 align:middle
+Nada del otro mundo.
+
+00:00:24.046 --> 00:00:30.896 align:middle
+El principio de Liskov dice Los subtipos
+deben ser sustituibles por sus tipos base.
+
+00:00:31.646 --> 00:00:34.716 align:middle
+En realidad, no es una definición terrible.
+
+00:00:35.416 --> 00:00:38.646 align:middle
+Un "subtipo" significa básicamente una clase
+
+00:00:39.086 --> 00:00:44.546 align:middle
+cualquier clase que extienda una clase
+base o que implemente una interfaz.
+
+00:00:45.336 --> 00:00:47.716 align:middle
+Así que permíteme reformular
+la definición. Voy a
+
+00:00:48.296 --> 00:00:54.146 align:middle
+ceñirme a hablar sólo de las clases y de las
+clases padre, pero esto se aplica igualmente
+
+00:00:54.146 --> 00:00:56.336 align:middle
+a una clase que implemente una interfaz.
+
+00:00:56.946 --> 00:01:02.416 align:middle
+Aquí está: Deberías poder
+sustituir una clase por una subclase
+
+00:01:02.606 --> 00:01:06.776 align:middle
+sin romper tu aplicación ni
+tener que cambiar ningún código.
+
+00:01:07.756 --> 00:01:14.316 align:middle
+Dan North se refiere a esto simplemente como El
+principio de la menor sorpresa, aplicado a las clases
+
+00:01:14.316 --> 00:01:17.546 align:middle
+que tienen una clase padre
+o implementan una interfaz.
+
+00:01:18.156 --> 00:01:23.016 align:middle
+En otras palabras, una clase debería comportarse de
+la manera que la mayoría de los usuarios esperan:
+
+00:01:23.726 --> 00:01:28.456 align:middle
+debe comportarse como su clase
+madre o su interfaz pretenden.
+
+00:01:29.346 --> 00:01:30.766 align:middle
+Vale, ¡eso suena muy bien!
+
+00:01:31.306 --> 00:01:34.286 align:middle
+Pero... ¿qué significa eso concretamente?
+
+00:01:34.956 --> 00:01:37.246 align:middle
+Significa cuatro cosas concretas.
+
+00:01:37.706 --> 00:01:42.836 align:middle
+Imagina que tenemos una clase que extiende
+una clase base o implementa una interfaz.
+
+00:01:43.446 --> 00:01:49.676 align:middle
+También tiene una propiedad protegida y
+un método, que viven en esa clase base.
+
+00:01:50.076 --> 00:01:52.976 align:middle
+O en el caso del método, vive en la interfaz.
+
+00:01:53.776 --> 00:01:57.466 align:middle
+Dada esta configuración, Liskov dice 4 cosas.
+
+00:01:58.076 --> 00:02:02.686 align:middle
+Una: no puedes cambiar el tipo
+de una propiedad protegida.
+
+00:02:03.446 --> 00:02:07.696 align:middle
+Dos: no puedes limitar el tipo
+de pista de un argumento. Por
+
+00:02:08.246 --> 00:02:14.466 align:middle
+ejemplo, si la clase padre utiliza la sugerencia
+de tipo object, no puedes hacerla más estrecha
+
+00:02:14.496 --> 00:02:20.586 align:middle
+en tu subclase exigiendo algo más
+específico, como un objeto DateTime.
+
+00:02:21.536 --> 00:02:29.066 align:middle
+Tres, que es a la vez similar y opuesto a la regla
+anterior, no puedes ampliar el tipo de retorno.
+
+00:02:29.916 --> 00:02:35.736 align:middle
+Si la clase padre dice que un método devuelve
+un objeto DateTime, no puedes cambiarlo
+
+00:02:35.736 --> 00:02:41.506 align:middle
+en la subclase para devolver de repente
+algo más amplio, como cualquier objeto.
+
+00:02:42.366 --> 00:02:49.806 align:middle
+Y, por último, en cuarto lugar, debes seguir las
+reglas de tu clase madre -o de la interfaz- sobre si
+
+00:02:49.806 --> 00:02:53.756 align:middle
+debes lanzar o no una excepción
+en determinadas condiciones.
+
+00:02:54.676 --> 00:02:57.346 align:middle
+Puede que haya algunos casos
+extremos que se me hayan escapado
+
+00:02:57.346 --> 00:03:00.296 align:middle
+con estas 4 reglas, pero
+ésta es la idea básica.
+
+00:03:00.976 --> 00:03:06.156 align:middle
+Al violar cualquiera de estas reglas, estás
+haciendo que tu clase se comporte de forma diferente
+
+00:03:06.216 --> 00:03:09.426 align:middle
+a la que pretendía su
+clase madre o su interfaz.
+
+00:03:10.146 --> 00:03:16.146 align:middle
+Eso es malo porque si parte de tu código
+espera una instancia de esa interfaz y pasas
+
+00:03:16.146 --> 00:03:20.176 align:middle
+tu clase, aunque implemente la interfaz,
+
+00:03:20.446 --> 00:03:24.516 align:middle
+las violaciones de la clase pueden
+hacer que ocurran cosas raras.
+
+00:03:25.076 --> 00:03:29.246 align:middle
+Veremos ejemplos concretos de
+esto en los próximos capítulos.
+
+00:03:30.116 --> 00:03:33.756 align:middle
+Esto es lo que realmente
+me gusta de este principio.
+
+00:03:34.276 --> 00:03:36.076 align:middle
+¿Esas tres primeras reglas?
+
+00:03:36.586 --> 00:03:40.086 align:middle
+Sí, son imposibles de violar en PHP.
+
+00:03:40.086 --> 00:03:47.006 align:middle
+Si cambias el tipo de propiedad de una propiedad
+protegida, reduces el tipo de un argumento
+
+00:03:47.346 --> 00:03:52.846 align:middle
+o amplías el tipo de retorno de un
+método, PHP te dará un error de sintaxis.
+
+00:03:53.746 --> 00:03:57.076 align:middle
+Sí, el principio de Liskov tiene tanto sentido
+
+00:03:57.546 --> 00:04:01.796 align:middle
+que sus reglas están
+codificadas en el lenguaje.
+
+00:04:02.696 --> 00:04:05.056 align:middle
+Así que ya conocemos las reglas de Liskov.
+
+00:04:05.486 --> 00:04:11.346 align:middle
+Pero para comprender mejor por qué existen
+estas reglas y, lo que es casi más importante,
+
+00:04:11.716 --> 00:04:18.216 align:middle
+qué cosas podemos hacer en un "subtipo",
+pasemos a dos ejemplos del mundo real
