@@ -1,0 +1,382 @@
+WEBVTT
+
+00:00:01.026 --> 00:00:05.176 align:middle
+Hemos identificado que
+UserManager::register() maneja dos cosas
+
+00:00:05.276 --> 00:00:07.416 align:middle
+que pueden cambiar por diferentes razones.
+
+00:00:07.746 --> 00:00:14.276 align:middle
+Estas son sus dos responsabilidades: una,
+crear y enviar un correo de confirmación
+
+00:00:14.906 --> 00:00:19.786 align:middle
+y dos, configurar los datos de un
+usuario y guardarlos en la base de datos.
+
+00:00:20.646 --> 00:00:25.296 align:middle
+Ahora vamos a seguir el consejo de SRP y "separar
+las cosas que cambian por diferentes motivos
+
+00:00:25.296 --> 00:00:27.346 align:middle
+".
+
+00:00:28.146 --> 00:00:32.456 align:middle
+Lo primero que quiero hacer es cambiar
+el nombre de register() a create()...
+
+00:00:32.746 --> 00:00:34.546 align:middle
+o podría utilizar save()...
+
+00:00:35.116 --> 00:00:37.906 align:middle
+o incluso cambiar el nombre de toda la clase.
+
+00:00:38.686 --> 00:00:45.276 align:middle
+La cuestión es que Quiero dejar más clara su
+responsabilidad: establecer todos los datos necesarios
+
+00:00:45.276 --> 00:00:48.036 align:middle
+en el objeto usuario y
+guardarlos en la base de datos.
+
+00:00:48.816 --> 00:00:53.536 align:middle
+Haz clic con el botón derecho en register(), ve a
+Refactorizar->Renombrar y llama a esto create().
+
+00:00:54.476 --> 00:00:57.346 align:middle
+Al pulsar enter, en RegistrationController,
+
+00:00:57.826 --> 00:01:00.236 align:middle
+PhpStorm también renombró el método allí.
+
+00:01:01.006 --> 00:01:06.596 align:middle
+A continuación, vamos a mover la lógica relacionada con el
+correo electrónico a una nueva clase en el directorio Service/...
+
+00:01:06.906 --> 00:01:09.246 align:middle
+aunque no importa dónde viva esto.
+
+00:01:10.076 --> 00:01:14.486 align:middle
+Crea una nueva clase PHP llamada,
+qué tal, ConfirmationEmailSender.
+
+00:01:15.246 --> 00:01:21.116 align:middle
+Esta clase necesitará dos servicios: el enrutador
+para poder generar el enlace y el correo.
+
+00:01:21.996 --> 00:01:26.396 align:middle
+Añade una función pública
+__construct() con esos dos argumentos:
+
+00:01:26.736 --> 00:01:30.516 align:middle
+MailerInterface $mailer,
+y RouterInterface $router.
+
+00:01:31.136 --> 00:01:35.576 align:middle
+Pulsa Alt + Enter y ve a
+"Inicializar propiedades" para crear
+
+00:01:35.576 --> 00:01:37.156 align:middle
+esas dos propiedades y establecerlas.
+
+00:01:37.946 --> 00:01:40.356 align:middle
+No necesitamos este PHPDoc
+adicional aquí arriba.
+
+00:01:41.236 --> 00:01:44.876 align:middle
+Ahora podemos crear una función
+pública llamada, qué tal, send(),
+
+00:01:45.396 --> 00:01:49.076 align:middle
+con un argumento de objeto
+User que devolverá void.
+
+00:01:49.946 --> 00:01:55.856 align:middle
+Para el interior de esto, vamos a robar toda la lógica
+relacionada con el correo electrónico de UserManager.
+
+00:01:56.806 --> 00:02:00.886 align:middle
+Así que... copia las partes
+$confirmationLink y $confirmationEmail...
+
+00:02:01.186 --> 00:02:01.826 align:middle
+borra esas...
+
+00:02:03.196 --> 00:02:04.216 align:middle
+y pega.
+
+00:02:05.146 --> 00:02:10.006 align:middle
+Sí PhpStorm: Definitivamente quiero que
+importes las declaraciones de use por mí.
+
+00:02:10.866 --> 00:02:14.716 align:middle
+La última línea que tenemos que
+robar es la de $mailer->send().
+
+00:02:15.616 --> 00:02:17.186 align:middle
+Pégala en la nueva clase.
+
+00:02:18.116 --> 00:02:18.856 align:middle
+¡Muy bien!
+
+00:02:19.646 --> 00:02:22.986 align:middle
+Vamos a celebrarlo limpiando
+las cosas en UserManager:
+
+00:02:23.806 --> 00:02:27.156 align:middle
+podemos eliminar los dos últimos
+argumentos del constructor -
+
+00:02:27.666 --> 00:02:30.666 align:middle
+$router y $mailer - sus propiedades...
+
+00:02:30.916 --> 00:02:33.396 align:middle
+e incluso algunas declaraciones
+de use en la parte superior.
+
+00:02:34.576 --> 00:02:36.096 align:middle
+¡Ya está! Ahora...
+
+00:02:36.306 --> 00:02:37.156 align:middle
+veamos...
+
+00:02:37.536 --> 00:02:43.116 align:middle
+¿quién debe encargarse de crear y establecer
+el token de confirmación en el Usuario?
+
+00:02:43.896 --> 00:02:45.996 align:middle
+Yo... no estoy muy seguro.
+
+00:02:46.486 --> 00:02:52.756 align:middle
+Pero invirtamos la pregunta: ¿quién no
+debería ser responsable de crear el token?
+
+00:02:53.346 --> 00:02:57.336 align:middle
+Eso es un poco más fácil:
+probablemente no tenga sentido
+
+00:02:57.416 --> 00:03:01.566 align:middle
+que el servicio cuya única responsabilidad
+es crear un correo electrónico...
+
+00:03:02.086 --> 00:03:07.256 align:middle
+sea también responsable de generar
+este token criptográficamente seguro
+
+00:03:07.476 --> 00:03:09.196 align:middle
+y guardarlo en la base de datos.
+
+00:03:09.916 --> 00:03:13.646 align:middle
+Sí, este servicio se encarga
+del enlace de confirmación...
+
+00:03:14.276 --> 00:03:19.646 align:middle
+pero parece que esa lógica cambiaría por razones
+muy diferentes a las del propio correo electrónico.
+
+00:03:20.306 --> 00:03:23.986 align:middle
+Así que si descartamos
+ConfirmationEmailSender de nuestras opciones,
+
+00:03:24.356 --> 00:03:28.876 align:middle
+entonces sólo queda un lugar
+lógico UserManager::create().
+
+00:03:29.686 --> 00:03:33.996 align:middle
+Y... tiene sentido: este
+método crea nuevos objetos User
+
+00:03:34.246 --> 00:03:37.486 align:middle
+con todos los datos que
+necesitan y luego los guarda.
+
+00:03:38.406 --> 00:03:43.126 align:middle
+También podrías optar por aislar la lógica
+de creación de fichas de confirmación
+
+00:03:43.486 --> 00:03:45.396 align:middle
+en una tercera clase...
+
+00:03:45.846 --> 00:03:52.476 align:middle
+no hay una respuesta correcta o incorrecta, ¡que
+es lo que hace que estas cosas sean tan complicadas!
+
+00:03:53.416 --> 00:03:58.356 align:middle
+Pero optimizar en exceso, dividiendo
+las cosas en demasiados trozos,
+
+00:03:58.746 --> 00:04:01.556 align:middle
+también es algo que no queremos hacer.
+
+00:04:02.186 --> 00:04:04.416 align:middle
+Hablaremos más de ello en
+el próximo capítulo. De
+
+00:04:05.166 --> 00:04:09.176 align:middle
+todos modos, ahora que hemos dividido
+todo nuestro código en dos lugares,
+
+00:04:09.546 --> 00:04:13.746 align:middle
+en RegistrationController, tenemos
+que llamar a ambos métodos.
+
+00:04:14.486 --> 00:04:16.616 align:middle
+Autoconectar un nuevo argumento en el método:
+
+00:04:16.946 --> 00:04:19.756 align:middle
+ConfirmationEmailSender
+$confirmationEmailSender.
+
+00:04:20.276 --> 00:04:24.276 align:middle
+Entonces, abajo, justo después de
+llamar a $userManager->create(),
+
+00:04:24.886 --> 00:04:29.546 align:middle
+di $confirmationEmailSender->send()
+y pasa el objeto $user.
+
+00:04:30.306 --> 00:04:34.686 align:middle
+¡Ya está! Nuestra función original -el envío
+de un correo electrónico de confirmación-
+
+00:04:34.926 --> 00:04:39.646 align:middle
+se ha implementado ahora de una
+forma más amigable para el SRP. Por
+
+00:04:40.446 --> 00:04:43.306 align:middle
+cierto, si no te gusta que tengas
+
+00:04:43.306 --> 00:04:46.886 align:middle
+que llamar a dos métodos cada vez
+que registres a un nuevo usuario...
+
+00:04:47.196 --> 00:04:48.586 align:middle
+Estoy de acuerdo
+
+00:04:49.156 --> 00:04:55.306 align:middle
+Y no hay problema: podrías extraer
+estas dos llamadas en una nueva clase...
+
+00:04:55.686 --> 00:04:58.526 align:middle
+tal vez llamada UserRegistrationHandler. Su
+
+00:04:59.336 --> 00:05:01.596 align:middle
+única responsabilidad sería
+
+00:05:01.596 --> 00:05:06.626 align:middle
+"orquestar" todas las tareas relacionadas
+con el registro de un usuario.
+
+00:05:07.376 --> 00:05:11.646 align:middle
+Se trata de una sola
+responsabilidad, no de muchas,
+
+00:05:12.186 --> 00:05:16.216 align:middle
+porque no hace ningún trabajo real.
+
+00:05:16.746 --> 00:05:21.256 align:middle
+Así, por ejemplo, si tuviéramos que hacer un
+cambio en el correo electrónico de confirmación...
+
+00:05:21.656 --> 00:05:25.106 align:middle
+o cambiar la forma de persistir
+los usuarios en la base de datos...
+
+00:05:25.446 --> 00:05:30.376 align:middle
+ninguno de ellos requeriría que
+tuviéramos que modificar esta nueva clase.
+
+00:05:31.176 --> 00:05:35.916 align:middle
+La nueva clase sólo cambiaría si añadiéramos
+algún nuevo "paso" al registro del usuario,
+
+00:05:36.296 --> 00:05:39.526 align:middle
+como el envío de una llamada a la API de
+nuestro servicio de boletín de noticias.
+
+00:05:40.256 --> 00:05:46.966 align:middle
+En cualquier caso, ahora que hemos refactorizado para ser
+compatibles con SRP, podemos disfrutar de nuestro duro trabajo
+
+00:05:47.186 --> 00:05:51.126 align:middle
+añadiendo por fin la nueva
+función que nuestro equipo pedía
+
+00:05:51.786 --> 00:05:54.756 align:middle
+la posibilidad de reenviar un correo
+electrónico de confirmación.
+
+00:05:55.836 --> 00:05:59.996 align:middle
+Si has descargado el código del curso desde esta
+página, deberías tener un directorio tutorial/
+
+00:06:00.246 --> 00:06:03.716 align:middle
+con un archivo
+ResendConfirmationController dentro.
+
+00:06:04.606 --> 00:06:07.146 align:middle
+Cópialo, sube al directorio Controller/...
+
+00:06:07.306 --> 00:06:07.986 align:middle
+y pégalo.
+
+00:06:09.006 --> 00:06:15.306 align:middle
+Esto viene con la plantilla necesaria para una
+ruta a la que un usuario podría hacer un POST para
+
+00:06:15.306 --> 00:06:17.316 align:middle
+reenviar su correo
+electrónico de confirmación.
+
+00:06:18.146 --> 00:06:22.976 align:middle
+Pero... el envío real de ese correo de
+confirmación sigue siendo un "TODO".
+
+00:06:23.626 --> 00:06:27.906 align:middle
+Elimina ese comentario, autocablea el
+servicio ConfirmationEmailSender...
+
+00:06:28.926 --> 00:06:32.596 align:middle
+y luego di
+$confirmationEmailSender->send($user).
+
+00:06:33.436 --> 00:06:34.786 align:middle
+¡Es así de fácil!
+
+00:06:35.206 --> 00:06:36.946 align:middle
+No me molestaré en probar esto...
+
+00:06:37.086 --> 00:06:42.356 align:middle
+pero repetiré las palabras que a todo desarrollador
+le encanta decir "debería funcionar". Lo
+
+00:06:43.146 --> 00:06:48.186 align:middle
+importante es que, gracias a nuestra
+nueva organización, si, por ejemplo,
+
+00:06:48.496 --> 00:06:55.136 align:middle
+una persona de marketing quisiera modificar el asunto de nuestro
+correo electrónico de bienvenida, podemos hacer ese cambio
+
+00:06:55.346 --> 00:07:01.276 align:middle
+sin tener que andar cerca del código que guarda cosas
+en la base de datos o hace el hash de las contraseñas.
+
+00:07:02.106 --> 00:07:05.616 align:middle
+Pero... Tengo más cosas que
+quiero decir sobre el SRP...
+
+00:07:06.246 --> 00:07:12.626 align:middle
+como los riesgos de la sobreoptimización,
+que viola un concepto llamado cohesión.
+
+00:07:13.446 --> 00:07:16.766 align:middle
+También creo que, gracias a
+la inspiración de Dan North,
+
+00:07:17.196 --> 00:07:19.376 align:middle
+hay una forma más fácil de pensar en la PRS.
+
+00:07:20.126 --> 00:07:22.006 align:middle
+A continuación explicaré todo eso
