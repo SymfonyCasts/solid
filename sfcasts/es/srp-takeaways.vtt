@@ -1,0 +1,204 @@
+WEBVTT
+
+00:00:01.006 --> 00:00:03.726 align:middle
+Decidimos que la funcionalidad del
+correo electrónico de confirmación
+
+00:00:03.846 --> 00:00:08.966 align:middle
+y la funcionalidad de la creación de usuarios
+es probable que cambien por razones diferentes.
+
+00:00:09.406 --> 00:00:14.066 align:middle
+Por ello, hemos dividido estas dos
+responsabilidades en dos clases distintas.
+
+00:00:14.946 --> 00:00:17.086 align:middle
+Ahora, tengo algunas preguntas.
+
+00:00:17.846 --> 00:00:23.116 align:middle
+¿Debemos separar la lógica de la contraseña de
+la responsabilidad de la persistencia del usuario?
+
+00:00:23.706 --> 00:00:27.106 align:middle
+Es decir, ¿debemos
+trasladarla a su propia clase?
+
+00:00:27.716 --> 00:00:30.946 align:middle
+¿Y deberíamos tratar la generación
+de fichas de confirmación
+
+00:00:31.046 --> 00:00:35.236 align:middle
+como una responsabilidad propia y
+trasladarla a un lugar distinto?
+
+00:00:36.056 --> 00:00:42.386 align:middle
+Si miras rápidamente el SRP, parece que
+la regla es Poner cada pequeña pieza
+
+00:00:42.386 --> 00:00:45.366 align:middle
+de funcionalidad en su propia clase y método.
+
+00:00:46.146 --> 00:00:50.166 align:middle
+Pero, afortunadamente, SRP no dice eso...
+
+00:00:50.446 --> 00:00:53.116 align:middle
+¡eso convertiría nuestro
+código en un desastre!
+
+00:00:53.986 --> 00:00:56.586 align:middle
+Hay otro concepto llamado "cohesión".
+
+00:00:57.196 --> 00:01:01.786 align:middle
+Dice así: Mantener juntas las
+cosas que están relacionadas.
+
+00:01:02.666 --> 00:01:07.246 align:middle
+Al principio, parece que la
+cohesión y el SRP son opuestos.
+
+00:01:07.686 --> 00:01:13.326 align:middle
+Es decir, el SRP dice "separa las cosas" y la
+cohesión dice "¡no, mantén las cosas juntas!".
+
+00:01:13.946 --> 00:01:20.986 align:middle
+Pero si lo analizamos más detenidamente, la PRS
+y la cohesión son dos formas de decir lo mismo
+
+00:01:21.596 --> 00:01:24.786 align:middle
+mantén juntas sólo las cosas relacionadas.
+
+00:01:25.576 --> 00:01:31.736 align:middle
+Éste es el empuje de la PRS: separa las cosas
+que van a cambiar por motivos diferentes...
+
+00:01:32.076 --> 00:01:34.986 align:middle
+pero no las separes más. Si
+
+00:01:35.746 --> 00:01:40.436 align:middle
+nos fijamos en UserManager, ya estamos
+un poco protegidos de los cambios
+
+00:01:40.436 --> 00:01:42.486 align:middle
+en la funcionalidad del
+bloqueo de contraseñas,
+
+00:01:42.906 --> 00:01:49.136 align:middle
+porque dependemos de un servicio que está detrás
+de una interfaz: UserPasswordEncoderInterface. El
+
+00:01:49.816 --> 00:01:54.436 align:middle
+funcionamiento de ese servicio podría
+cambiar completamente y no tendríamos
+
+00:01:54.436 --> 00:01:56.416 align:middle
+que actualizar ningún código de esta clase.
+
+00:01:57.246 --> 00:02:01.556 align:middle
+Así que el riesgo de que eso cambie
+de alguna manera que nos obligue a
+
+00:02:01.556 --> 00:02:05.216 align:middle
+cambiar esta clase es probablemente muy bajo.
+
+00:02:06.076 --> 00:02:08.376 align:middle
+¿Qué pasa con la lógica
+de generación de fichas?
+
+00:02:09.066 --> 00:02:14.826 align:middle
+¿Creemos que es muy probable que cambiemos
+la forma en que se generan los tokens?
+
+00:02:15.606 --> 00:02:19.666 align:middle
+Esto... a mí me parece un
+candidato débil para separar.
+
+00:02:20.306 --> 00:02:23.566 align:middle
+Ya es sencillo: una línea
+de código aquí abajo...
+
+00:02:23.766 --> 00:02:25.546 align:middle
+y dos líneas de código aquí arriba.
+
+00:02:26.046 --> 00:02:31.036 align:middle
+Y es poco probable que cambie,
+sobre todo por una razón diferente
+
+00:02:31.076 --> 00:02:32.566 align:middle
+al resto del código de esta clase.
+
+00:02:33.316 --> 00:02:39.506 align:middle
+En general, mi consejo es el siguiente: no
+te adelantes a los posibles cambios futuros.
+
+00:02:40.356 --> 00:02:44.506 align:middle
+Al principio de este tutorial, mencioné
+una entrada del blog de Dan North,
+
+00:02:45.036 --> 00:02:47.386 align:middle
+el padre del desarrollo
+basado en el comportamiento.
+
+00:02:48.146 --> 00:02:53.486 align:middle
+Tiene algo deliciosamente refrescante que decir
+sobre el principio de responsabilidad única.
+
+00:02:54.116 --> 00:02:56.986 align:middle
+En lugar de pensar en posibles cambios...
+
+00:02:57.076 --> 00:03:01.886 align:middle
+y organizar las cosas en
+responsabilidades -lo cual es complicado-
+
+00:03:02.376 --> 00:03:07.456 align:middle
+sugiere algo más sencillo:
+escribir un código simple....
+
+00:03:07.976 --> 00:03:12.896 align:middle
+utilizando la vara de medir de:
+"¿este código cabe en mi cabeza?".
+
+00:03:13.546 --> 00:03:14.896 align:middle
+Esto me encanta.
+
+00:03:15.466 --> 00:03:19.916 align:middle
+Si un método o clase tiene demasiadas
+cosas, entonces la lógica total
+
+00:03:19.916 --> 00:03:21.706 align:middle
+de ese método no " cabrá en tu cabeza"...
+
+00:03:21.706 --> 00:03:25.686 align:middle
+y será difícil pensar y trabajar con él.
+
+00:03:26.366 --> 00:03:31.456 align:middle
+Por tanto, debes separarlo en trozos más pequeños
+que sí quepan en tu cabeza. Por otro lado
+
+00:03:32.396 --> 00:03:37.776 align:middle
+, si divides el código para registrar
+a un usuario en 10 clases diferentes,
+
+00:03:38.306 --> 00:03:41.366 align:middle
+eso también va a ser complejo de pensar.
+
+00:03:42.076 --> 00:03:46.426 align:middle
+El objetivo general es crear unidades
+de código que quepan en tu cabeza...
+
+00:03:46.866 --> 00:03:51.516 align:middle
+para que puedas tener una aplicación global
+que también "quepa en nuestra cabeza".
+
+00:03:52.416 --> 00:03:57.906 align:middle
+Si sigues este consejo general, creo que te
+darás cuenta de que probablemente crearás clases
+
+00:03:57.906 --> 00:04:01.486 align:middle
+y métodos que sigan la SRP bastante bien...
+
+00:04:01.876 --> 00:04:04.446 align:middle
+sin el estrés de intentar perfeccionarlo.
+
+00:04:05.316 --> 00:04:11.066 align:middle
+Bien, es hora de sumergirse en el siguiente
+principio sólido: el principio de abierto-cerrado
