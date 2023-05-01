@@ -82,7 +82,7 @@ But *now* we know that we have *substituted* the `SightingScorer` for a
 a `DebuggableBigFootSightingScore`. But that's okay! Why? Because
 `DebuggableBigFootSightingScore` extends `BigFootSightingScore`. So we are
 *still* returning a `BigFootSightingScore` instance, which, of course, *still* has
-a a `getScore()` method. The fact that we return a subclass... that potentially
+a `getScore()` method. The fact that we return a subclass... that potentially
 has extra methods on it, does *not* break its substitutability.
 
 But if we had changed its return type to something *less* specific, like *any*
